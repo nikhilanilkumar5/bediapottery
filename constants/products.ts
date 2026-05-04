@@ -1,0 +1,221 @@
+import { Product, Category } from '@/types'
+
+export const categories: Category[] = [
+  {
+    id: '1',
+    name: 'Adults Pottery Wheel',
+    slug: 'adults-pottery-wheel',
+    subtitle: '(Beginners workshop only)',
+    description: 'A hands-on introduction to pottery wheel techniques, designed especially for beginners to learn, explore, and enjoy the process at a relaxed pace.',
+  },
+  {
+    id: '2',
+    name: 'Hand building',
+    slug: 'hand-building',
+    description: 'Learn the art of hand-building pottery using various techniques.',
+  },
+  {
+    id: '3',
+    name: 'Kids Pottery Wheel',
+    slug: 'kids-pottery-wheel',
+    description: 'Fun and engaging pottery workshops designed for children.',
+  },
+  {
+    id: '4',
+    name: 'Workshop',
+    slug: 'workshop',
+    description: 'Special pottery workshops and events.',
+  },
+  {
+    id: '5',
+    name: 'Packages',
+    slug: 'packages',
+    description: 'Special package deals for multiple sessions.',
+  },
+  {
+    id: '6',
+    name: 'Pottery Workshops',
+    slug: 'pottery-workshops',
+    description: 'General pottery workshops for all skill levels.',
+  },
+  {
+    id: '7',
+    name: "Dubai's Only Luxury Private",
+    slug: 'luxury-private',
+    description: 'Exclusive luxury private pottery experiences.',
+  },
+  {
+    id: '8',
+    name: 'Family Pottery Workshop',
+    slug: 'family-pottery-workshop',
+    description: 'Family-friendly pottery workshops for all ages.',
+  },
+]
+
+export const products: Product[] = [
+  // Adults Pottery Wheel
+  {
+    id: '1',
+    title: 'Pottery On Wheel',
+    price: 400,
+    imageUrl: '/images/products/pottery-wheel.jpg',
+    category: 'adults-pottery-wheel',
+    slug: 'pottery-on-wheel',
+  },
+  {
+    id: '2',
+    title: 'Turkish Coffee Set',
+    price: 300,
+    imageUrl: '/images/products/turkish-coffee-set.jpg',
+    category: 'adults-pottery-wheel',
+    slug: 'turkish-coffee-set',
+  },
+  {
+    id: '3',
+    title: 'From Mud to Mug',
+    price: 200,
+    imageUrl: '/images/products/mud-to-mug.jpg',
+    category: 'adults-pottery-wheel',
+    slug: 'from-mud-to-mug',
+  },
+  {
+    id: '4',
+    title: "Customised Gifts Gift Card",
+    price: 299,
+    imageUrl: '/images/products/gift-card.jpg',
+    category: 'adults-pottery-wheel',
+    slug: 'customised-gifts-gift-card',
+  },
+  {
+    id: '5',
+    title: "Couple's Pottery Workshop",
+    price: 400,
+    originalPrice: 500,
+    imageUrl: '/images/products/couples-workshop.jpg',
+    videoUrl: '/videos/couples-workshop.mp4',
+    category: 'adults-pottery-wheel',
+    slug: 'couples-workshop',
+    description: "Join us at Bedia Pottery Studio for our 'Couples Pottery Workshops'! It's a perfect opportunity for couples to bond while crafting beautiful keepsakes with clay.",
+    materials: [
+      { id: 'air-dry', name: 'Air Dry', description: 'Air-dry clay is perfect for beginners.' },
+      { id: 'terracotta', name: 'Terracotta', description: 'Terracotta clay is a natural, earthy clay.' },
+      { id: 'ceramic', name: 'Ceramic', description: 'Ceramic clay is versatile and fires to a durable finish.' },
+    ],
+    materialDescriptions: {
+      'air-dry': 'Air-dry clay is perfect for beginners. It doesn\'t require firing and dries naturally at room temperature. Perfect for creating decorative pieces and keepsakes.',
+      'terracotta': 'Terracotta clay is a natural, earthy clay that fires to a reddish-brown color. Perfect for traditional pottery and garden pieces.',
+      'ceramic': 'Ceramic clay is versatile and fires to a durable finish. Ideal for functional pottery pieces like mugs, bowls, and plates.',
+    },
+  },
+  {
+    id: '6',
+    title: 'Luxury Clay Night',
+    price: 300,
+    imageUrl: '/images/products/luxury-clay-night.jpg',
+    category: 'adults-pottery-wheel',
+    slug: 'luxury-clay-night',
+  },
+  {
+    id: '7',
+    title: 'Multiple Sessions',
+    price: 200,
+    imageUrl: '/images/products/multiple-sessions.jpg',
+    category: 'adults-pottery-wheel',
+    slug: 'multiple-sessions',
+  },
+  {
+    id: '8',
+    title: 'Team Building',
+    price: 299,
+    imageUrl: '/images/products/team-building.jpg',
+    category: 'adults-pottery-wheel',
+    slug: 'team-building',
+  },
+  // Hand building
+  {
+    id: '9',
+    title: 'Hand Building Basics',
+    price: 250,
+    imageUrl: '/images/products/hand-building-basics.jpg',
+    category: 'hand-building',
+    slug: 'hand-building-basics',
+  },
+  {
+    id: '10',
+    title: 'Coil Pottery Workshop',
+    price: 280,
+    imageUrl: '/images/products/coil-pottery.jpg',
+    category: 'hand-building',
+    slug: 'coil-pottery-workshop',
+  },
+  // Kids Pottery Wheel
+  {
+    id: '11',
+    title: 'Kids Pottery Fun',
+    price: 150,
+    imageUrl: '/images/products/kids-pottery-fun.jpg',
+    category: 'kids-pottery-wheel',
+    slug: 'kids-pottery-fun',
+  },
+  {
+    id: '12',
+    title: 'Children Clay Play',
+    price: 180,
+    imageUrl: '/images/products/children-clay-play.jpg',
+    category: 'kids-pottery-wheel',
+    slug: 'children-clay-play',
+  },
+  // Workshop
+  {
+    id: '13',
+    title: 'Weekend Workshop',
+    price: 350,
+    imageUrl: '/images/products/weekend-workshop.jpg',
+    category: 'workshop',
+    slug: 'weekend-workshop',
+  },
+  // Packages
+  {
+    id: '14',
+    title: 'Beginner Package',
+    price: 1000,
+    imageUrl: '/images/products/beginner-package.jpg',
+    category: 'packages',
+    slug: 'beginner-package',
+  },
+  {
+    id: '15',
+    title: 'Advanced Package',
+    price: 1500,
+    imageUrl: '/images/products/advanced-package.jpg',
+    category: 'packages',
+    slug: 'advanced-package',
+  },
+  // Pottery Workshops
+  {
+    id: '16',
+    title: 'Pottery Masterclass',
+    price: 500,
+    imageUrl: '/images/products/masterclass.jpg',
+    category: 'pottery-workshops',
+    slug: 'pottery-masterclass',
+  },
+  // Luxury Private
+  {
+    id: '17',
+    title: 'Private Luxury Session',
+    price: 800,
+    imageUrl: '/images/products/private-luxury.jpg',
+    category: 'luxury-private',
+    slug: 'private-luxury-session',
+  },
+  // Family Pottery Workshop
+  {
+    id: '18',
+    title: 'Family Fun Day',
+    price: 350,
+    imageUrl: '/images/products/family-fun-day.jpg',
+    category: 'family-pottery-workshop',
+    slug: 'family-fun-day',
+  },
+]
