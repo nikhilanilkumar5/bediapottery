@@ -24,7 +24,7 @@ export default function BirthdayHero() {
         {/* Left Column: Image Grid */}
         <div className="flex flex-col gap-4 h-full">
           {/* Main Large Image */}
-          <div className="w-full flex-1 bg-gray-200 overflow-hidden relative">
+          <div className="w-full aspect-[4/3] bg-gray-200 overflow-hidden relative">
             <img 
               src="/images/product/kids-birthday-1.png" 
               alt="Kids celebrating birthday with cake" 
@@ -47,7 +47,7 @@ export default function BirthdayHero() {
         </div>
 
         {/* Right Column: Content & Forms */}
-        <div className="flex flex-col">
+        <div className="flex flex-col h-full">
           {/* Header */}
           <div className="mb-6">
             <h1 className="text-[2.5rem] leading-tight font-neiko text-[#113224] mb-1">
