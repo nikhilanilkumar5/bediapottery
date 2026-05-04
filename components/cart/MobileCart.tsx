@@ -1,5 +1,6 @@
 import React from 'react';
 import { Play } from 'lucide-react';
+import Image from 'next/image';
 
 export default function MobileCart({ onCheckout }) {
   return (
@@ -18,9 +19,11 @@ export default function MobileCart({ onCheckout }) {
           <div className="flex gap-4">
             {/* Thumbnail with Play Button */}
             <div className="w-24 h-24 sm:w-28 sm:h-28 bg-gray-200 rounded-sm shrink-0 relative overflow-hidden">
-              <img 
-                src="/api/placeholder/150/150" 
+              <Image 
+                src="/images/banner/cart-page.png" 
                 alt="Couples pottery" 
+                width={112}
+                height={112}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 flex items-center justify-center">
@@ -75,9 +78,11 @@ export default function MobileCart({ onCheckout }) {
           <div className="flex gap-4">
             {/* Thumbnail */}
             <div className="w-24 h-24 sm:w-28 sm:h-28 bg-gray-200 rounded-sm shrink-0 overflow-hidden">
-              <img 
-                src="/api/placeholder/150/150" 
+              <Image 
+                src="/images/banner/cart-page.png" 
                 alt="Beginners pottery" 
+                width={112}
+                height={112}
                 className="w-full h-full object-cover"
               />
             </div>
