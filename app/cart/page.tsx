@@ -1,4 +1,5 @@
-import CheckoutFlow from '@/components/cart/CheckoutFlow';
+// app/cart/page.tsx (or wherever your cart page is located)
+import MasterCartFlow from '@/components/cart/MasterCartFlow'; // Adjust this path if needed
 
 export const metadata = {
   title: 'Your Cart | Bedia Pottery',
@@ -7,8 +8,9 @@ export const metadata = {
 
 export default function CartPage() {
   return (
-    <main className="min-h-screen bg-[#fcfbf9]">
-      <CheckoutFlow />
+    // Removed the background color here because MasterCartFlow handles it
+    <main className="min-h-screen"> 
+      <MasterCartFlow />
     </main>
   );
 }
