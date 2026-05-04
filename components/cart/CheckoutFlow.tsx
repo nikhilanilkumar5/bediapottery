@@ -24,7 +24,7 @@ export default function CheckoutFlow() {
       
       {/* Top Progress Indicator Bar */}
       <div className="w-full bg-[#f3f0e8] py-8 mb-12 border-t border-b border-[#e5e1d8]">
-        <div className="max-w-6xl mx-auto flex items-center justify-center px-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-center px-4">
           
           <button onClick={() => step > 1 && setStep(1)} className={`flex items-center gap-3 ${step > 1 ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}`}>
             <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${step >= 1 ? 'bg-[#113224] text-white' : 'bg-white text-[#113224]'}`}>
@@ -55,7 +55,7 @@ export default function CheckoutFlow() {
       </div>
 
       {/* Dynamic Step Content */}
-      <div className="max-w-6xl mx-auto px-4 pb-24 relative min-h-[600px]">
+      <div className="max-w-7xl mx-auto px-4 pb-24 relative min-h-[600px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={step}
