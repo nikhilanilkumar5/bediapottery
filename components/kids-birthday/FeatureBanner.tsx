@@ -11,8 +11,8 @@ export default function FeatureBanner() {
   ];
 
   return (
-    <section className="bg-[#f5f1eb] py-12 px-4 sm:px-6 lg:px-8 font-sans">
-      <div className="max-w-[1400px] mx-auto bg-white py-10 shadow-sm border border-gray-100">
+    <section className="py-12 font-sans bg-[#f5f1eb]">
+      <div className="page-wrapper bg-white py-10 shadow-sm border border-gray-100">
         
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-y-10 lg:gap-y-0 lg:divide-x divide-gray-300/60">
           {features.map((feature, index) => {
