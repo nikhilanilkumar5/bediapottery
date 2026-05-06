@@ -19,7 +19,7 @@ export default function LoginPage() {
           </Link>
           </div>
         {/* Right */}
-        <div className="flex items-center justify-start px-[90px]">
+        <div className="flex items-center justify-start px-[17px] sm:px-[40px] lg:px-[90px]">
           <div className="w-full max-w-xl">
             <div className="mb-[60px]">
                 <Title className=" mb-4 font-normal !text-[40px]">

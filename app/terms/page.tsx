@@ -10,10 +10,10 @@ export const metadata = {
 export default function TermsPage() {
   return (
     <main className="min-h-screen bg-secondary-dark">
-      <div className="page-wrapper py-24">
+      <div className="page-wrapper px-[17px] lg:px-0 py-24">
         <Title className="mb-4">{termsData.title}</Title>
         <Content>{termsData.subtitle}</Content>
-        <div className="mt-[40px] bg-white p-10 rounded-[40px] ">
+        <div className="mt-[40px] bg-white p-5 lg:p-10 rounded-[20px] lg:rounded-[40px]">
           {termsData.sections.map((section, index) => (
             <div key={index}>
               <Content className="font-semibold mb-4">

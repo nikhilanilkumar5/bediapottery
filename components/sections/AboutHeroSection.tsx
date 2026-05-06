@@ -20,9 +20,9 @@ const AboutHeroSection: React.FC<AboutHeroProps> = ({
 }) => {
   return (
     <section className="relative min-h-[calc(100vh-70px)] bg-secondary-off overflow-hidden">
-      <div className="flex h-full gap-[35px] items-center ">
+      <div className="flex flex-col lg:flex-row h-full gap-0 lg:gap-[35px] items-center">
         {/* LEFT IMAGE */}
-        <div className="w-1/2 relative h-[calc(100vh-70px)] overflow-hidden ">
+        <div className="w-full lg:w-1/2 relative h-[55vw] min-h-[260px] lg:h-[calc(100vh-70px)] overflow-hidden">
           <div
             className="w-full h-full bg-cover bg-center"
             style={{ backgroundImage: `url(${imageUrl})` }}
@@ -31,7 +31,7 @@ const AboutHeroSection: React.FC<AboutHeroProps> = ({
         </div>
 
         {/* RIGHT CONTENT */}
-        <div className="flex-1 px-9 py-16">
+        <div className="flex-1 px-[17px] lg:px-9 py-10 lg:py-16">
           <Subtitle className=" mb-4">{subtitle}</Subtitle>
           <Title className=" mb-6 font-normal max-w-md !leading-[120%]">
             {title}

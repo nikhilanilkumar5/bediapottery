@@ -55,7 +55,7 @@ const EventTimelineSection: React.FC<EventTimelineSectionProps> = ({
 }) => {
   return (
     <section className="py-16 lg:py-24 bg-white">
-      <div className="page-wrapper">
+      <div className="page-wrapper px-[17px] lg:px-0">
         <div className="mb-12 text-center">
           <p className="text-sm uppercase tracking-widest text-gray-500 mb-2">
             Event Schedule
@@ -64,7 +64,7 @@ const EventTimelineSection: React.FC<EventTimelineSectionProps> = ({
           <Content className="text-gray-600">{subtitle}</Content>
         </div>
 
-        <div className="max-w-2xl mx-auto bg-gray-50 p-8 rounded-lg">
+        <div className="max-w-2xl mx-auto bg-gray-50 p-4 lg:p-8 rounded-lg">
           {steps.map((step, index) => (
             <EventTimelineStep
               key={step.id}

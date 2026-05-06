@@ -40,7 +40,7 @@ const ParentNotesSection: React.FC<ParentNotesSectionProps> = ({
 }) => {
   return (
     <section className="py-16 lg:py-24 bg-secondary-off">
-      <div className="page-wrapper">
+      <div className="page-wrapper px-[17px] lg:px-0">
         <div className="mb-12 text-center">
           <p className="text-sm uppercase tracking-widest text-gray-500 mb-2">
             Parent Information

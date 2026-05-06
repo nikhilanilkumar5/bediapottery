@@ -11,7 +11,7 @@ export const metadata = {
 export default function FAQPage() {
   return (
     <main className="min-h-screen bg-[#F3EFE8]">
-      <section className="page-wrapper py-24">
+      <section className="page-wrapper px-[17px] lg:px-0 py-24">
           <Title className="mb-12 text-center">
             General Frequently Asked Questions
           </Title>

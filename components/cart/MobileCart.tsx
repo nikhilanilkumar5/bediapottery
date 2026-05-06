@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 export default function MobileCart({ onCheckout }: { onCheckout: () => void }) {
   return (
-    <main className="page-wrapper bg-[#fcfbf9] min-h-screen font-sans text-[#113224]">
+    <main className="page-wrapper px-[17px] lg:px-0 bg-[#fcfbf9] min-h-screen font-sans text-[#113224]">
       
       {/* Header */}
       <div className="flex justify-between items-end border-b border-gray-200 pb-4 mb-6 mt-4 sm:mt-8">

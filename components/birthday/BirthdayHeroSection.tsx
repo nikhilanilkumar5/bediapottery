@@ -30,7 +30,7 @@ const BirthdayHeroSection: React.FC<BirthdayHeroSectionProps> = ({
 }) => {
   return (
     <section className="relative pb-16 lg:pb-24 bg-secondary-off overflow-hidden">
-      <div className="page-wrapper">
+      <div className="page-wrapper px-[17px] lg:px-0">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 <ImageGrid
   images={[
