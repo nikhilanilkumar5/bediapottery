@@ -47,10 +47,10 @@ const HeroSection: React.FC = () => {
               ${index === currentSlide ? "opacity-100" : "opacity-0 pointer-events-none"}`}
             >
               <div className="max-w-2xl">
-                <Subtitle className="!text-white mb-1 lg:mb-2 !text-xs lg:!text-base">
+                <Subtitle className="!text-white mb-1 lg:mb-2 !text-[10px] lg:!text-sm">
                   {slide.shortDescription}
                 </Subtitle>
-                <Title className="!text-white mb-2 lg:mb-4 font-normal !text-2xl lg:!text-4xl">
+                <Title className="!text-white mb-2 lg:mb-4 font-normal !text-lg lg:!text-3xl">
                   {slide.title}
                 </Title>
                 <Content className="!text-white hidden lg:block">
@@ -116,10 +116,10 @@ const HeroSection: React.FC = () => {
                       />
                       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0)_-23.93%,rgba(0,0,0,0.9)_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       <div className="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-3 lg:px-6 opacity-0 translate-y-6 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-                        <Subtitle className="!text-secondary-off mb-1 lg:mb-2 !text-xs lg:!text-base">
+                        <Subtitle className="!text-secondary-off mb-1 lg:mb-2 !text-[10px] lg:!text-sm">
                           {card.type}
                         </Subtitle>
-                        <Title className="!text-secondary-off mb-2 lg:mb-4 !text-xl lg:!text-[41px] font-normal">
+                        <Title className="!text-secondary-off mb-2 lg:mb-4 !text-base lg:!text-[32px] font-normal">
                           {card.title}
                         </Title>
                         <Content className="!text-secondary-off mb-4 lg:mb-10 hidden lg:block">
@@ -130,10 +130,10 @@ const HeroSection: React.FC = () => {
                     </div>
                   ) : (
                     <div className="text-center">
-                      <Subtitle className="!text-secondary-off mb-1 lg:mb-2 !text-xs lg:!text-base">
+                      <Subtitle className="!text-secondary-off mb-1 lg:mb-2 !text-[10px] lg:!text-sm">
                         {card.title}
                       </Subtitle>
-                      <Title className="!text-secondary-off mb-2 lg:mb-4 !text-xl lg:!text-[41px] font-normal">
+                      <Title className="!text-secondary-off mb-2 lg:mb-4 !text-base lg:!text-[32px] font-normal">
                         {card.subtitle}
                       </Title>
                       <Content className="!text-secondary-off mb-4 lg:mb-10 hidden lg:block">
