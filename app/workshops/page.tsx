@@ -2,6 +2,7 @@ import React from 'react'
 import { categories } from '@/constants/products'
 import Link from 'next/link'
 import { Metadata } from 'next'
+import Footer from '@/components/layout/Footer'
 
 export const metadata: Metadata = {
   title: 'Pottery Workshops - Bedia Pottery',

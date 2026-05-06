@@ -12,7 +12,7 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <main className="min-h-screen">
-      {/* Hero Section */
+      {/* Hero Section */}
       <AboutHeroSection
         title={aboutPageData.hero.title}
         points={aboutPageData.hero.points}

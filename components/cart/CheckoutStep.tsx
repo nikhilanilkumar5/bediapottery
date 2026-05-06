@@ -1,4 +1,4 @@
-export default function CheckoutStep({ onNext }) {
+export default function CheckoutStep({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
   return (
     <>
       <div className="w-full lg:w-2/3 rounded-sm">

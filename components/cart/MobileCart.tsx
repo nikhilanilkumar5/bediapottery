@@ -2,7 +2,7 @@ import React from 'react';
 import { Play } from 'lucide-react';
 import Image from 'next/image';
 
-export default function MobileCart({ onCheckout }) {
+export default function MobileCart({ onCheckout }: { onCheckout: () => void }) {
   return (
     <main className="page-wrapper bg-[#fcfbf9] min-h-screen font-sans text-[#113224]">
       

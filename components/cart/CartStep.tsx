@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 
-export default function CartStep({ onNext }) {
+export default function CartStep({ onNext }: { onNext: () => void }) {
   return (
     <div className="w-full">
       <div className="flex flex-col lg:flex-row gap-12">
