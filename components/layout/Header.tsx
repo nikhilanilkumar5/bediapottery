@@ -84,9 +84,9 @@ const Header: React.FC = () => {
       />
     )}
 
-    {/* Mobile menu — floats over page content */}
+    {/* Mobile menu — full screen below header */}
     {mobileOpen && (
-      <div className="fixed top-[var(--header-h)] left-0 right-0 bg-white border-t border-gray-100 px-[17px] pb-4 z-50 lg:hidden shadow-lg">
+      <div className="fixed top-[var(--header-h)] left-0 right-0 bottom-0 bg-white border-t border-gray-100 px-[17px] pb-4 z-50 lg:hidden shadow-lg overflow-y-auto">
         {navigationItems.map((item) =>
           item.children ? (
             <div key={item.href}>
