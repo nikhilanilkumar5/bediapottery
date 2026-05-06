@@ -17,6 +17,7 @@ const Header: React.FC = () => {
   }
 
   return (
+    <>
     <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
       <nav className="page-wrapper py-[7px] px-[17px] lg:px-0">
         <div className="flex items-center justify-between">
@@ -71,50 +72,62 @@ const Header: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-100 px-[17px] pb-4">
-          {navigationItems.map((item) =>
-            item.children ? (
-              <div key={item.href}>
-                <button
-                  onClick={() => toggleDropdown(item.href)}
-                  className="flex items-center justify-between w-full py-3 border-b border-gray-100"
-                >
-                  <span className="text-sm font-medium text-gray-800">{item.label}</span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${openDropdown === item.href ? 'rotate-180' : ''}`}
-                  />
-                </button>
-                {openDropdown === item.href && (
-                  <div className="pl-4 pb-1">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        onClick={() => setMobileOpen(false)}
-                        className="block py-2.5 text-sm text-gray-600 hover:text-primary transition-colors duration-150"
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center py-3 border-b border-gray-100 text-sm font-medium text-gray-800 hover:text-primary transition-colors duration-200"
-              >
-                {item.label}
-              </Link>
-            )
-          )}
-        </div>
-      )}
+      {/* Mobile menu — removed from here, rendered as fixed overlay below */}
     </header>
+
+    {/* Full-screen overlay */}
+    {mobileOpen && (
+      <div
+        className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+        onClick={() => setMobileOpen(false)}
+        aria-hidden="true"
+      />
+    )}
+
+    {/* Mobile menu — floats over page content */}
+    {mobileOpen && (
+      <div className="fixed top-[var(--header-h)] left-0 right-0 bg-white border-t border-gray-100 px-[17px] pb-4 z-50 lg:hidden shadow-lg">
+        {navigationItems.map((item) =>
+          item.children ? (
+            <div key={item.href}>
+              <button
+                onClick={() => toggleDropdown(item.href)}
+                className="flex items-center justify-between w-full py-3 border-b border-gray-100"
+              >
+                <span className="text-sm font-medium text-gray-800">{item.label}</span>
+                <ChevronDown
+                  className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${openDropdown === item.href ? 'rotate-180' : ''}`}
+                />
+              </button>
+              {openDropdown === item.href && (
+                <div className="pl-4 pb-1">
+                  {item.children.map((child) => (
+                    <Link
+                      key={child.href}
+                      href={child.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="block py-2.5 text-sm text-gray-600 hover:text-primary transition-colors duration-150"
+                    >
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center py-3 border-b border-gray-100 text-sm font-medium text-gray-800 hover:text-primary transition-colors duration-200"
+            >
+              {item.label}
+            </Link>
+          )
+        )}
+      </div>
+    )}
+    </>
   )
 }
 
