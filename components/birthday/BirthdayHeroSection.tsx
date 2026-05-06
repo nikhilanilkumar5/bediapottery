@@ -52,7 +52,7 @@ const BirthdayHeroSection: React.FC<BirthdayHeroSectionProps> = ({
                        )}
                      </div>
 
-            <Content className="text-lg leading-relaxed">{description}</Content>
+         
 
             {/* Quick Info Cards */}
             <div className="grid grid-cols-3 gap-4 pt-6">
