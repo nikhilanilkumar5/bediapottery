@@ -19,7 +19,7 @@ export default function BirthdayHero() {
 
   return (
     <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#113224]">
-      <div className="page-wrapper grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+      <div className="page-wrapper px-[17px] lg:px-0 grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
         
         {/* Left Column: Image Grid */}
         <div className="flex flex-col gap-4 h-full">
@@ -113,12 +113,12 @@ export default function BirthdayHero() {
                 <ChevronLeft size={20} />
               </button>
               
-              <div className="flex gap-2 overflow-hidden flex-grow justify-between">
+              <div className="flex gap-2 overflow-x-auto flex-grow scrollbar-hide">
                 {dates.map((d, i) => (
                   <button 
                     key={i}
                     onClick={() => setSelectedDate(d.date)}
-                    className={`flex flex-col items-center justify-center p-3 w-[72px] border transition-colors ${selectedDate === d.date ? 'border-[#113224] bg-[#f9fafa]' : 'border-gray-200 hover:border-[#113224]/50'}`}
+                    className={`flex flex-col items-center justify-center p-3 min-w-[72px] border transition-colors flex-shrink-0 ${selectedDate === d.date ? 'border-[#113224] bg-[#f9fafa]' : 'border-gray-200 hover:border-[#113224]/50'}`}
                   >
                     <span className="text-[11px] text-gray-500 mb-1">{d.day}</span>
                     <span className="text-sm font-bold text-[#113224] whitespace-nowrap">{d.date}</span>
