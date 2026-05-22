@@ -18,7 +18,7 @@ export default function InfoAndTimeline() {
 
   return (
     <section className="bg-[#f2ece3] min-h-screen py-16 font-sans text-[#113224]">
-      <div className="page-wrapper px-[17px] lg:px-0 space-y-24">
+      <div className="page-wrapper px-[17px]  space-y-24">
         
         {/* --- TABS SECTION --- */}
         <div className="bg-white p-6 sm:p-10 shadow-sm rounded-sm">

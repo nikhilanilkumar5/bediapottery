@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function WorkshopsPage() {
   return (
     <main className="min-h-screen bg-white">
-      <div className="page-wrapper px-[17px] lg:px-0 pt-8 pb-16">
+      <div className="page-wrapper px-[17px]  pt-8 pb-16">
         <div className="mb-12">
           <h1 className="text-2xl lg:text-4xl 2xl:text-5xl font-semibold text-primary mb-4">
             Pottery Workshops
@@ -63,7 +63,6 @@ export default function WorkshopsPage() {
           ))}
         </div>
       </div>
-      <Footer />
     </main>
   )
 }

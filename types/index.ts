@@ -4,12 +4,32 @@ export interface NavigationItem {
   children?: { label: string; href: string }[]
 }
 
+export interface HeroSlideCard {
+  _id?: string
+  id?: string
+  type?: string
+  title?: string
+  subtitle?: string
+  description?: string
+  shortDescription?: string
+  bannerImage?: string
+  imageUrl?: string
+  images?: string[]
+  ctaText?: string
+  ctaLink?: string
+  slug?: string
+}
+
 export interface HeroSlide {
-  id: string
+  _id?: string
+  id?: string
   title: string
-  subtitle: string
-  description: string
+  subtitle?: string
+  description?: string
+  shortDescription?: string
   imageUrl: string
+  layout?: string
+  cards?: HeroSlideCard[]
 }
 export interface GoogleReview {
   _id: string
@@ -86,12 +106,13 @@ export interface AboutPageData {
 export interface Product {
   id: string
   title: string
-  price: number
+  price?: number
   originalPrice?: number
   imageUrl: string
   videoUrl?: string
   category?: string
   slug: string
+  mainSlug: string
   description?: string
   longDescription?: string
   materials?: MaterialOption[]

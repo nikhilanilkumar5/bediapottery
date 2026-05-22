@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "swiper/css";
+
 :root {
   --font-neiko: 'Neiko', sans-serif;
   --font-sunrise: 'Sunrise Himalaya', sans-serif;
@@ -49,7 +49,7 @@
   }
  
 }
-
+/* 
 .page-wrapper {
     width: 100%;
     margin-right: auto;
@@ -115,6 +115,45 @@
         margin-right: 0px;
         max-width: 100%;
     }
+} */
+
+/* =========================================
+   PAGE WRAPPER
+========================================= */
+
+.page-wrapper {
+  width: 100%;
+  max-width: 1820px;
+  margin-inline: auto;
+  padding-inline: 80px;
+}
+
+/* Large Desktop */
+@media (max-width: 1600px) {
+  .page-wrapper {
+    padding-inline: 60px;
+  }
+}
+
+/* Laptop */
+@media (max-width: 1200px) {
+  .page-wrapper {
+    padding-inline: 40px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .page-wrapper {
+    padding-inline: 20px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 540px) {
+  .page-wrapper {
+    padding-inline: 10px;
+  }
 }
 
 @keyframes dotIn {
@@ -130,4 +169,17 @@
 
 .animate-dotIn {
   animation: dotIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.feature-scroller {
+  animation: marquee 35s linear infinite;
 }

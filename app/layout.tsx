@@ -81,13 +81,13 @@ export const metadata: Metadata = {
     template: '%s | Bedia Pottery',
   },
   description: 'A Premium Ceramic Studio Offers A Unique Fusion Of Art, Mental Health & Fun!',
-  icons: {
-    icon: '/logo.svg',
-    shortcut: '/logo.svg',
-    apple: '/logo.svg',
+    icons: {
+    icon: '/logo-fav.svg',
+    shortcut: '/logo-fav.svg',
+    apple: '/logo-fav.svg',
   },
-}
 
+}
 export default function RootLayout({
   children,
 }: {

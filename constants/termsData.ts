@@ -1,8 +1,5 @@
 // constants/termsData.ts
 export const termsData = {
-  title: "Terms and Conditions",
-  subtitle:
-    'Please read these Terms and Conditions carefully before booking a workshop with Bedia Pottery ("us", "we", or "our").',
 
  sections: [
     {

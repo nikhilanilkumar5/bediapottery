@@ -9,7 +9,7 @@ export default function BirthdayDetails() {
 
   return (
     <section className="py-16 font-sans text-[#113224] bg-[#f5f1eb]">
-      <div className="page-wrapper px-[17px] lg:px-0 space-y-16">
+      <div className="page-wrapper px-[17px]  space-y-16">
         
         {/* --- TIMELINE SECTION --- */}
         <div>

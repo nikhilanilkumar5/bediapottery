@@ -7,7 +7,7 @@ import { Content } from "../ui";
 const Footer: React.FC = () => {
   return (
     <footer className="bg-primary text-secondary-off">
-      <div className="page-wrapper px-[17px] lg:px-0 pt-14 pb-8">
+      <div className="page-wrapper px-[17px]  pt-14 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-8">
           {/* Left Column - Logo and Description */}
           <div className="space-y-[30px]">

@@ -1,11 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
-import { validateSignupForm, getFieldError, ValidationError } from "@/utils/validation";
+import {
+  validateSignupForm,
+  getFieldError,
+  ValidationError,
+} from "@/utils/validation";
 import { SignupFormData } from "./signup.types";
 import FormInput from "./FormInput";
 import Button from "@/components/ui/PrimaryButton";
 import { useRouter } from "next/navigation";
+import FormPasswordInput from "./FormPasswordInput";
 
 /** Client-side service */
 const signupService = {
@@ -61,7 +66,9 @@ const SignupForm = () => {
     <form onSubmit={handleSubmit} noValidate className="space-y-6">
       {submitSuccess && (
         <div className="p-4 bg-green-50 border border-green-200 ">
-          <p className="text-green-600 text-sm">Account created successfully 🎉</p>
+          <p className="text-green-600 text-sm">
+            Account created successfully 🎉
+          </p>
         </div>
       )}
 
@@ -70,7 +77,7 @@ const SignupForm = () => {
         label="Your name"
         value={formData.name}
         onChange={handleChange}
-        error={getFieldError(errors, "name")    || undefined}
+        error={getFieldError(errors, "name") || undefined}
         required
       />
 
@@ -84,8 +91,7 @@ const SignupForm = () => {
         required
       />
 
-      <FormInput
-        type="password"
+      <FormPasswordInput
         name="password"
         label="Password"
         value={formData.password}
@@ -93,9 +99,7 @@ const SignupForm = () => {
         error={getFieldError(errors, "password") || undefined}
         required
       />
-
-      <FormInput
-        type="password"
+      <FormPasswordInput
         name="confirmPassword"
         label="Confirm Password"
         value={formData.confirmPassword}

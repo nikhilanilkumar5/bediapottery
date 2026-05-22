@@ -2,8 +2,14 @@ export interface FAQItem {
   _id: string
   question: string
   answer: string
+  isActive: boolean;
 }
-
+export type TermItem = {
+  _id: string;
+  title: string;
+  content: string;
+  isActive: boolean;
+};
 export const faqData = [
  
       {

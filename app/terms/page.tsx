@@ -1,5 +1,6 @@
 import { termsData } from "@/constants/termsData";
 import { Content, Title } from "@/components/ui";
+import { getTermsData } from "@/services/terms.service";
 
 export const metadata = {
   title: "Terms and Conditions | Bedia Pottery",
@@ -7,34 +8,33 @@ export const metadata = {
     "Read the terms and conditions for booking workshops with Bedia Pottery.",
 };
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const termsData = await getTermsData();
   return (
     <main className="min-h-screen bg-secondary-dark">
-      <div className="page-wrapper px-[17px] lg:px-0 py-24">
-        <Title className="mb-4">{termsData.title}</Title>
-        <Content>{termsData.subtitle}</Content>
-        <div className="mt-[40px] bg-white p-5 lg:p-10 rounded-[20px] lg:rounded-[40px]">
-          {termsData.sections.map((section, index) => (
+      <div className="page-wrapper px-[17px]  py-24">
+        <Title className="mb-4">Terms and Conditions</Title>
+        <Content>Please read these Terms and Conditions carefully before booking a workshop with Bedia Pottery ("us", "we", or "our").</Content>
+        <div className="mt-[40px] bg-white p-5 lg:p-10 ">
+          {termsData.map((section, index) => (
             <div key={index}>
               <Content className="font-semibold mb-4">
-                {section.heading}
+                {section.title}
               </Content>
               <div className="mb-6">
-                {section.content?.map((text, i) => (
-                  <Content key={i} className="leading-[150%]">
-                    {text}
+                  <Content  className="leading-[150%]">
+                    {section.content}
                   </Content>
-                ))}
 
-                {section.points && (
+                {/* {section?.points && (
                   <ul className="list-decimal  pl-5">
-                    {section.points.map((item, i) => (
+                    {section?.points.map((item, i) => (
                       <Content key={i} className="leading-[150%]">
                         <li>{item}</li>
                       </Content>
                     ))}
                   </ul>
-                )}
+                )} */}
               </div>
             </div>
           ))}

@@ -1,14 +1,9 @@
 import React from 'react'
 import ProductDetailClient from '@/components/product/ProductDetailClient'
 import { products } from '@/constants/products'
-import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
+import { getWorkshopData } from '@/services/workshop.service'
 
-/**
- * ProductDetailPage
- * Single Responsibility: Server-side page component that handles routing and data fetching
- * Open/Closed: Extensible through metadata generation
- */
 interface PageProps {
   params: {
     category: string
@@ -16,40 +11,27 @@ interface PageProps {
   }
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
-  const product = products.find(
-    (p) => p.category === params.category && p.slug === params.slug
-  )
-
-  if (!product) {
-    return {
-      title: 'Product Not Found',
-    }
-  }
-
-  return {
-    title: `${product.title} - Bedia Pottery`,
-    description:
-      product.description || `Book ${product.title} at Bedia Pottery`,
-  }
-}
-
+/**
+ * Required for static export
+ */
 export async function generateStaticParams() {
-  return products.map((product) => ({
+  return products.map(product => ({
     category: product.category,
     slug: product.slug,
   }))
 }
 
-export default function ProductDetailPage({ params }: PageProps) {
+export default async function ProductDetailPage({
+  params,
+}: PageProps) {
+  const data = await getWorkshopData(params.slug)
+
   const product = products.find(
-    (p) => p.category === params.category && p.slug === params.slug
+    item => item.slug === params.slug
   )
 
   if (!product) {
-    notFound()
+    return null
   }
 
   return (

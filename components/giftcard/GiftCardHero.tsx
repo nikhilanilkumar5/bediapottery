@@ -11,7 +11,7 @@ export default function GiftCardHero() {
 
   return (
     <section className="bg-[#f2ece3] min-h-screen py-12 font-sans text-[#113224]">
-      <div className="page-wrapper px-[17px] lg:px-0 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="page-wrapper px-[17px]  grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         
         {/* Left Column: Media Gallery */}
         <div className="space-y-4 h-full flex flex-col">

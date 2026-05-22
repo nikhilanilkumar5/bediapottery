@@ -40,7 +40,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
       {/* BUTTON */}
       <Link
-        href={`/workshops/${product.category}/${product.slug}`}
+        href={`/workshops/${product.mainSlug}/${product.slug}`}
         className="block mt-3 w-full bg-primary text-white text-center py-4 text-lg font-medium hover:bg-primary-dark transition-colors duration-300"
       >
         Book Now

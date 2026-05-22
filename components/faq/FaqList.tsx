@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { FAQItem } from "@/constants/faqData"
 import FaqItem from "./FaqItem"
 
@@ -10,7 +10,9 @@ interface FaqListProps {
 
 const FaqList: React.FC<FaqListProps> = ({ items }) => {
   const [openId, setOpenId] = useState<string | null>(null)
-
+  useEffect(() => {
+    console.log("FAQ data in page:", items)
+  }, [items])
   return (
     <div className="space-y-4 mt-[70px]">
       {items.map((faq) => (

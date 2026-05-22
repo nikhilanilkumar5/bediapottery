@@ -35,7 +35,7 @@ const TwoColumnSection: React.FC<TwoColumnSectionProps> = ({
 
   return (
     <section className={``}>
-      <div className="page-wrapper px-[17px] lg:px-0 flex flex-col lg:flex-row shadow-soft p-4 lg:p-6">
+      <div className="page-wrapper px-[17px]  flex flex-col lg:flex-row shadow-soft p-4 lg:p-6">
         {imagePosition === "left" ? (
           <>
             {imageSection}

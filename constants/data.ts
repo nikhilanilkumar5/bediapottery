@@ -12,7 +12,7 @@ export const navigationItems: NavigationItem[] = [
     label: "Pottery Workshops",
     href: "/workshops",
     children: [
-      { label: "Adults Workshop", href: "/workshops/adults-pottery-wheel" },
+      { label: "Adults Workshop", href: "/workshops/adults-workshop" },
       { label: "Kids Workshop", href: "/workshops/kids-workshop" },
       { label: "Kids Birthday Party", href: "/workshops/kids-birthday" },
       { label: "Adults Birthday Party", href: "/workshops/adults-birthday" },

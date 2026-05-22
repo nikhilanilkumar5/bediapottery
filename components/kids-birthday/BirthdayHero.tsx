@@ -19,7 +19,7 @@ export default function BirthdayHero() {
 
   return (
     <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#113224]">
-      <div className="page-wrapper px-[17px] lg:px-0 grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+      <div className="page-wrapper px-[17px]  grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
         
         {/* Left Column: Image Grid */}
         <div className="flex flex-col gap-4 h-full">

@@ -69,11 +69,6 @@ export const workshopData = {
 };
 
 export const workshopCategorySlugs = [
-  "adults-pottery-wheel",
+  "adults-workshop",
   "kids-workshop",
-  "kids-birthday",
-  "adults-birthday",
-  "gift-cards",
-  "corporate-events",
-  "school-field-trips",
 ];
