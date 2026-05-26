@@ -1,7 +1,8 @@
 'use client'
 
+import { WorkshopOption } from '@/services/workshop.service'
 import React from 'react'
-import { MaterialOption } from '@/types'
+
 
 /**
  * MaterialSelector Component
@@ -9,7 +10,7 @@ import { MaterialOption } from '@/types'
  * Interface Segregation: Only depends on MaterialOption interface
  */
 interface MaterialSelectorProps {
-  materials: MaterialOption[]
+  materials: WorkshopOption[]
   selectedMaterialId: string
   onMaterialSelect: (materialId: string) => void
   className?: string
@@ -30,15 +31,15 @@ const MaterialSelector: React.FC<MaterialSelectorProps> = ({
     <div className="flex gap-3 w-full">
   {materials.map((material) => (
     <button
-      key={material.id}
-      onClick={() => onMaterialSelect(material.id)}
+      key={material._id}
+      onClick={() => onMaterialSelect(material._id)}
       className={`flex-1 px-6 2xl:py-5 py-4 font-medium transition-colors duration-200 ${
-        selectedMaterialId === material.id
+        selectedMaterialId === material._id
           ? 'bg-primary text-secondary-dark  '
         : 'bg-[#0D463D1A] text-primary  hover:bg-primary hover:text-secondary-dark'
       }`}
     >
-      {material.name}
+      {material.title}
     </button>
   ))}
 </div>

@@ -52,170 +52,117 @@ export const categories: Category[] = [
   },
 ]
 
-export const products: Product[] = [
-  // Adults Pottery Wheel
-  {
-    id: '1',
-    title: 'Pottery On Wheel',
-    price: 400,
-    imageUrl: '/images/products/pottery-wheel.jpg',
-    category: 'adults-pottery-wheel',
-    slug: 'pottery-on-wheel',
-  },
-  {
-    id: '2',
-    title: 'Turkish Coffee Set',
-    price: 300,
-    imageUrl: '/images/products/turkish-coffee-set.jpg',
-    category: 'adults-pottery-wheel',
-    slug: 'turkish-coffee-set',
-  },
-  {
-    id: '3',
-    title: 'From Mud to Mug',
-    price: 200,
-    imageUrl: '/images/products/mud-to-mug.jpg',
-    category: 'adults-pottery-wheel',
-    slug: 'from-mud-to-mug',
-  },
-  {
-    id: '4',
-    title: "Customised Gifts Gift Card",
-    price: 299,
-    imageUrl: '/images/products/gift-card.jpg',
-    category: 'adults-pottery-wheel',
-    slug: 'customised-gifts-gift-card',
-  },
-  {
-    id: '5',
-    title: "Couple's Pottery Workshop",
-    price: 400,
-    originalPrice: 500,
-    imageUrl: '/images/products/couples-workshop.jpg',
-    videoUrl: '/videos/couples-workshop.mp4',
-    category: 'adults-pottery-wheel',
-    slug: 'couples-workshop',
-    description: "Join us at Bedia Pottery Studio for our 'Couples Pottery Workshops'! It's a perfect opportunity for couples to bond while crafting beautiful keepsakes with clay.",
-    materials: [
-      { id: 'air-dry', name: 'Air Dry', description: 'Air-dry clay is perfect for beginners.' },
-      { id: 'terracotta', name: 'Terracotta', description: 'Terracotta clay is a natural, earthy clay.' },
-      { id: 'ceramic', name: 'Ceramic', description: 'Ceramic clay is versatile and fires to a durable finish.' },
-    ],
-    materialDescriptions: {
-      'air-dry': 'Air-dry clay is perfect for beginners. It doesn\'t require firing and dries naturally at room temperature. Perfect for creating decorative pieces and keepsakes.',
-      'terracotta': 'Terracotta clay is a natural, earthy clay that fires to a reddish-brown color. Perfect for traditional pottery and garden pieces.',
-      'ceramic': 'Ceramic clay is versatile and fires to a durable finish. Ideal for functional pottery pieces like mugs, bowls, and plates.',
+export const product = {
+  _id: "6a0b15ca645dc00dea1e3977",
+
+  title: "Team Building",
+
+  slug: "team-building",
+
+  bannerImage: "",
+
+  images: [
+    {
+      image:
+        "https://api-bediaprive.adpedia.in/uploads/1779111370376-team2.jpg",
+      title: "",
+      _id: "6a10449e645dc00dea1e3d50",
     },
+  ],
+
+  categoryId: {
+    _id: "6a0b11fc645dc00dea1e38fc",
+    title: "Adults Workshop",
   },
-  {
-    id: '6',
-    title: 'Luxury Clay Night',
-    price: 300,
-    imageUrl: '/images/products/luxury-clay-night.jpg',
-    category: 'adults-pottery-wheel',
-    slug: 'luxury-clay-night',
-  },
-  {
-    id: '7',
-    title: 'Multiple Sessions',
-    price: 200,
-    imageUrl: '/images/products/multiple-sessions.jpg',
-    category: 'adults-pottery-wheel',
-    slug: 'multiple-sessions',
-  },
-  {
-    id: '8',
-    title: 'Team Building',
-    price: 299,
-    imageUrl: '/images/products/team-building.jpg',
-    category: 'adults-pottery-wheel',
-    slug: 'team-building',
-  },
-  // Hand building
-  {
-    id: '9',
-    title: 'Hand Building Basics',
-    price: 250,
-    imageUrl: '/images/products/hand-building-basics.jpg',
-    category: 'hand-building',
-    slug: 'hand-building-basics',
-  },
-  {
-    id: '10',
-    title: 'Coil Pottery Workshop',
-    price: 280,
-    imageUrl: '/images/products/coil-pottery.jpg',
-    category: 'hand-building',
-    slug: 'coil-pottery-workshop',
-  },
-  // Kids Pottery Wheel
-  {
-    id: '11',
-    title: 'Kids Pottery Fun',
-    price: 150,
-    imageUrl: '/images/products/kids-pottery-fun.jpg',
-    category: 'kids-pottery-wheel',
-    slug: 'kids-pottery-fun',
-  },
-  {
-    id: '12',
-    title: 'Children Clay Play',
-    price: 180,
-    imageUrl: '/images/products/children-clay-play.jpg',
-    category: 'kids-pottery-wheel',
-    slug: 'children-clay-play',
-  },
-  // Workshop
-  {
-    id: '13',
-    title: 'Weekend Workshop',
-    price: 350,
-    imageUrl: '/images/products/weekend-workshop.jpg',
-    category: 'workshop',
-    slug: 'weekend-workshop',
-  },
-  // Packages
-  {
-    id: '14',
-    title: 'Beginner Package',
-    price: 1000,
-    imageUrl: '/images/products/beginner-package.jpg',
-    category: 'packages',
-    slug: 'beginner-package',
-  },
-  {
-    id: '15',
-    title: 'Advanced Package',
-    price: 1500,
-    imageUrl: '/images/products/advanced-package.jpg',
-    category: 'packages',
-    slug: 'advanced-package',
-  },
-  // Pottery Workshops
-  {
-    id: '16',
-    title: 'Pottery Masterclass',
-    price: 500,
-    imageUrl: '/images/products/masterclass.jpg',
-    category: 'pottery-workshops',
-    slug: 'pottery-masterclass',
-  },
-  // Luxury Private
-  {
-    id: '17',
-    title: 'Private Luxury Session',
-    price: 800,
-    imageUrl: '/images/products/private-luxury.jpg',
-    category: 'luxury-private',
-    slug: 'private-luxury-session',
-  },
-  // Family Pottery Workshop
-  {
-    id: '18',
-    title: 'Family Fun Day',
-    price: 350,
-    imageUrl: '/images/products/family-fun-day.jpg',
-    category: 'family-pottery-workshop',
-    slug: 'family-fun-day',
-  },
-]
+
+  shortDescription:
+    "Boost team spirit and bond through clay in our Pottery Team-Building Workshop at Bedia Pottery Studio",
+
+  description:
+    "Create lasting memories and stronger connections using ceramic or air-dry clay in a fun, creative setting",
+
+  overview:
+    "Looking for a creative way to boost collaboration and build team spirit? Our Pottery Team-Building Workshop invites your group to slow down, connect, and craft something together. No experience needed — just bring your team and enjoy 1.5 hours of fun, hands-on clay time with the option to return for a painting session.",
+
+  defaultSlots: [
+    {
+      _id: "6a10449e645dc00dea1e3d4b",
+      label: "slot 1",
+      startTime: "2:00 PM",
+      endTime: "3:30 PM",
+      capacity: 12,
+    },
+    {
+      _id: "6a10449e645dc00dea1e3d4c",
+      label: "slot 2",
+      startTime: "4:00 PM",
+      endTime: "5:30 PM",
+      capacity: 12,
+    },
+  ],
+
+  includes: [
+    {
+      title: "2 Hours for the Event",
+      _id: "6a10449e645dc00dea1e3d51",
+    },
+    {
+      title: "Dedicated Workshop Area 1200 sq ft",
+      _id: "6a10449e645dc00dea1e3d52",
+    },
+    {
+      title: "Expert Instructors",
+      _id: "6a10449e645dc00dea1e3d53",
+    },
+  ],
+
+  options: [
+    {
+      _id: "6a10449e645dc00dea1e3d4d",
+      clayTypeId: "698ed9075bed39f35db8991a",
+      title: "Air-Dry Clay",
+      price: 249,
+      currency: "AED",
+      priceDescription: "per person",
+      description: "Air-Dry Clay",
+      inclusions: [],
+      image: "",
+    },
+    {
+      _id: "6a10449e645dc00dea1e3d4e",
+      clayTypeId: "698ed9075bed39f35db8991c",
+      title: "Terracotta Clay",
+      price: 259,
+      currency: "AED",
+      priceDescription: "person",
+      description: "Terracotta Clay",
+      inclusions: [],
+      image: "",
+    },
+    {
+      _id: "6a10449e645dc00dea1e3d4f",
+      clayTypeId: "698ed9075bed39f35db8991b",
+      title: "Ceramic Clay",
+      price: 299,
+      currency: "AED",
+      priceDescription: "person",
+      description: "Ceramic Clay",
+      inclusions: [],
+      image: "",
+    },
+  ],
+
+  showOnHomepage: true,
+
+  isActive: true,
+
+  journeyImage: [],
+
+  moreDetails: [],
+
+  nonAvailabilityDates: [],
+
+  nonAvailabilityDays: [],
+
+  createdAt: "2026-05-18T13:36:10.489Z",
+};

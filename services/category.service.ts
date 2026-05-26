@@ -55,7 +55,7 @@ export async function getCategoryData(
 
   const raw = await res.json().catch(() => null);
 
-  console.log("Category API:", raw);
+  console.log("Category API:", raw, `${API_BASE_URL}/workshop/byCategory?slug=${slug}`);
 
   if (!res.ok) {
     throw new Error(

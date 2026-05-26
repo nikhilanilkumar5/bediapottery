@@ -5,36 +5,42 @@ import { Content, Title } from "@/components/ui";
 import TestimonialsSection from "@/components/testimonial/TestimonialsSection";
 import { getCategoryData } from "@/services/category.service";
 
-interface PageProps {
-  params: {
+interface CategoryPageProps {
+ params: Promise<{
     category: string;
-  };
+  }>;
 }
 
+export default async function CategoryPage({
+  params,
+}: CategoryPageProps) {
+  const { category } = await params;
 
+  const data = await getCategoryData(category);
 
-
-export default async function CategoryPage({ params }: PageProps) {
-
-  const data = await getCategoryData(params.category);
-  /* Check category exists */
-  if (!data) {
+  // Check category exists
+  if (!data.totalCount || data.totalCount === 0) {
     notFound();
   }
 
   return (
     <main className="min-h-screen bg-white">
       <div className="page-wrapper pt-24">
+
         {/* Header Section */}
-
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-20">
-          <div className="flex-1">
-            <Title className="mb-2.5 font-normal">{data.category?.title}</Title>
 
-            <Title className="mb-2.5 font-normal !text-2xl">
-              ({data.category?.shortDescription})
-            </Title>
-          </div>
+          {data.category?.title && (
+            <div className="flex-1">
+              <Title className="mb-2.5 font-normal">
+                {data.category?.title}
+              </Title>
+
+              <Title className="mb-2.5 font-normal !text-2xl">
+                ({data.category?.shortDescription})
+              </Title>
+            </div>
+          )}
 
           {data.category?.description && (
             <div className="lg:max-w-lg flex-1">
@@ -51,11 +57,10 @@ export default async function CategoryPage({ params }: PageProps) {
                 key={workshop._id}
                 product={{
                   id: workshop._id,
-                  // price: workshop.price,
                   title: workshop.title,
                   imageUrl: workshop.bannerImage,
                   slug: workshop.slug,
-                  mainSlug:params.category,
+                  mainSlug: category,
                   description: workshop.shortDescription,
                 }}
               />
@@ -69,6 +74,7 @@ export default async function CategoryPage({ params }: PageProps) {
           </div>
         )}
       </div>
+
       <TestimonialsSection />
     </main>
   );

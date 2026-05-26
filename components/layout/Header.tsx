@@ -49,12 +49,12 @@ const Header: React.FC = () => {
               {navigationItems.map((item) =>
                 item.children ? (
                   <div key={item.href} className="relative group">
-                    <Link href={item.href} className="flex items-center gap-1">
+                    <div  className="flex items-center gap-1 cursor-pointer">
                       <Content className="hover:text-primary transition-colors duration-200">
                         {item.label}
                       </Content>
                       <ChevronDown className="w-3 h-3 text-gray-500 group-hover:text-primary transition-colors duration-200" />
-                    </Link>
+                    </div>
                     <div className="absolute left-0 top-full mt-2 w-44 bg-white border border-gray-100 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                       {item.children.map((child) => (
                         <Link

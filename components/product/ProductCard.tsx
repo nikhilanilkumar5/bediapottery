@@ -14,12 +14,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const [imageError, setImageError] = useState(false);
 
   return (
-    <div className="group bg-secondary-dark hover:bg-white p-2 pb-3 transition-all duration-300 hover:shadow-soft">
+    <div  onClick={() => window.location.href = `/workshops/${product.mainSlug}/${product.slug}`} className="group cursor-pointer bg-secondary-dark hover:bg-white p-2 pb-3 transition-all duration-300 hover:shadow-soft">
       {/* IMAGE CONTAINER */}
       <div className="relative w-full h-[420px] overflow-hidden">
         {!imageError ? (
           <Image
-            src={product.imageUrl}
+            src={product.imageUrl||"/images/banner/banner-2.png"}
             alt={product.title}
             fill
             className="object-cover"

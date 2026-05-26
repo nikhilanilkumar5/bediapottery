@@ -13,6 +13,7 @@ interface QuantitySelectorProps {
   onIncrease: () => void;
   onDecrease: () => void;
   unitPrice: number;
+  currency: string;
   className?: string;
 }
 
@@ -21,6 +22,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   onIncrease,
   onDecrease,
   unitPrice,
+  currency,
   className = "",
 }) => {
   const totalPrice = quantity * unitPrice;
@@ -93,7 +95,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
 
   {/* Price */}
   <Content className="font-medium !text-white">
-    {totalPrice} AED
+    {totalPrice} {currency}
   </Content>
 
   {/* Add to Cart */}

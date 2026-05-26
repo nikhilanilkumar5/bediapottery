@@ -1,4 +1,12 @@
-export default function BirthdayDetails() {
+import { WorkshopItem } from "@/services/workshop.service";
+
+  interface BirthdayProps {
+    product: WorkshopItem
+  }
+  
+  const BirthdayDetails: React.FC<BirthdayProps> = ({
+    product
+  }) => {
   const timelineSteps = [
     { num: '01', title: 'Arrival & Welcome', time: '15 Mins', desc: 'Kids Settle In And Get Ready For The Fun' },
     { num: '02', title: 'Pottery Workshop', time: '60 Mins', desc: 'Hands-On Pottery Making With Instructors' },
@@ -94,33 +102,31 @@ export default function BirthdayDetails() {
         <div>
           <h2 className="text-2xl font-neiko text-[#113224] mb-6">Package Includes</h2>
           <div className="bg-white p-8 lg:p-10 shadow-sm">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-12">
-              
-              <ul className="list-disc pl-5 space-y-2 text-[13px] text-black marker:text-[#113224]">
-                <li>2 Hours for the Event</li>
-                <li>Dedicated Workshop Area</li>
-                <li>Workshops: Handbuilding or Pottery Wheel</li>
-                <li>Expert Instructors</li>
-                <li>Clay, Tools & Aprons Provided</li>
-                <li>Special Cutters for Custom Designing</li>
-              </ul>
+            {(() => {
 
-              <ul className="list-disc pl-5 space-y-2 text-[13px] text-black marker:text-[#113224]">
-                <li>Tidy & Hygienic Workshop Area</li>
-                <li>Free Parking Space*</li>
-                <li>Digital Invitation</li>
-                <li>Decorated Party Area</li>
-                <li>Pots packed in a beautiful box - can be used as a goody gift</li>
-              </ul>
+              const packageIncludes = (product.includes?.map((item) => item.title) )
 
-              <ul className="list-disc pl-5 space-y-2 text-[13px] text-black marker:text-[#113224]">
-                <li>Locker facilities available</li>
-                <li>Birthday song during cake cutting</li>
-                <li>Cake cutting table & dining area</li>
-                <li>Premium Location</li>
-              </ul>
+              const columns = [[], [], []] as string[][]
 
-            </div>
+              packageIncludes.forEach((item, index) => {
+                columns[index % columns.length].push(item)
+              })
+
+              return (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-12">
+                  {columns.map((columnItems, index) => (
+                    <ul
+                      key={index}
+                      className="list-disc pl-5 space-y-2 text-[13px] text-black marker:text-[#113224]"
+                    >
+                      {columnItems.map((item, itemIndex) => (
+                        <li key={`${item}-${itemIndex}`}>{item}</li>
+                      ))}
+                    </ul>
+                  ))}
+                </div>
+              )
+            })()}
           </div>
         </div>
 
@@ -128,3 +134,4 @@ export default function BirthdayDetails() {
     </section>
   );
 }
+export default BirthdayDetails;

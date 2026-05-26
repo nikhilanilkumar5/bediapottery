@@ -46,7 +46,7 @@ const FormPasswordInput = React.forwardRef<
           <input
             ref={ref}
             type={showPassword ? 'text' : 'password'}
-            className={`w-full p-6 pr-14 bg-[#E5E0C933] rounded-[58px] border-[0.6px] border-transparent transition-colors duration-300 focus:outline-none focus:border-[#0D463D99] focus:bg-white text-lg leading-none hover:border-[#0D463D99] ${
+            className={`w-full 2xl:p-6 p-4 pr-14 bg-[#E5E0C933]  border-[0.6px] border-transparent transition-colors duration-300 focus:outline-none focus:border-[#0D463D99] focus:bg-white 2xl:text-lg text-sm leading-none hover:border-[#0D463D99] ${
               error
                 ? 'border-red-500 bg-red-50'
                 : 'hover:bg-white'

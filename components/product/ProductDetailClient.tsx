@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
-import { Product, BookingData } from '@/types'
+import React, { useState, useMemo, useEffect } from 'react'
+import {  BookingData } from '@/types'
+import{ WorkshopItem} from '@/services/workshop.service'
 import ProductMedia from './ProductMedia'
 import PriceDisplay from './PriceDisplay'
 import MaterialSelector from './MaterialSelector'
@@ -14,25 +15,23 @@ import { BookingService, IBookingService } from '@/services/booking.service'
 import { TimeSlotService, ITimeSlotService } from '@/services/timeSlot.service'
 import { Content, Title } from '../ui'
 
-/**
- * ProductDetailClient Component
- * Single Responsibility: Orchestrate product detail UI and booking flow
- * Dependency Inversion: Depends on service interfaces, not concrete implementations
- */
+
 interface ProductDetailClientProps {
-  product: Product
+  product: WorkshopItem
   bookingService?: IBookingService
   timeSlotService?: ITimeSlotService
 }
 
 const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
-  product,
   bookingService = new BookingService(),
   timeSlotService = new TimeSlotService(),
+  product
 }) => {
-  // State management - each state has single responsibility
+  useEffect(() => {   
+    console.log('Received product data:', product)
+  }, [product])
   const [selectedMaterialId, setSelectedMaterialId] = useState(
-    product.materials?.[0]?.id || ''
+    product.options?.[0]?._id || ''
   )
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null)
@@ -41,17 +40,10 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
 
   // Derived state - computed values
   const selectedMaterial = useMemo(
-    () => product.materials?.find((m) => m.id === selectedMaterialId),
-    [product.materials, selectedMaterialId]
+    () => product.options?.find((m) => m._id === selectedMaterialId),
+    [product.options, selectedMaterialId]
   )
 
-  const materialDescription = useMemo(() => {
-    return (
-      product.materialDescriptions?.[selectedMaterialId] ||
-      selectedMaterial?.description ||
-      ''
-    )
-  }, [product.materialDescriptions, selectedMaterialId, selectedMaterial])
 
   const timeSlots = useMemo(() => {
     if (!selectedDate) return []
@@ -83,7 +75,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
 
   const handleAddToCart = async () => {
     const bookingData: BookingData = {
-      productId: product.id,
+      productId: product._id,
       materialId: selectedMaterialId || undefined,
       date: selectedDate || undefined,
       timeSlotId: selectedSlotId || undefined,
@@ -94,7 +86,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
 
   const handleBookNow = async () => {
     const bookingData: BookingData = {
-      productId: product.id,
+      productId: product._id,
       materialId: selectedMaterialId || undefined,
       date: selectedDate || undefined,
       timeSlotId: selectedSlotId || undefined,
@@ -110,43 +102,37 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Left Section - Media */}
         <ProductMedia
-          imageUrl={'/images/product/1.png'}
-          videoUrl={product.videoUrl}
-          alt={product.title}
+          imageUrl={product?.images?.[0]?.image || '/images/product/1.png'}
+          alt={product?.title}
         />
 
         {/* Right Section - Booking Panel */}
         <div className=" p-6 lg:p-8 space-y-6 ">
           <div>
-                <Title className="2xl:mb-7 mb-5 font-normal">{product.title}</Title>
-            {product.description && (
+                <Title className="2xl:mb-7 mb-5 font-normal">{product?.title}</Title>
+            {product?.description && (
                <Content className=" leading-relaxed mb-7">
-                       {product.description}
+                       {product?.description}
                         </Content>
              
             )}
           </div>
 
-          {/* Price Display */}
-          <PriceDisplay
-            price={product.price}
-            originalPrice={product.originalPrice}
-          />
 <div className="p-[18px] bg-white">
           {/* Material Selector */}
-          {product.materials && product.materials.length > 0 && (
+          {product?.options && product.options.length > 0 && (
             <MaterialSelector
-              materials={product.materials}
+              materials={product?.options}
               selectedMaterialId={selectedMaterialId}
               onMaterialSelect={setSelectedMaterialId}
             />
           )}
 
           {/* Material Description */}
-          {selectedMaterial && materialDescription && (
+          {selectedMaterial && selectedMaterial.description && (
             <MaterialDescription
-              materialName={selectedMaterial.name}
-              description={materialDescription}
+              materialName={selectedMaterial.title}
+              description={selectedMaterial.description}
             />
           )}
 </div>
@@ -174,7 +160,8 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
             quantity={quantity}
             onIncrease={() => setQuantity(quantity + 1)}
             onDecrease={() => setQuantity(Math.max(1, quantity - 1))}
-            unitPrice={product.price}
+            unitPrice={selectedMaterial ? selectedMaterial.price : 0  }
+            currency={selectedMaterial ? selectedMaterial.currency :'AED' }
           />
 </div>
           {/* Booking Actions */}

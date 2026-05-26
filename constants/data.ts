@@ -14,8 +14,8 @@ export const navigationItems: NavigationItem[] = [
     children: [
       { label: "Adults Workshop", href: "/workshops/adults-workshop" },
       { label: "Kids Workshop", href: "/workshops/kids-workshop" },
-      { label: "Kids Birthday Party", href: "/workshops/kids-birthday" },
-      { label: "Adults Birthday Party", href: "/workshops/adults-birthday" },
+      { label: "Kids Birthday Party", href: "/workshops/kids-birthday-party" },
+      { label: "Adults Birthday Party", href: "/workshops/adults-birthday-party" },
       { label: "Gift Cards", href: "/workshops/gift-cards" },
       { label: "Corporate Events", href: "/workshops/corporate-events" },
       { label: "School Field Trips", href: "/workshops/school-field-trips" },

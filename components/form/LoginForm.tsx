@@ -7,6 +7,9 @@ import { useRouter } from "next/navigation";
 import { Content } from "../ui";
 import { validateEmail } from "@/utils/validation";
 
+import { loginUser } from "@/services/authService";
+import { useAuthStore } from "@/store/authStore";
+
 interface LoginFormData {
   email: string;
   password: string;
@@ -17,63 +20,132 @@ interface LoginError {
   message: string;
 }
 
-/** Client-side service */
-const loginService = {
-  submit: async (data: LoginFormData) => {
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log("Login data:", data);
-  },
-};
-
 const initialFormData: LoginFormData = {
   email: "",
   password: "",
 };
 
 const LoginForm = () => {
-  const [formData, setFormData] = useState(initialFormData);
-  const [errors, setErrors] = useState<LoginError[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [formData, setFormData] =
+    useState<LoginFormData>(initialFormData);
+
+  const [errors, setErrors] = useState<
+    LoginError[]
+  >([]);
+
+  const [isSubmitting, setIsSubmitting] =
+    useState(false);
+
+  const [submitSuccess, setSubmitSuccess] =
+    useState(false);
+
   const router = useRouter();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // zustand
+  const setUser = useAuthStore(
+    (state) => state.setUser
+  );
+
+  // input change
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => prev.filter((err) => err.field !== name));
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // remove old error
+    setErrors((prev) =>
+      prev.filter((err) => err.field !== name)
+    );
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // submit
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
+
     const newErrors: LoginError[] = [];
 
+    // email validation
+    const emailValidation = validateEmail(
+      formData.email
+    ) as { message: string } | null;
+
     if (!formData.email) {
-      newErrors.push({ field: "email", message: "Email is required" });
-    } else if (!validateEmail(formData.email)) {
-      newErrors.push({ field: "email", message: "Invalid email format" });
+      newErrors.push({
+        field: "email",
+        message: "Email is required",
+      });
+    } else if (emailValidation) {
+      newErrors.push({
+        field: "email",
+        message: emailValidation.message,
+      });
     }
 
+    // password validation
     if (!formData.password) {
-      newErrors.push({ field: "password", message: "Password is required" });
+      newErrors.push({
+        field: "password",
+        message: "Password is required",
+      });
     }
 
+    // stop if error
     if (newErrors.length > 0) {
       setErrors(newErrors);
       return;
     }
 
     setIsSubmitting(true);
+
     try {
-      await loginService.submit(formData);
+      // axios api call
+      const response = await loginUser({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      /*
+        expected api response
+
+        {
+          user: {
+            id: "1",
+            email: "test@gmail.com"
+          },
+          token: "abcd123"
+        }
+      */
+
+      // save zustand
+      setUser({
+        email: response.result.email,
+        token: response.result.token,
+        role: response.result.role,
+      });
+
       setSubmitSuccess(true);
+
+      // reset form
       setFormData(initialFormData);
+
+      // redirect
       setTimeout(() => {
-        setSubmitSuccess(false);
         router.push("/");
-      }, 1500);
-    } catch {
+      }, 1000);
+    } catch (error: any) {
       setErrors([
-        { field: "form", message: "Login failed. Please try again." },
+        {
+          field: "form",
+          message:
+            error.message || "Login failed",
+        },
       ]);
     } finally {
       setIsSubmitting(false);
@@ -81,24 +153,52 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-6">
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      className="space-y-6"
+    >
+      {/* success */}
       {submitSuccess && (
-        <div className="p-4 bg-green-50 border border-green-200 ">
-          <p className="text-green-600 text-sm">Login successful 🎉</p>
+        <div className="p-4 bg-green-50 border border-green-200 rounded-md">
+          <p className="text-green-600 text-sm">
+            Login successful 🎉
+          </p>
         </div>
       )}
 
+      {/* form error */}
+      {errors.find(
+        (err) => err.field === "form"
+      ) && (
+        <div className="p-4 bg-red-50 border border-red-200 rounded-md">
+          <p className="text-red-600 text-sm">
+            {
+              errors.find(
+                (err) => err.field === "form"
+              )?.message
+            }
+          </p>
+        </div>
+      )}
+
+      {/* email */}
       <FormInput
         name="email"
         label="Email Address"
         type="email"
         value={formData.email}
-        placeholder="Example@gmail.com"
+        placeholder="example@gmail.com"
         onChange={handleChange}
-        error={errors.find((err) => err.field === "email")?.message}
+        error={
+          errors.find(
+            (err) => err.field === "email"
+          )?.message
+        }
         required
       />
 
+      {/* password */}
       <div className="relative">
         <FormInput
           type="password"
@@ -106,26 +206,48 @@ const LoginForm = () => {
           label="Password"
           value={formData.password}
           onChange={handleChange}
-          error={errors.find((err) => err.field === "password")?.message}
+          error={
+            errors.find(
+              (err) => err.field === "password"
+            )?.message
+          }
           required
         />
-        <button type="button" onClick={() => router.push("/forgot-password")} className="w-full pt-5">
+
+        <button
+          type="button"
+          onClick={() =>
+            router.push("/forgot-password")
+          }
+          className="w-full pt-5"
+        >
           <Content className="text-right">
             Forget Password ?
           </Content>
         </button>
       </div>
 
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
-        {isSubmitting ? "Logging in..." : "Continue"}
+      {/* submit button */}
+      <Button
+        type="submit"
+        className="w-full"
+        disabled={isSubmitting}
+      >
+        {isSubmitting
+          ? "Logging in..."
+          : "Continue"}
       </Button>
 
+      {/* signup */}
       <div className="text-center">
-        <span className="text-sm text-gray-600">Don't have an account? </span>
+        <span className="text-sm text-gray-600">
+          Don&apos;t have an account?
+        </span>
+
         <button
           type="button"
           onClick={() => router.push("/signup")}
-          className="text-primary text-sm font-semibold hover:underline"
+          className="text-primary text-sm font-semibold hover:underline ml-1"
         >
           Sign up
         </button>

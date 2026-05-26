@@ -1,22 +1,46 @@
 'use client';
-import { useState } from 'react';
+import { Key, useEffect, useState } from 'react';
 import { Minus, Plus, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import DateSelector from '../product/DateSelector';
+import { WorkshopItem } from '@/services/workshop.service';
+interface BirthdayProps {
+  product: WorkshopItem
+}
 
-export default function BirthdayHero() {
-  const [activeTab, setActiveTab] = useState('notes');
+const BirthdayHero: React.FC<BirthdayProps> = ({
+  product
+}) => {
+  useEffect(() => {
+    console.log('Received product data in BirthdayHero:', product)
+  }, [product])
   const [quantity, setQuantity] = useState(1);
-  const [selectedDate, setSelectedDate] = useState('Jan 01');
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+    const [showTimeSlots, setShowTimeSlots] = useState(false)
+     const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState(
+  product.moreDetails?.[0]?._id || ''
+)
 
-  const dates = [
-    { day: 'Mon', date: 'Jan 01' },
-    { day: 'Thu', date: 'Jan 02' },
-    { day: 'Wed', date: 'Jan 03' },
-    { day: 'Thu', date: 'Jan 04' },
-    { day: 'Fri', date: 'Jan 05' },
-    { day: 'Sat', date: 'Jan 06' },
-    { day: 'Sun', date: 'Jan 07' },
-  ];
+const activeContent = product.moreDetails.find(
+  item => item._id === activeTab
+)
+const handleDateSelect = (date: Date) => {
+    const isSameDate =
+      selectedDate &&
+      date.toDateString() === selectedDate.toDateString()
 
+    if (isSameDate && showTimeSlots) {
+      // Toggle off if same date clicked
+      setShowTimeSlots(false)
+      setSelectedSlotId(null)
+      setSelectedDate(null)
+    } else {
+      // Show slots for new date
+      setSelectedDate(date)
+      setShowTimeSlots(true)
+      setSelectedSlotId(null)
+    }
+  }
   return (
     <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#113224]">
       <div className="page-wrapper px-[17px]  grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
@@ -26,7 +50,7 @@ export default function BirthdayHero() {
           {/* Main Large Image */}
           <div className="w-full aspect-[4/3] bg-gray-200 overflow-hidden relative">
             <img 
-              src="/images/product/kids-birthday-1.png" 
+              src={product.bannerImage || "/images/product/kids-birthday-1.png"} 
               alt="Kids celebrating birthday with cake" 
               className="w-full h-full object-cover"
             />
@@ -35,13 +59,13 @@ export default function BirthdayHero() {
           {/* Bottom Thumbnails */}
           <div className="grid grid-cols-3 gap-4">
             <div className="aspect-[4/3] bg-gray-200 overflow-hidden">
-               <img src="/images/product/kids-birthday-2.jpg" alt="Party scene 1" className="w-full h-full object-cover" />
+               <img src={product.images[0].image || "/images/product/kids-birthday-2.jpg"} alt="Party scene 1" className="w-full h-full object-cover" />
             </div>
             <div className="aspect-[4/3] bg-gray-200 overflow-hidden">
-               <img src="/images/product/kids-birthday-3.jpg" alt="Party scene 2" className="w-full h-full object-cover" />
+               <img src={product.images[1].image || "/images/product/kids-birthday-3.jpg"} alt="Party scene 2" className="w-full h-full object-cover" />
             </div>
             <div className="aspect-[4/3] bg-gray-200 overflow-hidden">
-               <img src="/images/product/kids-birthday-4.png" alt="Party scene 3" className="w-full h-full object-cover" />
+               <img src={product.images[2].image || "/images/product/kids-birthday-4.png"} alt="Party scene 3" className="w-full h-full object-cover" />
             </div>
           </div>
         </div>
@@ -51,7 +75,7 @@ export default function BirthdayHero() {
           {/* Header */}
           <div className="mb-6">
             <h1 className="text-[2.5rem] leading-tight font-neiko text-[#113224] mb-1">
-              Kids Birthday Party Package
+              {product.title}
             </h1>
             <h2 className="text-[2rem] font-neiko text-[#113224] mb-4">
               (3 - 13 Years)
@@ -64,72 +88,70 @@ export default function BirthdayHero() {
           <div className="space-y-6">
             
             {/* Tabs Section */}
-            <div className="bg-white p-6 shadow-sm">
-              <div className="flex gap-2 mb-4">
-                <button 
-                  onClick={() => setActiveTab('notes')}
-                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${activeTab === 'notes' ? 'bg-[#113224] text-white' : 'bg-[#e9eceb] text-[#113224] hover:bg-[#dce1df]'}`}
-                >
-                  Note For The Parents
-                </button>
-                <button 
-                  onClick={() => setActiveTab('venue')}
-                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${activeTab === 'venue' ? 'bg-[#113224] text-white' : 'bg-[#e9eceb] text-[#113224] hover:bg-[#dce1df]'}`}
-                >
-                  Venue Details
-                </button>
-                <button 
-                  onClick={() => setActiveTab('package')}
-                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${activeTab === 'package' ? 'bg-[#113224] text-white' : 'bg-[#e9eceb] text-[#113224] hover:bg-[#dce1df]'}`}
-                >
-                  Package Includes
-                </button>
-              </div>
+        <div className="bg-white p-6 shadow-sm">
+  <div className="flex gap-2 mb-4 flex-wrap">
+    {product.moreDetails?.map(detail => (
+      <button
+        key={detail._id}
+        onClick={() => setActiveTab(detail._id)}
+        className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+          activeTab === detail._id
+            ? 'bg-[#113224] text-white'
+            : 'bg-[#e9eceb] text-[#113224] hover:bg-[#dce1df]'
+        }`}
+      >
+        {detail.title}
+      </button>
+    ))}
 
-              <div className="bg-[#fcfcfa] border border-[#e5e5e5] p-6 relative">
-                {/* Simulated scrollbar line indicator from design */}
-                <div className="absolute right-6 top-6 bottom-6 w-[2px] bg-[#e5e5e5]">
-                  <div className="w-full h-1/3 bg-[#113224]/20 rounded-full"></div>
-                </div>
+    <button
+      onClick={() => setActiveTab('package')}
+      className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+        activeTab === 'package'
+          ? 'bg-[#113224] text-white'
+          : 'bg-[#e9eceb] text-[#113224] hover:bg-[#dce1df]'
+      }`}
+    >
+      Package Includes
+    </button>
+  </div>
 
-                <ul className="list-disc pl-5 space-y-4 text-[13px] text-gray-700 pr-8">
-                  <li>Cake is allowed to be cut inside the studio</li>
-                  <li>Outside food and drink are allowed within the provided time, or else additional charges may incur per hour.</li>
-                  <li>Cutlery and other food-serving essentials should be brought from your end.</li>
-                  <li>The studio will provide a knife and lighter for the cake, if required.</li>
-                  <li>We recommend arranging pick-up and drop-off for the kids attending the workshop.</li>
-                  <li>Pets are not allowed inside the studio premises.</li>
-                </ul>
-              </div>
+  <div className="bg-[#fcfcfa] border border-[#e5e5e5] max-h-72 overflow-y-auto  p-6 relative">
+   
+      
 
-              <div className="mt-6 text-center">
-                <p className="font-bold text-sm text-[#113224]">To Know More, Read The Description Below.</p>
-              </div>
-            </div>
+    {activeTab === 'package' ? (
+      <ul className="list-disc pl-5 space-y-4 text-[13px] text-gray-700 pr-8">
+        {product.includes?.map(item => (
+          <li key={item._id}>{item.title}</li>
+        ))}
+      </ul>
+    ) : (
+      <div className="pr-8">
+<ul className="list-disc pl-5 space-y-4 text-[13px] text-gray-700 pr-8">
+  {activeContent?.description
+    ?.split(".")
+    .filter((item: string) => item.trim() !== "")
+    .map((item: string, index: Key | null | undefined) => (
+      <li key={index}>{item.trim()}</li>
+    ))}
+</ul>
+      </div>
+    )}
+  </div>
 
-            {/* Date Selector */}
-            <div className="bg-white p-4 shadow-sm flex items-center justify-between gap-4">
-              <button className="text-gray-400 hover:text-[#113224] transition-colors p-2">
-                <ChevronLeft size={20} />
-              </button>
-              
-              <div className="flex gap-2 overflow-x-auto flex-grow scrollbar-hide">
-                {dates.map((d, i) => (
-                  <button 
-                    key={i}
-                    onClick={() => setSelectedDate(d.date)}
-                    className={`flex flex-col items-center justify-center p-3 min-w-[72px] border transition-colors flex-shrink-0 ${selectedDate === d.date ? 'border-[#113224] bg-[#f9fafa]' : 'border-gray-200 hover:border-[#113224]/50'}`}
-                  >
-                    <span className="text-[11px] text-gray-500 mb-1">{d.day}</span>
-                    <span className="text-sm font-bold text-[#113224] whitespace-nowrap">{d.date}</span>
-                  </button>
-                ))}
-              </div>
-
-              <button className="text-gray-400 hover:text-[#113224] transition-colors p-2">
-                <ChevronRight size={20} />
-              </button>
-            </div>
+  {/* <div className="mt-6 text-center">
+    <p className="font-bold text-sm text-[#113224]">
+      To Know More, Read The Description Below.
+    </p>
+  </div> */}
+</div>
+              {/* Date Selector */}
+          <div className="p-[18px] bg-white">
+          <DateSelector
+            onDateSelect={handleDateSelect}
+            selectedDate={selectedDate}
+          /></div>
 
             {/* Booking Box */}
             <div className="bg-white p-6 shadow-sm">
@@ -181,3 +203,5 @@ export default function BirthdayHero() {
     </section>
   );
 }
+
+export default BirthdayHero;

@@ -8,8 +8,8 @@ import Image from "next/image";
 
 export default function SignupPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen p-5">
+    <div className=" bg-white">
+      <div className="grid grid-cols-1 lg:grid-cols-2  p-5">
         {/* Left */}
         <div className="hidden lg:block  bg-primary  p-[50px] w-full  bg-cover bg-center"
                          style={{ backgroundImage: `url(/images/banner/signup-banner.png)` }}
@@ -19,7 +19,7 @@ export default function SignupPage() {
           </Link>
           </div>
         {/* Right */}
-        <div className="flex items-center justify-start px-[17px] sm:px-[40px] lg:px-[90px]">
+        <div className="flex items-center overflow-y-auto scrollbar-hide justify-start px-[17px] sm:px-[40px] lg:px-[90px]">
           <div className="w-full max-w-xl">
             <div className="mb-[60px]">
                 <Title className=" mb-4 font-normal !text-[40px]">

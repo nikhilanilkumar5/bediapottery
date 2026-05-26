@@ -8,8 +8,8 @@ import LoginForm from "@/components/form/LoginForm";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen p-5 sticky top-0">
+    <div className="min-h-[calc(100vh_-_80px)] bg-white">
+      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[calc(100vh_-_80px)] p-5 sticky top-0">
         {/* Left */}
         <div className="hidden lg:block  bg-primary  p-[50px] w-full  bg-cover bg-center"
                          style={{ backgroundImage: `url(/images/banner/login-banner.png)` }}
@@ -21,7 +21,7 @@ export default function LoginPage() {
         {/* Right */}
         <div className="flex items-center overflow-y-auto scrollbar-hide justify-start px-[17px] sm:px-[40px] lg:px-[90px]">
           <div className="w-full max-w-xl">
-            <div className="mb-[60px]">
+            <div className="2xl:mb-[60px] mb-10">
                 <Title className=" mb-4 font-normal !text-[40px]">
                 Join Our Creative Community
               </Title>
