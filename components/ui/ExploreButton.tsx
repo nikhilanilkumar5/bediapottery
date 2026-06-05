@@ -21,7 +21,7 @@ const ExploreButton: React.FC<ExploreButtonProps> = ({
       href={href}
       onClick={onClick}
       className="group inline-flex items-center gap-2 lg:gap-4 bg-secondary text-primary 
-      rounded-full px-3 py-1.5 lg:px-5 lg:py-2 transition-all duration-300 hover:bg-[#ece4cd]"
+      px-3 py-1.5 lg:px-5 lg:py-2 transition-all duration-300 hover:bg-[#ece4cd]"
     >
        <Content className="!text-primary ">
                        {text}
@@ -29,7 +29,7 @@ const ExploreButton: React.FC<ExploreButtonProps> = ({
 
       {/* Arrow Circle */}
       <span
-        className="flex items-center justify-center w-8 h-8 lg:w-[46px] lg:h-[46px] rounded-full 
+        className="flex items-center justify-center w-8 h-8 lg:w-[46px] lg:h-[46px] 
         bg-white  transition-transform duration-300 
         group-hover:translate-x-1"
       >

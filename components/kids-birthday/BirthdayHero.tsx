@@ -3,6 +3,7 @@ import { Key, useEffect, useState } from 'react';
 import { Minus, Plus, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import DateSelector from '../product/DateSelector';
 import { WorkshopItem } from '@/services/workshop.service';
+import TimeSlotSelector from '../product/TimeSlotSelector';
 interface BirthdayProps {
   product: WorkshopItem
 }
@@ -13,7 +14,7 @@ const BirthdayHero: React.FC<BirthdayProps> = ({
   useEffect(() => {
     console.log('Received product data in BirthdayHero:', product)
   }, [product])
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(12);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
     const [showTimeSlots, setShowTimeSlots] = useState(false)
      const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null)
@@ -147,11 +148,28 @@ const handleDateSelect = (date: Date) => {
   </div> */}
 </div>
               {/* Date Selector */}
-          <div className="p-[18px] bg-white">
+          
+           
+            <div className="p-[18px] bg-white">
           <DateSelector
             onDateSelect={handleDateSelect}
             selectedDate={selectedDate}
           /></div>
+           <div className="p-[18px] bg-white">
+              <TimeSlotSelector
+                slots={product.defaultSlots.map((slot) => ({
+                  ...slot,
+                  capacity: Boolean(slot.capacity),
+                }))}
+                selectedSlotId={selectedSlotId}
+                onSlotSelect={() => {}}
+              />
+              {/* {slotError && (
+                <p className="mt-3 text-sm text-red-600">
+                  {slotError}
+                </p>
+              )} */}
+            </div>
 
             {/* Booking Box */}
             <div className="bg-white p-6 shadow-sm">
@@ -165,16 +183,16 @@ const handleDateSelect = (date: Date) => {
                 {/* Quantity Control */}
                 <div className="flex items-center border border-gray-300 w-32 justify-between px-2">
                   <button 
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    onClick={() => setQuantity(Math.max(12, quantity - 1))}
                     className="p-2 text-gray-600 hover:text-black transition-colors"
                   >
                     <Minus size={16} />
                   </button>
                   <span className="font-medium text-sm">
-                    {quantity < 10 ? `0${quantity}` : quantity}
+                    {quantity}
                   </span>
                   <button 
-                    onClick={() => setQuantity(quantity + 1)}
+                    onClick={() => setQuantity(Math.min(25, quantity + 1))}
                     className="p-2 text-gray-600 hover:text-black transition-colors"
                   >
                     <Plus size={16} />

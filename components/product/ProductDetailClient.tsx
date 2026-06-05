@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useMemo, useEffect } from 'react'
-import {  BookingData } from '@/types'
+import {  BookingData,Availability, AvailabilityResponse } from '@/types'
 import{ WorkshopItem} from '@/services/workshop.service'
 import ProductMedia from './ProductMedia'
 import PriceDisplay from './PriceDisplay'
@@ -12,19 +12,17 @@ import TimeSlotSelector from './TimeSlotSelector'
 import QuantitySelector from './QuantitySelector'
 import BookingActions from './BookingActions'
 import { BookingService, IBookingService } from '@/services/booking.service'
-import { TimeSlotService, ITimeSlotService } from '@/services/timeSlot.service'
+import { getAvailabilityData } from '@/services/avaliablity.service'
 import { Content, Title } from '../ui'
-
+import { useRouter } from "next/navigation";
 
 interface ProductDetailClientProps {
   product: WorkshopItem
   bookingService?: IBookingService
-  timeSlotService?: ITimeSlotService
 }
 
 const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   bookingService = new BookingService(),
-  timeSlotService = new TimeSlotService(),
   product
 }) => {
   useEffect(() => {   
@@ -36,8 +34,11 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null)
   const [quantity, setQuantity] = useState(1)
-  const [showTimeSlots, setShowTimeSlots] = useState(false)
-
+  const [formattedDate, setFormattedDate] = useState<string>('')
+  const [dateError, setDateError] = useState<string>('')
+  const [slotError, setSlotError] = useState<string>('')
+  const [availabilityError, setAvailabilityError] = useState<string>('')
+const router = useRouter()
   // Derived state - computed values
   const selectedMaterial = useMemo(
     () => product.options?.find((m) => m._id === selectedMaterialId),
@@ -45,10 +46,6 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   )
 
 
-  const timeSlots = useMemo(() => {
-    if (!selectedDate) return []
-    return timeSlotService.getTimeSlotsForDate(selectedDate)
-  }, [selectedDate, timeSlotService])
 
   // Event handlers - single responsibility per handler
   const handleDateSelect = (date: Date) => {
@@ -56,43 +53,125 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
       selectedDate &&
       date.toDateString() === selectedDate.toDateString()
 
-    if (isSameDate && showTimeSlots) {
+    if (isSameDate ) {
       // Toggle off if same date clicked
-      setShowTimeSlots(false)
       setSelectedSlotId(null)
       setSelectedDate(null)
+      setFormattedDate('')
     } else {
       // Show slots for new date
       setSelectedDate(date)
-      setShowTimeSlots(true)
+      setFormattedDate(date.toISOString().split('T')[0]) // Format as YYYY-MM-DD
       setSelectedSlotId(null)
     }
+
+    setDateError('')
   }
 
   const handleSlotSelect = (slotId: string) => {
     setSelectedSlotId(slotId)
+    setSlotError('')
+  }
+
+  const validateSelection = () => {
+    let isValid = true
+    if (!selectedDate) {
+      setDateError('Please select a date before continuing.')
+      isValid = false
+    } else {
+      setDateError('')
+    }
+
+    if (!selectedSlotId) {
+      setSlotError('Please select a time slot before continuing.')
+      isValid = false
+    } else {
+      setSlotError('')
+    }
+
+    return isValid
   }
 
   const handleAddToCart = async () => {
-    const bookingData: BookingData = {
-      productId: product._id,
-      materialId: selectedMaterialId || undefined,
-      date: selectedDate || undefined,
-      timeSlotId: selectedSlotId || undefined,
-      quantity,
+    if (!validateSelection()) {
+      return
     }
+
+    const bookingData: BookingData = {
+      userId: '65f1a2b3c4d5e6f7890a1234',
+      workshopId: product._id,
+      optionId: selectedMaterialId,
+      bookingDate: formattedDate,
+      slotId: selectedSlotId!,
+      people: quantity,
+    }
+
+    const availabilityData: Availability = {
+      workshopId: product._id,
+      bookingDate: formattedDate,
+      slotId: selectedSlotId!,
+      guests: quantity,
+    }
+
+    const availabilityResponse = await getAvailabilityData(
+      availabilityData
+    )
+
+    const isAvailable = availabilityResponse?.result?.available === true
+    const isAvailableMessage = availabilityResponse?.result?.reason
+    console.log('Availability response:', isAvailable, availabilityResponse)
+    if (!isAvailable) {
+      setAvailabilityError(
+        isAvailableMessage || 'Selected slot is not available. Please choose another date or time.'
+      )
+      return
+    }
+
+    setAvailabilityError('')
+
     await bookingService.addToCart(bookingData)
+    router.push('/cart')
   }
 
   const handleBookNow = async () => {
-    const bookingData: BookingData = {
-      productId: product._id,
-      materialId: selectedMaterialId || undefined,
-      date: selectedDate || undefined,
-      timeSlotId: selectedSlotId || undefined,
-      quantity,
+    if (!validateSelection()) {
+      return
     }
+
+    const bookingData: BookingData = {
+      userId: '',
+      workshopId: product._id,
+      optionId: selectedMaterialId,
+      bookingDate: formattedDate,
+      slotId: selectedSlotId!,
+      people: quantity,
+    }
+  
+    const availabilityData: Availability = {
+      workshopId: product._id,
+      bookingDate: formattedDate,
+      slotId: selectedSlotId!,
+      guests: quantity,
+    }
+
+    const availabilityResponse = await getAvailabilityData(
+      availabilityData
+    )
+
+    const isAvailable = availabilityResponse?.result?.available === true
+    const isAvailableMessage = availabilityResponse?.result?.reason
+    console.log('Availability response:', isAvailable, availabilityResponse)
+    if (!isAvailable) {
+      setAvailabilityError(
+        isAvailableMessage || 'Selected slot is not available. Please choose another date or time.'
+      )
+      return
+    }
+
+    setAvailabilityError('')
+
     await bookingService.bookNow(bookingData)
+    router.push('/booking-confirmation')
   }
 
   const isBookingDisabled = !selectedDate || !selectedSlotId
@@ -138,21 +217,35 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
 </div>
           {/* Date Selector */}
           <div className="p-[18px] bg-white">
-          <DateSelector
-            onDateSelect={handleDateSelect}
-            selectedDate={selectedDate}
-          /></div>
+            <DateSelector
+              onDateSelect={handleDateSelect}
+              selectedDate={selectedDate}
+            />
+            {dateError && (
+              <p className="mt-3 text-sm text-red-600">
+                {dateError}
+              </p>
+            )}
+          </div>
 
           {/* Time Slots */}
-          {/* {showTimeSlots && selectedDate && timeSlots.length > 0 && (
-            <div className="pt-4 border-t-2 border-gray-300 animate-dotIn">
+          {product?.defaultSlots.length > 0 && (
+            <div className="p-[18px] bg-white">
               <TimeSlotSelector
-                slots={timeSlots}
+                slots={product.defaultSlots.map((slot) => ({
+                  ...slot,
+                  capacity: Boolean(slot.capacity),
+                }))}
                 selectedSlotId={selectedSlotId}
                 onSlotSelect={handleSlotSelect}
               />
+              {slotError && (
+                <p className="mt-3 text-sm text-red-600">
+                  {slotError}
+                </p>
+              )}
             </div>
-          )} */}
+          )}
 
           {/* Quantity Selector */}
             <div className="p-[18px] bg-white">
@@ -162,9 +255,13 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
             onDecrease={() => setQuantity(Math.max(1, quantity - 1))}
             unitPrice={selectedMaterial ? selectedMaterial.price : 0  }
             currency={selectedMaterial ? selectedMaterial.currency :'AED' }
+                  onCart={handleAddToCart}
           />
 </div>
           {/* Booking Actions */}
+          {availabilityError && (
+            <p className="text-sm text-red-600">{availabilityError}</p>
+          )}
           <BookingActions
             onBookNow={handleBookNow}
             isBookingDisabled={isBookingDisabled}

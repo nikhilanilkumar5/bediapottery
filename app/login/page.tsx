@@ -1,6 +1,4 @@
-import React from "react";
 import Title from "@/components/ui/Title";
-import Subtitle from "@/components/ui/Subtitle";
 import { Content } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";

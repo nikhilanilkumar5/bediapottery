@@ -18,39 +18,12 @@ export default function CheckoutStep({ onNext, onBack }: { onNext: () => void; o
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
-             <div>
-              <label className="block text-sm mb-2">Company Name (Optional)</label>
-              <input type="text" className="w-full border border-gray-200 p-3 rounded-sm focus:outline-none focus:border-[#113224]" />
-            </div>
-            <div>
-              <label className="block text-sm mb-2">Country / Region *</label>
-              <select className="w-full border border-gray-200 p-3 rounded-sm focus:outline-none focus:border-[#113224] bg-white">
-                <option></option>
-              </select>
-            </div>
-          </div>
 
           <div>
-            <label className="block text-sm mb-2">Street Address *</label>
-            <input type="text" placeholder="House name and street name" className="w-full border border-gray-200 p-3 rounded-sm mb-3 focus:outline-none focus:border-[#113224]" />
-            <input type="text" placeholder="Apartment, suite, unit, etc. (optional)" className="w-full border border-gray-200 p-3 rounded-sm focus:outline-none focus:border-[#113224]" />
-          </div>
+            <label className="block text-sm mb-2"> Address *</label>
+            <input type="text" placeholder="Address" className="w-full border border-gray-200 p-3 rounded-sm mb-3 focus:outline-none focus:border-[#113224]" />
+                    </div>
 
-          <div className="grid grid-cols-3 gap-6">
-            <div>
-              <label className="block text-sm mb-2">Town / City *</label>
-              <select className="w-full border border-gray-200 p-3 rounded-sm bg-white"><option>New York</option></select>
-            </div>
-            <div>
-              <label className="block text-sm mb-2">Province *</label>
-              <select className="w-full border border-gray-200 p-3 rounded-sm bg-white"><option>New York</option></select>
-            </div>
-            <div>
-              <label className="block text-sm mb-2">Postcode / ZIP *</label>
-              <input type="text" defaultValue="734547" className="w-full border border-gray-200 p-3 rounded-sm" />
-            </div>
-          </div>
           
           <div className="grid grid-cols-2 gap-6">
             <div>

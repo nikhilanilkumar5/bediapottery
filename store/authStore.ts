@@ -1,33 +1,41 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 interface User {
-  email: string;
-  token: string;
-  role: string;
+  email: string
+  token: string
+  role: string
 }
 
 interface AuthStore {
-  user: User | null;
-  setUser: (user: User) => void;
-  logout: () => void;
+  user: User | null
+
+  setUser: (user: User) => void
+
+  logout: () => void
+
+  getToken: () => string | null
 }
 
-export const useAuthStore = create<AuthStore>((set) => ({
-    
-  user: null,
+export const useAuthStore = create<AuthStore>()(
+  persist(
+    (set, get) => ({
+      user: null,
 
-  setUser: (user) => {
-    localStorage.setItem("token", user.token);
-    localStorage.setItem("user", JSON.stringify(user.role));
+      setUser: user => {
+        set({ user })
+      },
 
-    set({ user });
-  },
+      logout: () => {
+        set({ user: null })
+      },
 
-  logout: () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
-    set({ user: null });
-  },
-}));
+      getToken: () => {
+        return get().user?.token || null
+      },
+    }),
+    {
+      name: 'auth-storage',
+    }
+  )
+)

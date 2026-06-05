@@ -126,17 +126,21 @@ export interface MaterialOption {
 }
 
 export interface TimeSlot {
-  id: string
-  time: string
-  available: boolean
+  _id: string
+  startTime: string
+  endTime: string
+  label: string
+  capacity: boolean
+  
 }
 
 export interface BookingData {
-  productId: string
-  materialId?: string
-  date?: Date
-  timeSlotId?: string
-  quantity: number
+  userId: string
+  workshopId: string
+  bookingDate: string
+  slotId: string
+  optionId: string
+  people: number
 }
 
 export interface Category {
@@ -145,4 +149,21 @@ export interface Category {
   slug: string
   description?: string
   subtitle?: string
+}
+
+export interface Availability {
+  workshopId: string;
+  bookingDate: string;
+  slotId: string;
+  guests: number;
+}
+export interface AvailabilityResult {
+  available: boolean;
+  reason: string;
+}
+
+export interface AvailabilityResponse {
+  success: boolean;
+  message: string;
+  result: AvailabilityResult;
 }

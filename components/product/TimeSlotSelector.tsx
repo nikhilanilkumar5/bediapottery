@@ -31,18 +31,18 @@ const TimeSlotSelector: React.FC<TimeSlotSelectorProps> = ({
       <div className="grid grid-cols-3 gap-3">
         {slots.map((slot) => (
           <button
-            key={slot.id}
-            onClick={() => slot.available && onSlotSelect(slot.id)}
-            disabled={!slot.available}
-            className={`px-4 py-3 rounded-lg font-medium transition-colors duration-200 ${
-              selectedSlotId === slot.id
-                ? 'bg-primary text-white border-2 border-primary'
-                : slot.available
-                ? 'bg-white text-gray-700 border-2 border-gray-300 hover:border-primary'
-                : 'bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed'
+            key={slot._id}
+            onClick={() => slot.capacity && onSlotSelect(slot._id)}
+            disabled={!slot.capacity}
+            className={`px-4 py-3  font-medium transition-colors duration-200 ${
+              selectedSlotId === slot._id
+                ? 'bg-primary text-white border border-primary'
+                : slot.capacity
+                ? 'bg-white text-gray-700 border border-gray-300 hover:border-primary'
+                : 'bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed'
             }`}
           >
-            {slot.time}
+            {slot.startTime} - {slot.endTime}
           </button>
         ))}
       </div>

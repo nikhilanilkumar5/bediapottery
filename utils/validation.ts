@@ -166,3 +166,4 @@ export const getFieldError = (errors: ValidationError[], fieldName: string): str
 }
 
 export const validateEmail = validators.validateEmail;
+export const validatePassword = validators.validatePassword;

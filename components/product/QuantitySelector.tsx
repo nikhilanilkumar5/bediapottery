@@ -12,6 +12,7 @@ interface QuantitySelectorProps {
   quantity: number;
   onIncrease: () => void;
   onDecrease: () => void;
+  onCart: () => void
   unitPrice: number;
   currency: string;
   className?: string;
@@ -21,6 +22,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   quantity,
   onIncrease,
   onDecrease,
+  onCart,
   unitPrice,
   currency,
   className = "",
@@ -99,7 +101,10 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   </Content>
 
   {/* Add to Cart */}
-  <button className="flex items-center gap-4 group hover:shadow-sm">
+  <button 
+    onClick={onCart}
+    className="flex items-center gap-4 group hover:shadow-sm"
+  >
     <span className="">Add to Cart</span>
 
       <span

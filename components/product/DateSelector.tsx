@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useMemo, useEffect } from 'react'
-import { format, addDays, startOfWeek } from 'date-fns'
+import { format, addDays } from 'date-fns'
 import { Calendar } from "@/components/ui/calendar"
 import {
 Popover,
@@ -89,7 +89,7 @@ daysCount: number,
 disabledDays: number[]
 ) => {
 return useMemo(() => {
-const start = startOfWeek(baseDate, { weekStartsOn: 1 })
+const start = normalizeDate(baseDate)
 const dates: Date[] = []
 let i = 0
 

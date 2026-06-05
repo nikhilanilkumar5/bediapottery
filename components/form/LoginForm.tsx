@@ -5,10 +5,11 @@ import FormInput from "./FormInput";
 import Button from "@/components/ui/PrimaryButton";
 import { useRouter } from "next/navigation";
 import { Content } from "../ui";
-import { validateEmail } from "@/utils/validation";
+import { validateEmail,validatePassword } from "@/utils/validation";
 
 import { loginUser } from "@/services/authService";
 import { useAuthStore } from "@/store/authStore";
+import FormPasswordInput from "./FormPasswordInput";
 
 interface LoginFormData {
   email: string;
@@ -89,10 +90,19 @@ const LoginForm = () => {
     }
 
     // password validation
+    const passwordValidation = validatePassword(
+      formData.password
+    ) as { message: string } | null;
+
     if (!formData.password) {
       newErrors.push({
         field: "password",
         message: "Password is required",
+      });
+    } else if (passwordValidation) {
+      newErrors.push({
+        field: "password",
+        message: passwordValidation.message,
       });
     }
 
@@ -200,19 +210,18 @@ const LoginForm = () => {
 
       {/* password */}
       <div className="relative">
-        <FormInput
-          type="password"
-          name="password"
-          label="Password"
-          value={formData.password}
-          onChange={handleChange}
-          error={
-            errors.find(
-              (err) => err.field === "password"
-            )?.message
-          }
-          required
-        />
+          <FormPasswordInput
+        name="password"
+        label="Password"
+        value={formData.password}
+        onChange={handleChange}
+        error={
+          errors.find(
+            (err) => err.field === "password"
+          )?.message
+        }
+        required
+      />
 
         <button
           type="button"
