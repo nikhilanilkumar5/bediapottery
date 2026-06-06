@@ -10,24 +10,41 @@ import { Content } from "../ui";
  */
 interface QuantitySelectorProps {
   quantity: number;
+  childCount?: number;
   onIncrease: () => void;
   onDecrease: () => void;
+  onchildIncrease?: () => void;
+  onchildDecrease?: () => void;
   onCart: () => void
-  unitPrice: number;
+  unitPrice?: number;
+  totalPrice?: number;
   currency: string;
   className?: string;
+  child?: boolean;
 }
 
 const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   quantity,
+  childCount = 0,
   onIncrease,
   onDecrease,
+  onchildIncrease,
+  onchildDecrease,
   onCart,
   unitPrice,
+  totalPrice,
   currency,
   className = "",
+  child = false
 }) => {
-  const totalPrice = quantity * unitPrice;
+  const effectiveChildCount = child ? childCount : 0;
+  const totalPersons = quantity + effectiveChildCount;
+  if(!unitPrice) {
+    const total = totalPrice ? totalPrice : 0;
+  }
+  else{
+    totalPrice = totalPersons * unitPrice;
+  }
 
   return (
     <div className={`space-y-4 ${className}`}>
@@ -41,10 +58,118 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
         </Content>
       </div>
     <div className={`w-full ${className}`}>
-  <div className="flex items-center w-full">
+  <div className={`${!child ? 'flex' : ''} items-center w-full`}>
         {/* Card */}
           {/* Quantity Controls */}
-          <div className="flex items-center mr-10 gap-4 border border-black/30 py-4 px-3">
+          
+          {child?(
+         
+            <div className="flex items-center w-full mb-4">
+            <Content className=" leading-relaxed !text-black  font-semibold mr-3">
+          Adults
+        </Content>
+            <div className="flex items-center mr-10 gap-4 border border-black/30 py-4 px-3">
+            {/* Minus */}
+            
+            <button
+              onClick={onDecrease}
+              disabled={quantity <= 1}
+              className="w-11  flex items-center justify-center  disabled:opacity-40 transition"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="black"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M20 12H4"
+                />
+              </svg>
+            </button>
+
+            {/* Quantity */}
+            <Content className="text-center leading-relaxed !text-black">
+              {quantity.toString().padStart(2, "0")}
+            </Content>
+
+            {/* Plus */}
+            <button
+              onClick={onIncrease}
+              className="w-11 flex items-center justify-center  transition"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="black"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            </button>
+          </div>
+            <Content className=" leading-relaxed !text-black  font-semibold mr-3">
+         Child
+        </Content>
+            <div className="flex items-center mr-10 gap-4 border border-black/30 py-4 px-3">
+            {/* Minus */}
+            
+            <button
+              onClick={onchildDecrease}
+              disabled={childCount <= 1}
+              className="w-11  flex items-center justify-center  disabled:opacity-40 transition"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="black"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M20 12H4"
+                />
+              </svg>
+            </button>
+
+            {/* Quantity */}
+            <Content className="text-center leading-relaxed !text-black">
+              {childCount.toString().padStart(2, "0")}
+            </Content>
+
+            {/* Plus */}
+            <button
+              onClick={onchildIncrease}
+              className="w-11 flex items-center justify-center  transition"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="black"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            </button>
+          </div>
+          </div>
+          ):(
+           <div className="flex items-center mr-10 gap-4 border border-black/30 py-4 px-3">
             {/* Minus */}
             <button
               onClick={onDecrease}
@@ -91,7 +216,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
               </svg>
             </button>
           </div>
-
+          )}
 {/* Price + Button Section */}
 <div className="flex  items-center justify-between bg-[#0f4a3c] text-white w-full py-[9px] pl-7 pr-3">
 

@@ -5,7 +5,7 @@ import { Play } from 'lucide-react';
 import Image from 'next/image';
 import { CartData, deleteCart } from '@/services/cart.service';
 
-export default function MobileCart({ data  }: {  data: CartData[] }) {
+export default function MobileCart({ data, onCheckout }: { data: CartData[]; onCheckout?: () => void }) {
   const router = useRouter();
   const cartItems = data[0]?.items || [];
   useEffect(() => {
@@ -77,12 +77,14 @@ export default function MobileCart({ data  }: {  data: CartData[] }) {
           This button uses the onCheckout prop passed down from MasterCartFlow 
           to transition to Step 1 (the detailed CartStep) 
         */}
-        {/* <button 
-          onClick={() => {}}
-          className="w-full bg-[#113224] text-white py-4 font-medium text-[15px] hover:bg-[#0c251a] transition-colors rounded-sm shadow-sm"
-        >
-          Checkout
-        </button> */}
+        {onCheckout ? (
+          <button 
+            onClick={onCheckout}
+            className="w-full bg-[#113224] text-white py-4 font-medium text-[15px] hover:bg-[#0c251a] transition-colors rounded-sm shadow-sm"
+          >
+            Checkout
+          </button>
+        ) : null}
 
         {/* Payment Methods */}
         <div className="text-center pb-8">

@@ -1,9 +1,10 @@
 'use client'
 
 import React, { useState, useMemo, useEffect } from 'react'
-import {  BookingData,Availability, } from '@/types'
+import {  BookingData,Availability, AvailabilityResponse } from '@/types'
 import{ WorkshopItem} from '@/services/workshop.service'
 import ProductMedia from './ProductMedia'
+import PriceDisplay from './PriceDisplay'
 import MaterialSelector from './MaterialSelector'
 import MaterialDescription from './MaterialDescription'
 import DateSelector from './DateSelector'
@@ -14,14 +15,13 @@ import { BookingService, IBookingService } from '@/services/booking.service'
 import { getAvailabilityData } from '@/services/avaliablity.service'
 import { Content, Title } from '../ui'
 import { useRouter } from "next/navigation";
-import { useBookingStore ,} from "@/store/bookingStore";
 
 interface ProductDetailClientProps {
   product: WorkshopItem
   bookingService?: IBookingService
 }
 
-const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
+const FamilyProductDetailClient: React.FC<ProductDetailClientProps> = ({
   bookingService = new BookingService(),
   product
 }) => {
@@ -34,21 +34,62 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null)
   const [quantity, setQuantity] = useState(1)
+  const [childCount, setChildCount] = useState(1)
   const [formattedDate, setFormattedDate] = useState<string>('')
   const [dateError, setDateError] = useState<string>('')
   const [slotError, setSlotError] = useState<string>('')
   const [availabilityError, setAvailabilityError] = useState<string>('')
 const router = useRouter()
   // Derived state - computed values
-  const selectedMaterial = useMemo(
-    () => product.options?.find((m) => m._id === selectedMaterialId),
-    [product.options, selectedMaterialId]
-  )
-
-const setBooking = useBookingStore(
-  (state) => state.setBooking
+const selectedMaterial = useMemo(
+  () => product.options?.find((m) => m._id === selectedMaterialId),
+  [product.options, selectedMaterialId]
 );
 
+const relatedOptions = useMemo(() => {
+  if (!selectedMaterial) return [];
+
+  return (
+    product.options?.filter(
+      option => option.clayTypeId === selectedMaterial.clayTypeId
+    ) || []
+  );
+}, [product.options, selectedMaterial]);
+
+const extraChildPrice = useMemo(() => {
+  return (
+    relatedOptions.find(option =>
+      option.title.toLowerCase().includes("extra child")
+    )?.price || 0
+  );
+}, [relatedOptions]);
+
+const extraAdultPrice = useMemo(() => {
+  return (
+    relatedOptions.find(option =>
+      option.title.toLowerCase().includes("extra adult")
+    )?.price || 0
+  );
+}, [relatedOptions]);
+
+const totalPrice = useMemo(() => {
+  if (!selectedMaterial) return 0;
+
+  const extraAdults = Math.max(0, quantity - 1);
+  const extraChildren = Math.max(0, childCount - 1);
+
+  return (
+    selectedMaterial.price +
+    extraAdults * extraAdultPrice +
+    extraChildren * extraChildPrice
+  );
+}, [
+  selectedMaterial,
+  quantity,
+  childCount,
+  extraAdultPrice,
+  extraChildPrice,
+]);
 
   // Event handlers - single responsibility per handler
   const handleDateSelect = (date: Date) => {
@@ -95,17 +136,12 @@ const setBooking = useBookingStore(
     return isValid
   }
 
-const handleAddToCart = async (
-  totalCount?: number | React.MouseEvent
-) => {
-  if (!validateSelection()) {
-    return;
-  }
+  const handleAddToCart = async (totalCount?: number) => {
+    if (!validateSelection()) {
+      return
+    }
 
-  const peopleCount =
-    typeof totalCount === "number"
-      ? totalCount
-      : quantity;
+    const peopleCount = totalCount ?? quantity
     const bookingData: BookingData = {
       userId: '65f1a2b3c4d5e6f7890a1234',
       workshopId: product._id,
@@ -142,54 +178,54 @@ const handleAddToCart = async (
     router.push('/cart')
   }
 
- const handleBookNow = async () => {
-  if (!validateSelection()) {
-    return;
+  const handleBookNow = async () => {
+    if (!validateSelection()) {
+      return
+    }
+
+    const bookingData: BookingData = {
+      userId: '',
+      workshopId: product._id,
+      optionId: selectedMaterialId,
+      bookingDate: formattedDate,
+      slotId: selectedSlotId!,
+      people: quantity,
+    }
+  
+    const availabilityData: Availability = {
+      workshopId: product._id,
+      bookingDate: formattedDate,
+      slotId: selectedSlotId!,
+      guests: quantity,
+    }
+
+    const availabilityResponse = await getAvailabilityData(
+      availabilityData
+    )
+
+    const isAvailable = availabilityResponse?.result?.available === true
+    const isAvailableMessage = availabilityResponse?.result?.reason
+    console.log('Availability response:', isAvailable, availabilityResponse)
+    if (!isAvailable) {
+      setAvailabilityError(
+        isAvailableMessage || 'Selected slot is not available. Please choose another date or time.'
+      )
+      return
+    }
+
+    setAvailabilityError('')
+
+    await bookingService.bookNow(bookingData)
+    router.push('/booking-confirmation')
   }
-
-  const bookingData: BookingData = {
-    userId: '65f1a2b3c4d5e6f7890a1234',
-    workshopId: product._id,
-    optionId: selectedMaterialId,
-    bookingDate: formattedDate,
-    slotId: selectedSlotId!,
-    people: quantity,
-  };
-
-  const availabilityData: Availability = {
-    workshopId: product._id,
-    bookingDate: formattedDate,
-    slotId: selectedSlotId!,
-    guests: quantity,
-  };
-
-  const availabilityResponse =
-    await getAvailabilityData(availabilityData);
-
-  const isAvailable =
-    availabilityResponse?.result?.available === true;
-
-  const isAvailableMessage =
-    availabilityResponse?.result?.reason;
-
-  if (!isAvailable) {
-    setAvailabilityError(
-      isAvailableMessage ||
-        "Selected slot is not available. Please choose another date or time."
-    );
-    return;
-  }
-
-  setAvailabilityError("");
-
-  // Save to Zustand
-  await bookingService.addToCart(bookingData)
-  setBooking(bookingData);
-  router.push("/checkout");
-};
+  
 
   const isBookingDisabled = !selectedDate || !selectedSlotId
-
+const uniqueMaterials = product?.options?.filter(
+  option =>
+    !option.title.toLowerCase().includes('extra child') &&
+    !option.title.toLowerCase().includes('extra adult')
+);
   return (
     <div className="page-wrapper ">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -213,9 +249,9 @@ const handleAddToCart = async (
 
 <div className="p-[18px] bg-white">
           {/* Material Selector */}
-          {product?.options && product.options.length > 0 && (
+          {uniqueMaterials && uniqueMaterials.length > 0 && (
             <MaterialSelector
-              materials={product?.options}
+              materials={uniqueMaterials}
               selectedMaterialId={selectedMaterialId}
               onMaterialSelect={setSelectedMaterialId}
             />
@@ -263,14 +299,19 @@ const handleAddToCart = async (
 
           {/* Quantity Selector */}
             <div className="p-[18px] bg-white">
+             
           <QuantitySelector
-            quantity={quantity}
-            onIncrease={() => setQuantity(quantity + 1)}
-            onDecrease={() => setQuantity(Math.max(1, quantity - 1))}
-            unitPrice={selectedMaterial ? selectedMaterial.price : 0  }
-            currency={selectedMaterial ? selectedMaterial.currency :'AED' }
-                  onCart={handleAddToCart}
-          />
+  quantity={quantity}
+  onIncrease={() => setQuantity(quantity + 1)}
+  onDecrease={() => setQuantity(Math.max(1, quantity - 1))}
+  onchildIncrease={() => setChildCount(childCount + 1)}
+  onchildDecrease={() => setChildCount(Math.max(1, childCount - 1))}
+  totalPrice={totalPrice}
+  currency={selectedMaterial?.currency || "AED"}
+  onCart={handleAddToCart}
+  child={true}
+  childCount={childCount}
+/>
 </div>
           {/* Booking Actions */}
           {availabilityError && (
@@ -286,4 +327,4 @@ const handleAddToCart = async (
   )
 }
 
-export default ProductDetailClient
+export default FamilyProductDetailClient
