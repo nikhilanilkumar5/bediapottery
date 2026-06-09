@@ -1,16 +1,32 @@
 "use client";
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Play } from 'lucide-react';
 import Image from 'next/image';
 import { CartData, deleteCart } from '@/services/cart.service';
 
 export default function MobileCart({ data, onCheckout }: { data: CartData[]; onCheckout?: () => void }) {
   const router = useRouter();
-  const cartItems = data[0]?.items || [];
+  const cartItems = data?.[0]?.items || [];
+  const cartTotal = data?.[0]?.totalAmount ?? 0;
+  const currency = cartItems?.[0]?.currency || 'AED';
+
   useEffect(() => {
     console.log('Cart data received in MobileCart:', cartItems);
   }, [cartItems]);
+
+  if (cartItems.length === 0) {
+    return (
+      <main className="page-wrapper px-[17px] bg-[#fcfbf9] min-h-screen font-sans text-[#113224]">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4 py-20">
+          <h1 className="text-2xl font-serif mb-4">Your cart is empty</h1>
+          <p className="text-gray-500 max-w-md">
+            Add items to your cart and return here to complete checkout.
+          </p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="page-wrapper px-[17px]  bg-[#fcfbf9] min-h-screen font-sans text-[#113224]">
       
@@ -28,7 +44,7 @@ export default function MobileCart({ data, onCheckout }: { data: CartData[]; onC
             {/* Thumbnail */}
             <div className="w-24 h-24 sm:w-28 sm:h-28 bg-gray-200 rounded-sm shrink-0 overflow-hidden">
               <Image 
-                src={`${item.workshopId.images[0].image || '/images/products/pottery1.png'}`} 
+                src={item.workshopId.images?.[0]?.image || '/images/products/pottery1.png'} 
                 alt="Beginners pottery" 
                 width={112}
                 height={112}
@@ -70,7 +86,7 @@ export default function MobileCart({ data, onCheckout }: { data: CartData[]; onC
       <div className="mt-8 space-y-6">
         <div className="flex justify-between items-center text-lg">
           <span className="font-semibold text-gray-800">TOTAL</span>
-          <span className="font-bold">{cartItems[0].currency} {data[0]?.totalAmount.toFixed(2)}</span>
+          <span className="font-bold">{currency} {cartTotal.toFixed(2)}</span>
         </div>
 
         {/* 

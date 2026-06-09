@@ -1,3 +1,5 @@
+import { CartData } from "@/services/cart.service";
+
 export interface NavigationItem {
   label: string
   href: string
@@ -141,6 +143,33 @@ export interface BookingData {
   slotId: string
   optionId: string
   people: number
+  adult?: number
+  child?: number
+}
+
+export interface CheckoutWorkshopItem {
+  optionId: string
+  people: number
+}
+
+export interface CheckoutWorkshopPayload {
+  workshopId: string
+  bookingDate: string
+  slotId: string
+  items: CheckoutWorkshopItem[]
+}
+
+export interface CheckoutCustomerPayload {
+  firstName: string
+  lastName: string
+  address: string
+  phone: string
+  email: string
+}
+
+export interface CheckoutPayload {
+  workshops: CheckoutWorkshopPayload[]
+  customer: CheckoutCustomerPayload
 }
 
 export interface Category {
@@ -166,4 +195,10 @@ export interface AvailabilityResponse {
   success: boolean;
   message: string;
   result: AvailabilityResult;
+}
+export interface CartStepProps {
+  onNext?: () => void;
+  getCartData: () => Promise<CartData[]>;
+  data: CartData[];
+  deleteCart: (input: { userId: string; itemIndex: number }) => Promise<CartData[]>;
 }

@@ -1,27 +1,16 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { getCartData, CartData, deleteCart } from '@/services/cart.service';
 import Image from 'next/image';
+import { CartData } from '@/services/cart.service';
 
-export default function CartStep({ onNext }: { onNext: () => void }) {
-  const [cartData, setCartData] = useState<CartData[] | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  useEffect(() => {
-    async function loadCart() {
-      try {
-        const data = await getCartData();
-        setCartData(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load cart.');
-      } finally {
-        setLoading(false);
-      }
-    }
+interface CartStepProps {
+  onNext: () => void;
+  data: CartData[];
+  onDeleteItem: (itemIndex: number) => Promise<void>;
+  loading?: boolean;
+  error?: string | null;
+}
 
-    loadCart();
-  }, [deleteCart]);
-
+export default function CartStep({ onNext, data, onDeleteItem, loading = false, error }: CartStepProps) {
   if (loading) {
     return (
       <div className="w-full text-center py-24 text-gray-600">
@@ -39,10 +28,10 @@ export default function CartStep({ onNext }: { onNext: () => void }) {
     );
   }
 
-  const cartItems = cartData?.[0]?.items || [];
-  const cartTotal = cartData?.[0]?.totalAmount ?? 0;
-  const cartGrandTotal = cartData?.[0]?.grandTotal ?? 0;
-  const cartTax = cartData?.[0]?.taxAmount ?? 0;
+  const cartItems = data?.[0]?.items || [];
+  const cartTotal = data?.[0]?.totalAmount ?? 0;
+  const cartGrandTotal = data?.[0]?.grandTotal ?? 0;
+  const cartTax = data?.[0]?.taxAmount ?? 0;
   const cartCount = cartItems.length;
 
   if (cartCount === 0) {
@@ -87,12 +76,14 @@ export default function CartStep({ onNext }: { onNext: () => void }) {
                       <p className="text-sm text-gray-500">x {item.people} <span className="ml-2">{item.currency} {item.price.toFixed(2)}</span></p>
                     </div>
                     <div className="text-right flex flex-col items-end">
-                      <button  className="text-gray-400 hover:text-[#113224] mb-3 border border-gray-300 rounded-full w-6 h-6 flex items-center justify-center text-xs transition-colors"  onClick={async () => {
-                                            await deleteCart({
-                                              userId: cartData?.[0]?.userId || '',
-                                              itemIndex: cartItems.indexOf(item),
-                                            });
-                                          }}>✕</button>
+                      <button
+                        className="text-gray-400 hover:text-[#113224] mb-3 border border-gray-300 rounded-full w-6 h-6 flex items-center justify-center text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                        onClick={() => onDeleteItem(index)}
+                        disabled={loading}
+                        type="button"
+                      >
+                        ✕
+                      </button>
                       <p className="font-semibold text-[#113224]">{item.currency} {item.subtotal.toFixed(2)}</p>
                     </div>
                   </div>

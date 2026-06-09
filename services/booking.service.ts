@@ -1,5 +1,5 @@
 import { useAuthStore } from '@/store/authStore'
-import { BookingData } from '@/types'
+import { BookingData, CheckoutPayload } from '@/types'
 /**
  * BookingService
  * Single Responsibility: Handle booking API logic
@@ -18,7 +18,7 @@ function assertApiBaseUrl() {
 
 export interface IBookingService {
   addToCart(data: BookingData): Promise<any>
-  bookNow(data: BookingData): Promise<any>
+  bookNow(data: CheckoutPayload): Promise<any>
 }
 
 export class BookingService
@@ -49,15 +49,12 @@ const token : string | null = useAuthStore.getState().user?.token || null
 
     console.log('Add to cart API:', raw)
 
-    if (!res.ok) {
+    if (!res.ok || raw?.success === false || raw?.msuccess === false) {
       throw new Error(
-        `Add to cart failed: ${res.status} ${
-          res.statusText
-        }${
-          raw
-            ? ` - ${JSON.stringify(raw)}`
-            : ''
-        }`
+        raw?.message || raw?.error ||
+          `Add to cart failed: ${res.status} ${res.statusText}${
+            raw ? ` - ${JSON.stringify(raw)}` : ''
+          }`
       )
     }
 
@@ -65,14 +62,14 @@ const token : string | null = useAuthStore.getState().user?.token || null
   }
 
   async bookNow(
-    data: BookingData
+    data: CheckoutPayload
   ): Promise<any> {
     assertApiBaseUrl()
 
     const token : string | null = useAuthStore.getState().user?.token || null
 
     const res = await fetch(
-      `${API_BASE_URL}/booking/create`,
+      `${API_BASE_URL}/workshop/booking`,
       {
         method: 'POST',
         headers: {
@@ -89,16 +86,17 @@ const token : string | null = useAuthStore.getState().user?.token || null
 
     console.log('Book now API:', raw)
 
-    if (!res.ok) {
+    if (!res.ok || raw?.success === false || raw?.msuccess === false) {
       throw new Error(
-        `Booking failed: ${res.status} ${
-          res.statusText
-        }${
-          raw
-            ? ` - ${JSON.stringify(raw)}`
-            : ''
-        }`
+        raw?.message || raw?.error ||
+          `Booking failed: ${res.status} ${res.statusText}${
+            raw ? ` - ${JSON.stringify(raw)}` : ''
+          }`
       )
+    }
+
+    if (raw.checkoutUrl) {
+      window.location.href = raw.checkoutUrl
     }
 
     return raw

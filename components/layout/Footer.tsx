@@ -7,8 +7,8 @@ import { Content } from "../ui";
 const Footer: React.FC = () => {
   return (
     <footer className="bg-primary text-secondary-off">
-      <div className="page-wrapper px-[17px]  pt-14 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-8">
+      <div className="page-wrapper md:px-[17px] px-3  md:pt-14 pt-10 md:pb-8 pb-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-16 gap-6 md:mb-8 mb-5">
           {/* Left Column - Logo and Description */}
           <div className="space-y-[30px]">
             <Link href="/">
@@ -54,8 +54,8 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Middle-Left Column - Links */}
-          <div className="mt-16">
-            <h3 className=" 2xl:text-2xl  xl:text-xl font-medium mb-10">Links</h3>
+          <div className="md:mt-16 mt-6">
+            <h3 className=" 2xl:text-2xl  xl:text-xl font-medium md:mb-10 mb-5">Links</h3>
             <ul className="space-y-4">
               {footerLinks.map((link) => (
                 <li key={link.href}>
@@ -71,14 +71,14 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Middle-Right Column - Opening Hours */}
-          <div className="mt-16">
-            <h3 className="font-semibold mb-10 2xl:text-2xl  xl:text-xl">Opening Hours</h3>
+          <div className="md:mt-16 mt-6">
+            <h3 className="font-semibold md:mb-10 mb-5 2xl:text-2xl  xl:text-xl">Opening Hours</h3>
             <ul className="space-y-4  2xl:text-[22px]  xl:text-lg">
               <li>
                 <p className="font-normal">{openingHours.weekdays.days}</p>
                 <p className="font-light">{openingHours.weekdays.hours}</p>
               </li>
-              <li className="mt-4">
+              <li className="md:mt-4 mt-2">
                 <p className="font-normal">{openingHours.sunday.days}</p>
                 <p className="font-light">{openingHours.sunday.hours}</p>
               </li>
@@ -86,8 +86,8 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Right Column - Newsletter & Social Media */}
-          <div className="mt-16">
-            <h3 className=" 2xl:text-2xl  xl:text-xl font-medium mb-10">Newsletter</h3>
+          <div className="md:mt-16 mt-6">
+            <h3 className=" 2xl:text-2xl  xl:text-xl font-medium md:mb-10 mb-5">Newsletter</h3>
             <form className="mb-6">
               <div className="flex pr-1.5  border-[0.8px] h-[60px] border-secondary-off  items-center">
                 <input
@@ -186,8 +186,8 @@ const Footer: React.FC = () => {
               </div>
             </form>
 
-            <div className="mb-4">
-              <h3 className=" 2xl:text-2xl  xl:text-xl font-medium mb-10">Follow Us On:</h3>
+            <div className="md:mb-4 mb-2">
+              <h3 className=" 2xl:text-2xl  xl:text-xl font-medium md:mb-10 mb-5">Follow Us On:</h3>
               <div className="flex gap-8">
                 {socialMedia.map((social) => (
                   <a
@@ -212,11 +212,11 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className=" pt-12 flex justify-between items-center ">
+        <div className=" md:pt-12 pt-8 md:flex justify-between items-center ">
           <Content className="  !text-secondary-off ">
             Made With Love By Bedia Pottery LLC © 2024
           </Content>
-          <Content className="  !text-secondary-off ">
+          <Content className="  !text-secondary-off  md:mt-0 mt-4">
             <Link href="/privacy" className="">
               Privacy Policy
             </Link>

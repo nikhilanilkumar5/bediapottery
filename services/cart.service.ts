@@ -54,20 +54,22 @@ export async function getCartData(): Promise<CartData[]> {
     headers: {
       "Content-Type": "application/json",
     },
+    cache: "no-store",
   });
 
   const raw = await res.json().catch(() => null);
 
   console.log("Cart data API:", raw);
   if (!res.ok) {
-    throw new Error(
+    console.error(
       `Cart data failed: ${res.status} ${res.statusText}${
         raw ? ` - ${JSON.stringify(raw)}` : ""
       }`
     );
+    return [];
   }
 
-  const result = raw.data ?? raw;
+  const result = raw?.data ?? raw;
   if (!result) {
     return [];
   }
@@ -84,6 +86,7 @@ export async function deleteCart(deleteData: deleteCartData): Promise<CartData[]
       "Content-Type": "application/json",
     },
     body: JSON.stringify(deleteData),
+    cache: "no-store",
   });
 
   const raw = await res.json().catch(() => null);

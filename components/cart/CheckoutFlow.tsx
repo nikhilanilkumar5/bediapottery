@@ -1,17 +1,60 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Wallet, FileCheck2 } from 'lucide-react';
-
+import { CartData, deleteCart, getCartData } from '@/services/cart.service';
 import CartStep from './CartStep';
 import CheckoutStep from './CheckoutStep';
 import OrderCompleteStep from './OrderCompleteStep';
 
-export default function CheckoutFlow() {
+interface CheckoutFlowProps {
+  initialData: CartData[];
+}
+
+export default function CheckoutFlow({ initialData }: CheckoutFlowProps) {
   // Step 1 = Detailed Cart Review
   // Step 2 = Billing / Checkout
   // Step 3 = Order Complete
   const [step, setStep] = useState(1);
+  const [cartData, setCartData] = useState<CartData[]>(initialData ?? []);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const hasCartItems = cartData?.[0]?.items?.length > 0;
+  const isCartEmpty = !hasCartItems;
+
+  const refreshCart = async () => {
+    setLoading(true);
+    try {
+      const latest = await getCartData();
+      setCartData(latest);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to refresh cart.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteItem = async (itemIndex: number) => {
+    if (!cartData?.[0]?.userId) {
+      setError('Unable to determine cart user.');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      await deleteCart({
+        userId: cartData[0].userId,
+        itemIndex,
+      });
+      await refreshCart();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete cart item.');
+      setLoading(false);
+    }
+  };
 
   const fadeVariants = {
     hidden: { opacity: 0, y: 10 },
@@ -65,9 +108,29 @@ export default function CheckoutFlow() {
             exit="exit"
             className="flex flex-col lg:flex-row gap-12 items-start w-full"
           >
-            {step === 1 && <CartStep onNext={() => setStep(2)} />}
-            {step === 2 && <CheckoutStep onNext={() => setStep(3)} onBack={() => setStep(1)} />}
-            {step === 3 && <OrderCompleteStep />}
+            {isCartEmpty ? (
+              <div className="w-full text-center py-24 text-gray-700">
+                <h2 className="text-2xl font-semibold mb-3">Your cart is empty</h2>
+                <p className="text-sm text-gray-500 mb-6">
+                  It looks like your cart has no items. Please go back to the cart page and add items before checking out.
+                </p>
+                <a href="/cart" className="inline-flex items-center justify-center px-6 py-3 bg-[#113224] text-white rounded-sm hover:bg-[#0d2b1f] transition">
+                  Go to Cart
+                </a>
+              </div>
+            ) : step === 1 ? (
+              <CartStep
+                onNext={() => setStep(2)}
+                data={cartData}
+                loading={loading}
+                onDeleteItem={handleDeleteItem}
+                error={error}
+              />
+            ) : step === 2 ? (
+              <CheckoutStep onNext={() => setStep(3)} onBack={() => setStep(1)} data={cartData} />
+            ) : (
+              <OrderCompleteStep />
+            )}
           </motion.div>
         </AnimatePresence>
       </div>

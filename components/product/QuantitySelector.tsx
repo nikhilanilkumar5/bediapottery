@@ -173,7 +173,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
             {/* Minus */}
             <button
               onClick={onDecrease}
-              disabled={quantity <= 1}
+              disabled={quantity <= 2}
               className="w-11  flex items-center justify-center  disabled:opacity-40 transition"
             >
               <svg

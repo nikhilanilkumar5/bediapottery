@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useMemo, useEffect } from 'react'
+import { format } from 'date-fns'
 import {  BookingData,Availability, } from '@/types'
 import{ WorkshopItem} from '@/services/workshop.service'
 import ProductMedia from './ProductMedia'
@@ -33,8 +34,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   )
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null)
-  const [quantity, setQuantity] = useState(1)
-  const [formattedDate, setFormattedDate] = useState<string>('')
+  const [quantity, setQuantity] = useState(2)
   const [dateError, setDateError] = useState<string>('')
   const [slotError, setSlotError] = useState<string>('')
   const [availabilityError, setAvailabilityError] = useState<string>('')
@@ -45,32 +45,29 @@ const router = useRouter()
     [product.options, selectedMaterialId]
   )
 
-const setBooking = useBookingStore(
-  (state) => state.setBooking
-);
 
 
-  // Event handlers - single responsibility per handler
-  const handleDateSelect = (date: Date) => {
-    const isSameDate =
-      selectedDate &&
-      date.toDateString() === selectedDate.toDateString()
+const formattedDate = useMemo(() => {
+  return selectedDate
+    ? format(selectedDate, 'yyyy-MM-dd')
+    : ''
+}, [selectedDate])
+const handleDateSelect = (date: Date) => {
+  const isSameDate =
+    selectedDate &&
+    date.toDateString() === selectedDate.toDateString()
 
-    if (isSameDate ) {
-      // Toggle off if same date clicked
-      setSelectedSlotId(null)
-      setSelectedDate(null)
-      setFormattedDate('')
-    } else {
-      // Show slots for new date
-      setSelectedDate(date)
-      setFormattedDate(date.toISOString().split('T')[0]) // Format as YYYY-MM-DD
-      setSelectedSlotId(null)
-    }
+  if (isSameDate) {
+    setSelectedDate(null)
+    setSelectedSlotId(null)
+  } else {
+    setSelectedDate(date)
+    setSelectedSlotId(null)
 
-    setDateError('')
   }
 
+  setDateError('')
+}
   const handleSlotSelect = (slotId: string) => {
     setSelectedSlotId(slotId)
     setSlotError('')
@@ -95,56 +92,23 @@ const setBooking = useBookingStore(
     return isValid
   }
 
-const handleAddToCart = async (
-  totalCount?: number | React.MouseEvent
-) => {
-  if (!validateSelection()) {
-    return;
-  }
-
-  const peopleCount =
-    typeof totalCount === "number"
-      ? totalCount
-      : quantity;
-    const bookingData: BookingData = {
-      userId: '65f1a2b3c4d5e6f7890a1234',
-      workshopId: product._id,
-      optionId: selectedMaterialId,
-      bookingDate: formattedDate,
-      slotId: selectedSlotId!,
-      people: peopleCount,
-    }
-
-    const availabilityData: Availability = {
-      workshopId: product._id,
-      bookingDate: formattedDate,
-      slotId: selectedSlotId!,
-      guests: peopleCount,
-    }
-
-    const availabilityResponse = await getAvailabilityData(
-      availabilityData
-    )
-
-    const isAvailable = availabilityResponse?.result?.available === true
-    const isAvailableMessage = availabilityResponse?.result?.reason
-    console.log('Availability response:', isAvailable, availabilityResponse)
-    if (!isAvailable) {
-      setAvailabilityError(
-        isAvailableMessage || 'Selected slot is not available. Please choose another date or time.'
-      )
-      return
-    }
-
-    setAvailabilityError('')
-
-    await bookingService.addToCart(bookingData)
+const handleAddToCart = async () => {
+  const success = await handlecheck('cart')
+  if (success) {
     router.push('/cart')
   }
+}
 
- const handleBookNow = async () => {
+const handleBookNow = async () => {
+  const success = await handlecheck('checkout')
+  if (success) {
+    router.push('/checkout')
+  }
+}
+
+const handlecheck = async (destination: 'cart' | 'checkout') => {
   if (!validateSelection()) {
-    return;
+    return false;
   }
 
   const bookingData: BookingData = {
@@ -163,29 +127,31 @@ const handleAddToCart = async (
     guests: quantity,
   };
 
-  const availabilityResponse =
-    await getAvailabilityData(availabilityData);
+  const availabilityResponse = await getAvailabilityData(availabilityData);
 
-  const isAvailable =
-    availabilityResponse?.result?.available === true;
-
-  const isAvailableMessage =
-    availabilityResponse?.result?.reason;
+  const isAvailable = availabilityResponse?.result?.available === true;
+  const isAvailableMessage = availabilityResponse?.result?.reason;
 
   if (!isAvailable) {
     setAvailabilityError(
       isAvailableMessage ||
-        "Selected slot is not available. Please choose another date or time."
+        'Selected slot is not available. Please choose another date or time.'
     );
-    return;
+    return false;
   }
 
-  setAvailabilityError("");
+  setAvailabilityError('');
 
-  // Save to Zustand
-  await bookingService.addToCart(bookingData)
-  setBooking(bookingData);
-  router.push("/checkout");
+  try {
+    await bookingService.addToCart(bookingData);
+    return true;
+  } catch (error) {
+    setAvailabilityError(
+      (error as Error)?.message ||
+        'Unable to add booking to cart. Please try again.'
+    );
+    return false;
+  }
 };
 
   const isBookingDisabled = !selectedDate || !selectedSlotId

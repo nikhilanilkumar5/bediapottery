@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useMemo, useEffect } from 'react'
+import { format } from 'date-fns'
 import {  BookingData,Availability, AvailabilityResponse } from '@/types'
 import{ WorkshopItem} from '@/services/workshop.service'
 import ProductMedia from './ProductMedia'
@@ -35,16 +36,39 @@ const FamilyProductDetailClient: React.FC<ProductDetailClientProps> = ({
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null)
   const [quantity, setQuantity] = useState(1)
   const [childCount, setChildCount] = useState(1)
-  const [formattedDate, setFormattedDate] = useState<string>('')
   const [dateError, setDateError] = useState<string>('')
   const [slotError, setSlotError] = useState<string>('')
   const [availabilityError, setAvailabilityError] = useState<string>('')
+
+const formattedDate = useMemo(() => {
+  return selectedDate
+    ? format(selectedDate, 'yyyy-MM-dd')
+    : ''
+}, [selectedDate])
 const router = useRouter()
   // Derived state - computed values
 const selectedMaterial = useMemo(
   () => product.options?.find((m) => m._id === selectedMaterialId),
   [product.options, selectedMaterialId]
 );
+  const validateSelection = () => {
+    let isValid = true
+    if (!selectedDate) {
+      setDateError('Please select a date before continuing.')
+      isValid = false
+    } else {
+      setDateError('')
+    }
+
+    if (!selectedSlotId) {
+      setSlotError('Please select a time slot before continuing.')
+      isValid = false
+    } else {
+      setSlotError('')
+    }
+
+    return isValid
+  }
 
 const relatedOptions = useMemo(() => {
   if (!selectedMaterial) return [];
@@ -92,133 +116,97 @@ const totalPrice = useMemo(() => {
 ]);
 
   // Event handlers - single responsibility per handler
-  const handleDateSelect = (date: Date) => {
-    const isSameDate =
-      selectedDate &&
-      date.toDateString() === selectedDate.toDateString()
+const handleDateSelect = (date: Date) => {
+  const isSameDate =
+    selectedDate &&
+    date.toDateString() === selectedDate.toDateString()
 
-    if (isSameDate ) {
-      // Toggle off if same date clicked
-      setSelectedSlotId(null)
-      setSelectedDate(null)
-      setFormattedDate('')
-    } else {
-      // Show slots for new date
-      setSelectedDate(date)
-      setFormattedDate(date.toISOString().split('T')[0]) // Format as YYYY-MM-DD
-      setSelectedSlotId(null)
-    }
+  if (isSameDate) {
+    setSelectedDate(null)
+    setSelectedSlotId(null)
+  } else {
+    setSelectedDate(date)
+    setSelectedSlotId(null)
 
-    setDateError('')
+    console.log('Date object:', date)
+    console.log(
+      'Formatted:',
+      format(date, 'yyyy-MM-dd')
+    )
   }
 
+  setDateError('')
+}
   const handleSlotSelect = (slotId: string) => {
     setSelectedSlotId(slotId)
     setSlotError('')
   }
 
-  const validateSelection = () => {
-    let isValid = true
-    if (!selectedDate) {
-      setDateError('Please select a date before continuing.')
-      isValid = false
-    } else {
-      setDateError('')
-    }
 
-    if (!selectedSlotId) {
-      setSlotError('Please select a time slot before continuing.')
-      isValid = false
-    } else {
-      setSlotError('')
-    }
-
-    return isValid
-  }
-
-  const handleAddToCart = async (totalCount?: number) => {
-    if (!validateSelection()) {
-      return
-    }
-
-    const peopleCount = totalCount ?? quantity
-    const bookingData: BookingData = {
-      userId: '65f1a2b3c4d5e6f7890a1234',
-      workshopId: product._id,
-      optionId: selectedMaterialId,
-      bookingDate: formattedDate,
-      slotId: selectedSlotId!,
-      people: peopleCount,
-    }
-
-    const availabilityData: Availability = {
-      workshopId: product._id,
-      bookingDate: formattedDate,
-      slotId: selectedSlotId!,
-      guests: peopleCount,
-    }
-
-    const availabilityResponse = await getAvailabilityData(
-      availabilityData
-    )
-
-    const isAvailable = availabilityResponse?.result?.available === true
-    const isAvailableMessage = availabilityResponse?.result?.reason
-    console.log('Availability response:', isAvailable, availabilityResponse)
-    if (!isAvailable) {
-      setAvailabilityError(
-        isAvailableMessage || 'Selected slot is not available. Please choose another date or time.'
-      )
-      return
-    }
-
-    setAvailabilityError('')
-
-    await bookingService.addToCart(bookingData)
+const handleAddToCart = async () => {
+  const success = await handlecheck('cart')
+  if (success) {
     router.push('/cart')
   }
+}
 
-  const handleBookNow = async () => {
-    if (!validateSelection()) {
-      return
-    }
-
-    const bookingData: BookingData = {
-      userId: '',
-      workshopId: product._id,
-      optionId: selectedMaterialId,
-      bookingDate: formattedDate,
-      slotId: selectedSlotId!,
-      people: quantity,
-    }
-  
-    const availabilityData: Availability = {
-      workshopId: product._id,
-      bookingDate: formattedDate,
-      slotId: selectedSlotId!,
-      guests: quantity,
-    }
-
-    const availabilityResponse = await getAvailabilityData(
-      availabilityData
-    )
-
-    const isAvailable = availabilityResponse?.result?.available === true
-    const isAvailableMessage = availabilityResponse?.result?.reason
-    console.log('Availability response:', isAvailable, availabilityResponse)
-    if (!isAvailable) {
-      setAvailabilityError(
-        isAvailableMessage || 'Selected slot is not available. Please choose another date or time.'
-      )
-      return
-    }
-
-    setAvailabilityError('')
-
-    await bookingService.bookNow(bookingData)
-    router.push('/booking-confirmation')
+const handleBookNow = async () => {
+  const success = await handlecheck('checkout')
+  if (success) {
+    router.push('/checkout')
   }
-  
+}
+
+const handlecheck = async (destination: 'cart' | 'checkout') => {
+  if (!validateSelection()) {
+    return false;
+  }
+
+  const bookingData: BookingData = {
+    userId: '65f1a2b3c4d5e6f7890a1234',
+    workshopId: product._id,
+    optionId: selectedMaterialId,
+    bookingDate: formattedDate,
+    slotId: selectedSlotId!,
+    people: quantity + childCount,
+    adult: quantity,
+    child: childCount
+  };
+
+  const availabilityData: Availability = {
+    workshopId: product._id,
+    bookingDate: formattedDate,
+    slotId: selectedSlotId!,
+    guests: quantity,
+  };
+
+  const availabilityResponse = await getAvailabilityData(availabilityData);
+
+  const isAvailable = availabilityResponse?.result?.available === true;
+  const isAvailableMessage = availabilityResponse?.result?.reason;
+
+  if (!isAvailable) {
+    setAvailabilityError(
+      isAvailableMessage ||
+        'Selected slot is not available. Please choose another date or time.'
+    );
+    return false;
+  }
+
+  setAvailabilityError('');
+
+  try {
+    await bookingService.addToCart(bookingData);
+    return true;
+  } catch (error) {
+    setAvailabilityError(
+      (error as Error)?.message ||
+        'Unable to add booking to cart. Please try again.'
+    );
+    return false;
+  }
+};
+
 
   const isBookingDisabled = !selectedDate || !selectedSlotId
 const uniqueMaterials = product?.options?.filter(

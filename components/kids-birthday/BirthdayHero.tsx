@@ -1,47 +1,172 @@
 'use client';
-import { Key, useEffect, useState } from 'react';
+import { Key, useEffect, useMemo, useState } from 'react';
+import { format } from 'date-fns';
 import { Minus, Plus, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import DateSelector from '../product/DateSelector';
 import { WorkshopItem } from '@/services/workshop.service';
 import TimeSlotSelector from '../product/TimeSlotSelector';
+import { useRouter } from 'next/navigation';
+import { BookingService } from '@/services/booking.service';
+import { getAvailabilityData } from '@/services/avaliablity.service';
+import { BookingData, Availability } from '@/types';
+import { useBookingStore } from '@/store/bookingStore';
+import QuantitySelector from '../product/QuantitySelector';
+import BookingActions from '../product/BookingActions';
+import MaterialSelector from '../product/MaterialSelector';
 interface BirthdayProps {
-  product: WorkshopItem
+  product: WorkshopItem;
+  type?: 'kids' | 'adults';
 }
 
 const BirthdayHero: React.FC<BirthdayProps> = ({
-  product
+  product,
+  type ,
 }) => {
   useEffect(() => {
     console.log('Received product data in BirthdayHero:', product)
   }, [product])
-  const [quantity, setQuantity] = useState(12);
-    const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-    const [showTimeSlots, setShowTimeSlots] = useState(false)
-     const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null)
+  const makeTypes = [
+  { id: 'wheel', label: 'Wheel' },
+  { id: 'hand-building', label: 'Hand Building' },
+];
+
+const [makeType, setMakeType] = useState('');
+  const [quantity, setQuantity] = useState(type === 'kids' ? 12 : 10);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [showTimeSlots, setShowTimeSlots] = useState(false);
+  const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
+  const [dateError, setDateError] = useState<string>('');
+  const [slotError, setSlotError] = useState<string>('');
+  const [availabilityError, setAvailabilityError] = useState<string>('');
+  const router = useRouter();
+  const bookingService = new BookingService();
+  const setBooking = useBookingStore((state) => state.setBooking);
+  const [selectedMaterialId, setSelectedMaterialId] = useState(
+    product.options?.[0]?._id || ''
+  )
+   const selectedMaterial = useMemo(
+      () => product.options?.find((m) => m._id === selectedMaterialId),
+      [product.options, selectedMaterialId]
+    )
+  
   const [activeTab, setActiveTab] = useState(
-  product.moreDetails?.[0]?._id || ''
-)
+    product.moreDetails?.[0]?._id || ''
+  );
 
 const activeContent = product.moreDetails.find(
   item => item._id === activeTab
 )
-const handleDateSelect = (date: Date) => {
-    const isSameDate =
-      selectedDate &&
-      date.toDateString() === selectedDate.toDateString()
+const formattedDate = useMemo(() => {
+  return selectedDate ? format(selectedDate, 'yyyy-MM-dd') : ''
+}, [selectedDate])
 
-    if (isSameDate && showTimeSlots) {
-      // Toggle off if same date clicked
-      setShowTimeSlots(false)
-      setSelectedSlotId(null)
-      setSelectedDate(null)
-    } else {
-      // Show slots for new date
-      setSelectedDate(date)
-      setShowTimeSlots(true)
-      setSelectedSlotId(null)
-    }
+const handleDateSelect = (date: Date) => {
+  const isSameDate =
+    selectedDate &&
+    date.toDateString() === selectedDate.toDateString()
+
+  if (isSameDate && showTimeSlots) {
+    setShowTimeSlots(false)
+    setSelectedSlotId(null)
+    setSelectedDate(null)
+  } else {
+    setSelectedDate(date)
+    setShowTimeSlots(true)
+    setSelectedSlotId(null)
   }
+
+  setDateError('')
+  setAvailabilityError('')
+}
+
+const handleSlotSelect = (slotId: string) => {
+  setSelectedSlotId(slotId)
+  setSlotError('')
+  setAvailabilityError('')
+}
+
+const validateSelection = () => {
+  let isValid = true
+
+  if (!selectedDate) {
+    setDateError('Please select a date before continuing.')
+    isValid = false
+  } else {
+    setDateError('')
+  }
+
+  if (!selectedSlotId) {
+    setSlotError('Please select a time slot before continuing.')
+    isValid = false
+  } else {
+    setSlotError('')
+  }
+
+  return isValid
+}
+
+const handleCheck = async (destination: 'cart' | 'checkout') => {
+  if (!validateSelection()) {
+    return false
+  }
+
+  const bookingData: BookingData = {
+    userId: '65f1a2b3c4d5e6f7890a1234',
+    workshopId: product._id,
+    optionId: product.options?.[0]?._id || '',
+    bookingDate: formattedDate,
+    slotId: selectedSlotId!,
+    people: quantity,
+  }
+
+  const availabilityData: Availability = {
+    workshopId: product._id,
+    bookingDate: formattedDate,
+    slotId: selectedSlotId!,
+    guests: quantity,
+  }
+
+  const availabilityResponse = await getAvailabilityData(availabilityData)
+  const isAvailable = availabilityResponse?.result?.available === true
+  const isAvailableMessage = availabilityResponse?.result?.reason
+
+  if (!isAvailable) {
+    setAvailabilityError(
+      isAvailableMessage ||
+        'Selected slot is not available. Please choose another date or time.'
+    )
+    return false
+  }
+
+  setAvailabilityError('')
+
+  try {
+    await bookingService.addToCart(bookingData)
+    setBooking(bookingData)
+    return true
+  } catch (error) {
+    setAvailabilityError(
+      (error as Error)?.message ||
+        'Unable to add booking to cart. Please try again.'
+    )
+    return false
+  }
+}
+
+const handleAddToCart = async () => {
+  const success = await handleCheck('cart')
+  if (success) {
+    router.push('/cart')
+  }
+}
+
+const handleBookNow = async () => {
+  const success = await handleCheck('checkout')
+  if (success) {
+    router.push('/checkout')
+  }
+}
+ const isBookingDisabled = !selectedDate || !selectedSlotId
   return (
     <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#113224]">
       <div className="page-wrapper px-[17px]  grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
@@ -51,7 +176,7 @@ const handleDateSelect = (date: Date) => {
           {/* Main Large Image */}
           <div className="w-full aspect-[4/3] bg-gray-200 overflow-hidden relative">
             <img 
-              src={product.bannerImage || "/images/product/kids-birthday-1.png"} 
+              src={product?.bannerImage || "/images/product/kids-birthday-1.png"} 
               alt="Kids celebrating birthday with cake" 
               className="w-full h-full object-cover"
             />
@@ -60,13 +185,13 @@ const handleDateSelect = (date: Date) => {
           {/* Bottom Thumbnails */}
           <div className="grid grid-cols-3 gap-4">
             <div className="aspect-[4/3] bg-gray-200 overflow-hidden">
-               <img src={product.images[0].image || "/images/product/kids-birthday-2.jpg"} alt="Party scene 1" className="w-full h-full object-cover" />
+               <img src={product?.images[0]?.image || "/images/product/kids-birthday-2.jpg"} alt="Party scene 1" className="w-full h-full object-cover" />
             </div>
             <div className="aspect-[4/3] bg-gray-200 overflow-hidden">
-               <img src={product.images[1].image || "/images/product/kids-birthday-3.jpg"} alt="Party scene 2" className="w-full h-full object-cover" />
+               <img src={product?.images[1]?.image || "/images/product/kids-birthday-3.jpg"} alt="Party scene 2" className="w-full h-full object-cover" />
             </div>
             <div className="aspect-[4/3] bg-gray-200 overflow-hidden">
-               <img src={product.images[2].image || "/images/product/kids-birthday-4.png"} alt="Party scene 3" className="w-full h-full object-cover" />
+               <img src={product?.images[2]?.image || "/images/product/kids-birthday-4.png"} alt="Party scene 3" className="w-full h-full object-cover" />
             </div>
           </div>
         </div>
@@ -79,7 +204,7 @@ const handleDateSelect = (date: Date) => {
               {product.title}
             </h1>
             <h2 className="text-[2rem] font-neiko text-[#113224] mb-4">
-              (3 - 13 Years)
+              {type === 'kids' ? '(3 - 13 Years)' : '(above 18 Years)'}
             </h2>
             <p className="text-sm text-gray-800 leading-relaxed pr-4">
               Celebrate your kid's birthday at Bedia Pottery Studio! Enjoy a fun pottery experience in a serene setting. This booking is for a minimum of 12 kids. If you have more, we'll help accommodate.
@@ -147,73 +272,87 @@ const handleDateSelect = (date: Date) => {
     </p>
   </div> */}
 </div>
+<div className="p-[18px] bg-white">
+          {/* Material Selector */}
+          {product?.options && product.options.length > 0 && type === 'adults' && (
+            <MaterialSelector
+              materials={product?.options}
+              selectedMaterialId={selectedMaterialId}
+              onMaterialSelect={setSelectedMaterialId}
+            />
+          )}
+          </div>
+          <div className="p-[18px] bg-white space-y-3">
+            <h3 className="text-lg font-medium text-gray-900">Choose Your Make Type</h3>
+            {type === 'adults' && (
+          <div className="grid grid-cols-2 gap-3">
+  {makeTypes.map((type) => (
+    <button
+      key={type.id}
+      onClick={() => setMakeType(type.id)}
+      className={`px-4 py-3 font-medium transition-colors duration-200 ${
+        makeType === type.id
+          ? 'bg-primary text-white border border-primary'
+          : 'bg-white text-gray-700 border border-gray-300 hover:border-primary'
+      }`}
+    >
+      {type.label}
+    </button>
+  ))}
+</div>
+          )}
+          </div>
               {/* Date Selector */}
-          
-           
+              <div className="p-[18px] bg-white">
+            <DateSelector
+              onDateSelect={handleDateSelect}
+              selectedDate={selectedDate}
+            />
+            {dateError && (
+              <p className="mt-3 text-sm text-red-600">
+                {dateError}
+              </p>
+            )}
+          </div>
+
+          {/* Time Slots */}
+          {product?.defaultSlots.length > 0 && (
             <div className="p-[18px] bg-white">
-          <DateSelector
-            onDateSelect={handleDateSelect}
-            selectedDate={selectedDate}
-          /></div>
-           <div className="p-[18px] bg-white">
               <TimeSlotSelector
                 slots={product.defaultSlots.map((slot) => ({
                   ...slot,
                   capacity: Boolean(slot.capacity),
                 }))}
                 selectedSlotId={selectedSlotId}
-                onSlotSelect={() => {}}
+                onSlotSelect={handleSlotSelect}
               />
-              {/* {slotError && (
+              {slotError && (
                 <p className="mt-3 text-sm text-red-600">
                   {slotError}
                 </p>
-              )} */}
+              )}
             </div>
+          )}
 
-            {/* Booking Box */}
-            <div className="bg-white p-6 shadow-sm">
-              <h3 className="font-bold text-[15px] mb-2">Select Quantity & Book Your Slot</h3>
-              <p className="text-[13px] text-gray-600 mb-6">
-                Choose the number of participants and add the workshop to your cart to confirm your booking.
-              </p>
-
-              {/* Add to Cart Row */}
-              <div className="flex items-stretch gap-4 mb-4">
-                {/* Quantity Control */}
-                <div className="flex items-center border border-gray-300 w-32 justify-between px-2">
-                  <button 
-                    onClick={() => setQuantity(Math.max(12, quantity - 1))}
-                    className="p-2 text-gray-600 hover:text-black transition-colors"
-                  >
-                    <Minus size={16} />
-                  </button>
-                  <span className="font-medium text-sm">
-                    {quantity}
-                  </span>
-                  <button 
-                    onClick={() => setQuantity(Math.min(25, quantity + 1))}
-                    className="p-2 text-gray-600 hover:text-black transition-colors"
-                  >
-                    <Plus size={16} />
-                  </button>
-                </div>
-
-                {/* Add to Cart Button */}
-                <button className="flex-grow bg-[#113224] text-white flex items-center justify-between pl-6 pr-2 py-2 hover:bg-[#0d261b] transition-colors group">
-                  <span className="font-medium text-[15px]">{400 * quantity} AED</span>
-                  <span className="font-medium text-[14px]">Add to Cart</span>
-                  <div className="bg-white text-[#113224] p-2 flex items-center justify-center transition-transform group-hover:translate-x-0.5">
-                    <ArrowRight size={16} />
-                  </div>
-                </button>
-              </div>
-
-              {/* Main Book Now Button */}
-              <button className="w-full bg-[#113224] text-white font-medium py-4 text-[15px] hover:bg-[#0d261b] transition-colors">
-                Book Now
-              </button>
-            </div>
+          {/* Quantity Selector */}
+            <div className="p-[18px] bg-white">
+          <QuantitySelector
+            quantity={quantity}
+            onIncrease={() => setQuantity(quantity + 1)}
+            onDecrease={() => setQuantity(Math.max(1, quantity - 1))}
+            unitPrice={selectedMaterial ? selectedMaterial.price : 0  }
+            currency={selectedMaterial ? selectedMaterial.currency :'AED' }
+                  onCart={handleAddToCart}
+          />
+</div>
+          {/* Booking Actions */}
+          {availabilityError && (
+            <p className="text-sm text-red-600">{availabilityError}</p>
+          )}
+          <BookingActions
+            onBookNow={handleBookNow}
+            isBookingDisabled={isBookingDisabled}
+          />
 
           </div>
         </div>

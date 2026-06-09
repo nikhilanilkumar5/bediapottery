@@ -4,6 +4,7 @@ import localFont from 'next/font/local'
 import './globals.css'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import ScrollToTop from '@/components/layout/ScrollToTop'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -94,8 +95,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={` ${inter.variable} ${neiko.variable} ${sunriseHimalaya.variable} ${euclid.variable} font-sans`}>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning className={` ${inter.variable} ${neiko.variable} ${sunriseHimalaya.variable} ${euclid.variable} font-sans`}>
+        <ScrollToTop />
         <Header />
         {children}
         <Footer />
