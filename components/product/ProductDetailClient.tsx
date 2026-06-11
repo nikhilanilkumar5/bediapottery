@@ -15,7 +15,7 @@ import { BookingService, IBookingService } from '@/services/booking.service'
 import { getAvailabilityData } from '@/services/avaliablity.service'
 import { Content, Title } from '../ui'
 import { useRouter } from "next/navigation";
-import { useBookingStore ,} from "@/store/bookingStore";
+import { useAuthStore } from "@/store/authStore";
 
 interface ProductDetailClientProps {
   product: WorkshopItem
@@ -93,6 +93,11 @@ const handleDateSelect = (date: Date) => {
   }
 
 const handleAddToCart = async () => {
+ const token: string | null = useAuthStore.getState().user?.token || null
+  if (!token) {
+    router.push('/login');
+    return;
+  }
   const success = await handlecheck('cart')
   if (success) {
     router.push('/cart')
@@ -100,6 +105,11 @@ const handleAddToCart = async () => {
 }
 
 const handleBookNow = async () => {
+  const token: string | null = useAuthStore.getState().user?.token || null
+  if (!token) {
+    router.push('/login');
+    return;
+  }
   const success = await handlecheck('checkout')
   if (success) {
     router.push('/checkout')

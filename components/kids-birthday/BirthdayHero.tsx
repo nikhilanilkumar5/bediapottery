@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { BookingService } from '@/services/booking.service';
 import { getAvailabilityData } from '@/services/avaliablity.service';
 import { BookingData, Availability } from '@/types';
-import { useBookingStore } from '@/store/bookingStore';
+import { useAuthStore } from '@/store/authStore';
 import QuantitySelector from '../product/QuantitySelector';
 import BookingActions from '../product/BookingActions';
 import MaterialSelector from '../product/MaterialSelector';
@@ -40,7 +40,6 @@ const [makeType, setMakeType] = useState('');
   const [availabilityError, setAvailabilityError] = useState<string>('');
   const router = useRouter();
   const bookingService = new BookingService();
-  const setBooking = useBookingStore((state) => state.setBooking);
   const [selectedMaterialId, setSelectedMaterialId] = useState(
     product.options?.[0]?._id || ''
   )
@@ -142,7 +141,6 @@ const handleCheck = async (destination: 'cart' | 'checkout') => {
 
   try {
     await bookingService.addToCart(bookingData)
-    setBooking(bookingData)
     return true
   } catch (error) {
     setAvailabilityError(
@@ -154,6 +152,11 @@ const handleCheck = async (destination: 'cart' | 'checkout') => {
 }
 
 const handleAddToCart = async () => {
+  const token: string | null = useAuthStore.getState().user?.token || null
+  if (!token) {
+    router.push('/login');
+    return;
+  }
   const success = await handleCheck('cart')
   if (success) {
     router.push('/cart')
@@ -161,6 +164,11 @@ const handleAddToCart = async () => {
 }
 
 const handleBookNow = async () => {
+  const token: string | null = useAuthStore.getState().user?.token || null
+  if (!token) {
+    router.push('/login');
+    return;
+  }
   const success = await handleCheck('checkout')
   if (success) {
     router.push('/checkout')

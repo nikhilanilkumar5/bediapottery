@@ -2,13 +2,21 @@
 
 import { useAuthStore } from '@/store/authStore';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 export default function SearchPill() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const router = useRouter();
+  const logout = useAuthStore((state) => state.logout);
+  const getToken = useAuthStore((state) => state.getToken);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
- const user : string | null = useAuthStore.getState().user?.email || null
+  const token = getToken();
+  useEffect(() => {
+   console.log('Current auth token:', token);
+  }, [token]);
+  const user : string | null = useAuthStore.getState().user?.email || null
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -76,9 +84,9 @@ export default function SearchPill() {
       {/* Profile Dropdown */}
       <div className="relative" ref={dropdownRef}>
         <button
-          onClick={() =>
+          onClick={() => {
             setUserMenuOpen(prev => !prev)
-          }
+          }}
           className="text-secondary-off shrink-0 hover:text-white transition-colors duration-200"
           aria-label="User account"
         >
@@ -105,7 +113,7 @@ export default function SearchPill() {
           </svg>
         </button>
 
-        {userMenuOpen && (
+          {userMenuOpen && (
           <div className="absolute right-0 top-[calc(100%+14px)] w-[220px] bg-white rounded-2xl border border-gray-100 shadow-2xl overflow-hidden z-50">
             
             <div className="px-5 py-4 border-b border-gray-100">
@@ -124,16 +132,28 @@ export default function SearchPill() {
             >
               My Profile
             </Link> */}
-
-            <button
-              onClick={() => {
-                console.log('logout');
-                setUserMenuOpen(false);
-              }}
-              className="w-full text-left px-5 py-4 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors"
-            >
-              Logout
-            </button>
+{token ? (
+  <button
+    onClick={() => {
+      logout();
+      setUserMenuOpen(false);
+      router.push("/");
+    }}
+    className="w-full text-left px-5 py-4 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors"
+  >
+    Logout
+  </button>
+) : (
+  <button
+    onClick={() => {
+      setUserMenuOpen(false);
+      router.push("/login");
+    }}
+    className="w-full text-left px-5 py-4 text-sm font-medium text-[#113224] hover:bg-gray-50 transition-colors"
+  >
+    Login
+  </button>
+)}
           </div>
         )}
       </div>

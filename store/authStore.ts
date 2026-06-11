@@ -28,6 +28,10 @@ export const useAuthStore = create<AuthStore>()(
 
       logout: () => {
         set({ user: null })
+        // Clear the persisted storage
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('auth-storage')
+        }
       },
 
       getToken: () => {
