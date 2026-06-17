@@ -40,6 +40,7 @@ const [makeType, setMakeType] = useState('');
   const [availabilityError, setAvailabilityError] = useState<string>('');
   const router = useRouter();
   const bookingService = new BookingService();
+  const userId: string = useAuthStore.getState().user?.userId ?? ''
   const [selectedMaterialId, setSelectedMaterialId] = useState(
     product.options?.[0]?._id || ''
   )
@@ -110,7 +111,7 @@ const handleCheck = async (destination: 'cart' | 'checkout') => {
   }
 
   const bookingData: BookingData = {
-    userId: '65f1a2b3c4d5e6f7890a1234',
+    userId: userId,
     workshopId: product._id,
     optionId: product.options?.[0]?._id || '',
     bookingDate: formattedDate,

@@ -5,6 +5,7 @@ interface User {
   email: string
   token: string
   role: string
+  userId?: string
 }
 
 interface AuthStore {

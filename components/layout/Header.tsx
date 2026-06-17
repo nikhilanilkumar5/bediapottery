@@ -77,7 +77,7 @@ const Header: React.FC = () => {
             </div>
 
             {/* Mobile right side: SearchPill icons + hamburger */}
-            <div className="flex lg:hidden items-center gap-3">
+            <div className="flex lg:hidden items-center gap-[3rem]">
               <SearchPill />
               <button
                 aria-label={mobileOpen ? 'Close menu' : 'Open menu'}

@@ -40,7 +40,7 @@ const FamilyProductDetailClient: React.FC<ProductDetailClientProps> = ({
   const [dateError, setDateError] = useState<string>('')
   const [slotError, setSlotError] = useState<string>('')
   const [availabilityError, setAvailabilityError] = useState<string>('')
-
+  const userId: string = useAuthStore.getState().user?.userId ?? ''
 const formattedDate = useMemo(() => {
   return selectedDate
     ? format(selectedDate, 'yyyy-MM-dd')
@@ -174,7 +174,7 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
   }
 
   const bookingData: BookingData = {
-    userId: '65f1a2b3c4d5e6f7890a1234',
+    userId: userId,
     workshopId: product._id,
     optionId: selectedMaterialId,
     bookingDate: formattedDate,

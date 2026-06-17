@@ -42,7 +42,7 @@ export default function SearchPill() {
   }, []);
 
   return (
-    <div className="flex items-center gap-3 xl:gap-4 2xl:gap-[45px] bg-primary rounded-full px-3 py-2 lg:px-[23px] lg:py-[17px]">
+    <div className="flex items-center justify-center !gap-12 xl:gap-4 2xl:gap-[45px] bg-primary rounded-full px-3 py-2 lg:px-[23px] lg:py-[17px]">
       
       {/* Cart Icon */}
       <Link
@@ -82,7 +82,7 @@ export default function SearchPill() {
       </Link>
 
       {/* Profile Dropdown */}
-      <div className="relative" ref={dropdownRef}>
+      <div className="relative flex items-center justify-center" ref={dropdownRef}>
         <button
           onClick={() => {
             setUserMenuOpen(prev => !prev)

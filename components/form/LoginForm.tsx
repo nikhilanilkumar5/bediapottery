@@ -135,9 +135,10 @@ const LoginForm = () => {
 
       // save zustand
       setUser({
-        email: response.result.email,
+        email: response.result.user.email,
         token: response.result.token,
         role: response.result.role,
+        userId: response.result.user.userId,
       });
 
       setSubmitSuccess(true);

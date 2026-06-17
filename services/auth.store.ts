@@ -2,6 +2,7 @@ export interface AuthUser {
   name: string;
   email: string;
   password: string;
+  userId?: string;
 }
 
 const users: AuthUser[] = [];

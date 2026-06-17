@@ -37,6 +37,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   const [quantity, setQuantity] = useState(2)
   const [dateError, setDateError] = useState<string>('')
   const [slotError, setSlotError] = useState<string>('')
+  const userId: string = useAuthStore.getState().user?.userId ?? ''
   const [availabilityError, setAvailabilityError] = useState<string>('')
 const router = useRouter()
   // Derived state - computed values
@@ -122,7 +123,7 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
   }
 
   const bookingData: BookingData = {
-    userId: '65f1a2b3c4d5e6f7890a1234',
+    userId: userId,
     workshopId: product._id,
     optionId: selectedMaterialId,
     bookingDate: formattedDate,
