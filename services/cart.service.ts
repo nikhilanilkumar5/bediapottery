@@ -1,3 +1,5 @@
+import { useAuthStore } from "@/store/authStore";
+
 export interface CartWorkshopImage {
   image: string;
   title: string;
@@ -39,43 +41,50 @@ export interface deleteCartData  {
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-
+ const userId: string = useAuthStore.getState().user?.userId ?? '';
 function assertApiBaseUrl() {
   if (!API_BASE_URL) {
     throw new Error("NEXT_PUBLIC_API_BASE_URL is not set in environment variables");
   }
 }
 
+function getAuthenticatedUserId() {
+  const currentUserId = useAuthStore.getState().user?.userId;
+
+  if (!currentUserId) {
+    throw new Error("You must be signed in to access the cart.");
+  }
+
+  return currentUserId;
+}
+
+
 export async function getCartData(): Promise<CartData[]> {
   assertApiBaseUrl();
 
-  const res = await fetch(`${API_BASE_URL}/workshop/cart/65f1a2b3c4d5e6f7890a1234`, {
+  const { user } = useAuthStore.getState();
+  const token = user?.token;
+  const userId = getAuthenticatedUserId();
+
+  const res = await fetch(`${API_BASE_URL}/workshop/cart/${userId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     cache: "no-store",
   });
 
   const raw = await res.json().catch(() => null);
 
-  console.log("Cart data API:", raw);
   if (!res.ok) {
-    console.error(
-      `Cart data failed: ${res.status} ${res.statusText}${
-        raw ? ` - ${JSON.stringify(raw)}` : ""
-      }`
+    throw new Error(
+      raw?.message || `Cart data failed: ${res.status}`
     );
-    return [];
   }
 
   const result = raw?.data ?? raw;
-  if (!result) {
-    return [];
-  }
-
   return Array.isArray(result) ? result : [result];
-
 }
 export async function deleteCart(deleteData: deleteCartData): Promise<CartData[]> {
   assertApiBaseUrl();

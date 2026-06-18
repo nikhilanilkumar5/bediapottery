@@ -85,7 +85,8 @@ export default function SearchPill() {
       <div className="relative flex items-center justify-center" ref={dropdownRef}>
         <button
           onClick={() => {
-            setUserMenuOpen(prev => !prev)
+            user ?(setUserMenuOpen(prev => !prev)):(router.push("/login"));
+            
           }}
           className="text-secondary-off shrink-0 hover:text-white transition-colors duration-200"
           aria-label="User account"
@@ -113,7 +114,7 @@ export default function SearchPill() {
           </svg>
         </button>
 
-          {userMenuOpen && (
+          {userMenuOpen && user && (
           <div className="absolute right-0 top-[calc(100%+14px)] w-[220px] bg-white rounded-2xl border border-gray-100 shadow-2xl overflow-hidden z-50">
             
             <div className="px-5 py-4 border-b border-gray-100">
