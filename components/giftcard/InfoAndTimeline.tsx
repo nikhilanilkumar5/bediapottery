@@ -1,20 +1,14 @@
 'use client';
+import { WorkshopItem } from '@/services/category.service';
 import { useState } from 'react';
+interface GiftCardHeroProps {
+  product: WorkshopItem;
+}
 
-export default function InfoAndTimeline() {
-  const [activeTab, setActiveTab] = useState('dirty-details');
+export default function InfoAndTimeline({ product }: GiftCardHeroProps) {
+  const [activeTab, setActiveTab] = useState(product?.moreDetails?.[0]?._id );
 
-  const tabData = [
-    { 
-      id: 'dirty-details', 
-      label: 'The Dirty Details', 
-      content: "If you've been flirting with pottery, this is your big date. In just one chunky, hands-on day, you'll learn how to throw simple cylinders, shape them into cups and bowls, trim them like a pro, and pick your dream glaze colour. It's all the good stuff from our 5-week course, delivered at lightning speed for anyone who's busy, curious, or just ready to get their hands dirty and really see what wheel throwing is about.\n\nYou get six hours with our team, three full hours on the wheel, a deep dive into trimming, and a glazing demo that finally makes glazing feel... understandable. You make the pieces, we dry, glaze, and fire them. You come back in about four weeks to collect your new babies. Easy." 
-    },
-    { id: 'what-youll-get', label: "What You'll Get Up To", content: "Details about what you will get up to during this hands-on pottery experience..." },
-    { id: 'whats-included', label: "What's Included", content: "A comprehensive list of materials, expert guidance, and firing services included..." },
-    { id: 'perfect-for', label: "Perfect For", content: "Whether you are a complete beginner or someone looking to brush up on wheel throwing..." },
-    { id: 'fine-print', label: "The Fine Print", content: "Rescheduling policies, firing timelines, and other important terms to know..." },
-  ];
+
 
   return (
     <section className="bg-[#f2ece3] min-h-screen py-16 font-sans text-[#113224]">
@@ -24,24 +18,24 @@ export default function InfoAndTimeline() {
         <div className="bg-white p-6 sm:p-10 shadow-sm rounded-sm">
           {/* Tab Headers */}
           <div className="bg-[#e2e6e3] p-2 flex flex-wrap lg:flex-nowrap gap-2 mb-8">
-            {tabData.map((tab) => (
+            {product?.moreDetails?.map((tab) => (
               <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                key={tab._id}
+                onClick={() => setActiveTab(tab._id)}
                 className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
-                  activeTab === tab.id 
+                  activeTab === tab._id 
                     ? 'bg-[#113224] text-white shadow-sm' 
                     : 'bg-[#c5ccc8] text-[#113224] hover:bg-[#b5beb9]'
                 }`}
               >
-                {tab.label}
+                {tab.title}
               </button>
             ))}
           </div>
 
           {/* Tab Content */}
           <div className="text-sm text-gray-800 leading-relaxed max-w-5xl whitespace-pre-wrap">
-            {tabData.find(t => t.id === activeTab)?.content}
+            {product?.moreDetails?.find((t) => t._id === activeTab)?.description || 'Select a tab to see more details.'}
           </div>
         </div>
 

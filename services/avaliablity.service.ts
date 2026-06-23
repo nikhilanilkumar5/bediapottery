@@ -14,7 +14,7 @@ export async function getAvailabilityData(
 ): Promise<AvailabilityResponse> {
   assertApiBaseUrl();
   const token: string | null = useAuthStore.getState().user?.token || null
-  const res = await fetch(`${API_BASE_URL}/workshop/availability`, {
+  const res = await fetch(`${API_BASE_URL}/workshop/pottery-availability`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

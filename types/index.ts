@@ -139,8 +139,10 @@ export interface TimeSlot {
 export interface BookingData {
   userId: string
   workshopId: string
-  bookingDate: string
-  slotId: string
+  bookingDate?: string
+  message?:string
+  bookingType: string
+  slotId?: string
   optionId: string
   people: number
   adult?: number
@@ -154,8 +156,9 @@ export interface CheckoutWorkshopItem {
 
 export interface CheckoutWorkshopPayload {
   workshopId: string
-  bookingDate: string
-  slotId: string
+  bookingDate?: string
+  bookingType?: string
+  slotId?: string
   items: CheckoutWorkshopItem[]
 }
 
@@ -168,8 +171,55 @@ export interface CheckoutCustomerPayload {
 }
 
 export interface CheckoutPayload {
-  workshops: CheckoutWorkshopPayload[]
-  customer: CheckoutCustomerPayload
+ bookingType?: string;
+
+  giftDetails?: GiftDetailsPayload;
+
+  workshops: CheckoutWorkshopPayload[];
+
+  customer: CheckoutCustomerPayload;
+}
+
+export interface GiftDetailsPayload {
+  recipientName: string;
+  giftEmail: string;
+  giftPhone: string;
+  giftFor: string;
+  occasion: string;
+  personalMessage: string;
+}
+
+export interface CheckoutWorkshopPayload {
+  workshopId: string;
+  bookingDate?: string;
+  slotId?: string;
+  items: CheckoutWorkshopItemPayload[];
+}
+export interface CheckoutWorkshopItem {
+  optionId: string;
+  people: number;
+  adult?: number;
+  child?: number;
+}
+
+export interface CheckoutWorkshopPayload {
+  workshopId: string;
+  bookingDate?: string;
+  slotId?: string;
+  items: CheckoutWorkshopItem[];
+}
+export interface CheckoutWorkshopItemPayload {
+  optionId: string;
+  people: number;
+  adult?: number;
+  child?: number;
+}
+
+export interface CheckoutCustomerPayload {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
 }
 
 export interface Category {

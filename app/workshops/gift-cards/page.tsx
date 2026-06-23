@@ -1,6 +1,5 @@
-import GiftCardHero from '@/components/giftcard/GiftCardHero'
-import InfoAndTimeline from '@/components/giftcard/InfoAndTimeline'
-import TestimonialsSection from '@/components/testimonial/TestimonialsSection'
+
+import GiftPageClient from '@/components/giftcard/GiftPageClient'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -8,13 +7,13 @@ export const metadata: Metadata = {
   description: 'Give the gift of pottery. Purchase a Bedia Pottery gift card for your loved ones.',
 }
 
-const GiftCardsPage = () => {
+const GiftCardsPage = async () => {
+  
   return (
-    <>
-      <GiftCardHero />
-      <InfoAndTimeline />
-      <TestimonialsSection />
-    </>
+      <main>
+                <GiftPageClient/>
+        </main>
+
   )
 }
 

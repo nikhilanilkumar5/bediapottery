@@ -112,6 +112,7 @@ const handleCheck = async (destination: 'cart' | 'checkout') => {
 
   const bookingData: BookingData = {
     userId: userId,
+    bookingType: 'pottery',
     workshopId: product._id,
     optionId: product.options?.[0]?._id || '',
     bookingDate: formattedDate,
@@ -176,6 +177,7 @@ const handleBookNow = async () => {
   }
 }
  const isBookingDisabled = !selectedDate || !selectedSlotId
+ 
   return (
     <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#113224]">
       <div className="page-wrapper px-[17px]  grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">

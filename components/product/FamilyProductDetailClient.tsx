@@ -175,6 +175,7 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
 
   const bookingData: BookingData = {
     userId: userId,
+     bookingType: "pottery",
     workshopId: product._id,
     optionId: selectedMaterialId,
     bookingDate: formattedDate,
@@ -220,10 +221,9 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
 
 
   const isBookingDisabled = !selectedDate || !selectedSlotId
-const uniqueMaterials = product?.options?.filter(
-  option =>
-    !option.title.toLowerCase().includes('extra child') &&
-    !option.title.toLowerCase().includes('extra adult')
+const uniqueMaterials = product?.options?.filter(option =>
+  option.title.toLowerCase().includes('adults') &&
+  !option.title.toLowerCase().includes('adults & kids')
 );
   return (
     <div className="page-wrapper ">

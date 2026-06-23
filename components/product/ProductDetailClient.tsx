@@ -34,7 +34,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   )
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null)
-  const [quantity, setQuantity] = useState(2)
+  const [quantity, setQuantity] = useState(1)
   const [dateError, setDateError] = useState<string>('')
   const [slotError, setSlotError] = useState<string>('')
   const userId: string = useAuthStore.getState().user?.userId ?? ''
@@ -125,6 +125,7 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
   const bookingData: BookingData = {
     userId: userId,
     workshopId: product._id,
+    bookingType: "pottery",
     optionId: selectedMaterialId,
     bookingDate: formattedDate,
     slotId: selectedSlotId!,

@@ -19,6 +19,7 @@ interface QuantitySelectorProps {
   unitPrice?: number;
   totalPrice?: number;
   currency: string;
+  buttonlabel?: string;
   className?: string;
   child?: boolean;
 }
@@ -35,6 +36,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   totalPrice,
   currency,
   className = "",
+  buttonlabel="Add to Cart",
   child = false
 }) => {
   const effectiveChildCount = child ? childCount : 0;
@@ -173,7 +175,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
             {/* Minus */}
             <button
               onClick={onDecrease}
-              disabled={quantity <= 2}
+              disabled={quantity <= 1}
               className="w-11  flex items-center justify-center  disabled:opacity-40 transition"
             >
               <svg
@@ -230,7 +232,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
     onClick={onCart}
     className="flex items-center gap-4 group hover:shadow-sm"
   >
-    <span className="">Add to Cart</span>
+    <span className="">{buttonlabel}</span>
 
       <span
         className="flex items-center justify-center w-10 h-10 

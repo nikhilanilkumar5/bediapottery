@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import MobileCart from '@/components/cart/MobileCart';
 import { CartData, getCartData } from '@/services/cart.service';
 import { useAuthStore } from '@/store/authStore';
+import { useRouter } from 'next/navigation';
 
 export default function CartPageClient() {
   const userId = useAuthStore(state => state.user?.userId);
   const [cartData, setCartData] = useState<CartData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+const router = useRouter()
   useEffect(() => {
     let isMounted = true;
 
@@ -55,7 +56,28 @@ export default function CartPageClient() {
   }, [userId]);
 
   const bannerImage = cartData?.[0]?.items?.[0]?.workshopId?.bannerImage || '/images/banner/cart-page.png';
+const loadCart = async () => {
+  if (!userId) {
+    setCartData([]);
+    return;
+  }
 
+  try {
+    const data = await getCartData();
+    setCartData(data);
+  } catch (err) {
+    setError(
+      err instanceof Error
+        ? err.message
+        : "Unable to load cart."
+    );
+  }
+};
+const onCheckout = () => {  
+  localStorage.setItem('checkoutCartStep',"2");
+  router.push('/checkout')
+    
+}
   return (
     <main className="bg-[#fcfbf9] flex lg:flex-row font-sans">
       <div className="hidden lg:block w-1/2 h-[calc(100vh-76.4px)] sticky top-[76.4px] bg-gray-200 z-0">
@@ -79,7 +101,11 @@ export default function CartPageClient() {
             </div>
           </div>
         ) : userId ? (
-          <MobileCart data={cartData} />
+         <MobileCart
+  data={cartData}
+  onCheckout={onCheckout}
+  refreshCart={loadCart}
+/>
         ) : (
           <div className="min-h-screen flex items-center justify-center text-center px-4 text-gray-700">
             <div>

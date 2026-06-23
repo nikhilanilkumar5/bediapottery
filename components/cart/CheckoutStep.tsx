@@ -9,12 +9,7 @@ import { BookingService, IBookingService } from '@/services/booking.service'
 interface CheckoutFormData {
   firstName: string;
   lastName: string;
-  companyName: string;
-  notes: string;
-  country: string;
   address: string;
-  city: string;
-  state: string;
   phone: string;
   email: string;
 }
@@ -27,12 +22,7 @@ interface ValidationError {
 const initialFormData: CheckoutFormData = {
   firstName: '',
   lastName: '',
-  companyName: '',
-  notes: '',
-  country: '',
   address: '',
-  city: '',
-  state: '',
   phone: '',
   email: '',
 };
@@ -49,7 +39,6 @@ export default function CheckoutStep({ onNext, onBack, data }: { onNext: () => v
   const bookingService = new BookingService();
 
   const hasItems = data?.[0]?.items?.length > 0;
-
   if (!hasItems) {
     return (
       <div className="w-full text-center py-24 text-gray-700">
@@ -145,6 +134,7 @@ export default function CheckoutStep({ onNext, onBack, data }: { onNext: () => v
             workshopId: item.workshopId._id,
             bookingDate: item.bookingDate,
             slotId: item.slotId,
+            bookingType: item.bookingType,
             items: [workshopItem],
           });
         }
@@ -178,6 +168,7 @@ const handleSubmit = async (
   try {
     const payload = buildCheckoutPayload();
 
+ localStorage.setItem('checkoutCartStep',"1");
     console.log("Checkout payload:", payload);
 
     await bookingService.bookNow(payload);
