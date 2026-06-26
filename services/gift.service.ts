@@ -21,6 +21,7 @@ export interface GiftRedeemConfirmPayload {
   recipientName: string;
   recipientPhone: string;
   recipientEmail: string;
+  recipientAddress: string;
 }
 
 export interface GiftRedeemConfirmResponse {

@@ -9,6 +9,8 @@ import { useAuthStore } from "@/store/authStore";
 import MaterialSelector from "../product/MaterialSelector";
 import { WorkshopOption } from "@/services/workshop.service";
 import { BookingService } from "@/services/booking.service";
+import OccasionSelector from "./OccasionSelector";
+import Link from "next/link";
 
 function getUniqueMaterials(options?: WorkshopOption[]) {
   return (
@@ -48,7 +50,7 @@ export default function GiftCardHero({
     () => getUniqueMaterials(product?.options),
     [product?.options],
   );
-
+  const [showCartToast, setShowCartToast] = useState(false);
   const [selectedMaterialId, setSelectedMaterialId] = useState(
     () => getUniqueMaterials(product?.options)[0]?._id ?? "",
   );
@@ -103,6 +105,11 @@ export default function GiftCardHero({
 
     try {
       await bookingService.addToCart(bookingData);
+      setShowCartToast(true);
+
+      // Automatically clear the banner after 5 seconds
+      setTimeout(() => setShowCartToast(false), 8000);
+
       return true;
     } catch (error) {
       setAvailabilityError(
@@ -115,6 +122,21 @@ export default function GiftCardHero({
 
   return (
     <section className="bg-[#f2ece3] min-h-screen py-12 font-sans text-[#113224]">
+      {showCartToast && (
+        <div className="fixed top-20 left-0 right-0 w-full bg-[#68bc60] text-white py-3.5 px-6 z-[9999] shadow-sm animate-in fade-in slide-in-from-top duration-300">
+          <div className="page-wrapper flex justify-end items-center text-sm font-medium">
+            <div>
+              Your item has been added to bag.{" "}
+              <Link
+                href="/cart"
+                className="underline underline-offset-2 font-bold hover:opacity-90 ml-1"
+              >
+                Checkout now
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="page-wrapper relative px-[17px] grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         {/* Left Column: Media Gallery */}
         <div className="space-y-4 h-[calc(100vh-80px)] flex flex-col  ">
@@ -191,30 +213,10 @@ export default function GiftCardHero({
             <div className="p-8 space-y-8">
               {/* Occasion */}
               <div>
-                <label className="block font-medium mb-3">
-                  Choose an Occasion
-                </label>
-                <div className="bg-[#e9e6df] p-1 flex flex-wrap gap-1">
-                  {[
-                    "Birthday",
-                    "Anniversary",
-                    "Wedding",
-                    "Graduation",
-                    "more+",
-                  ].map((item) => (
-                    <button
-                      key={item}
-                      onClick={() => setOccasion(item)}
-                      className={`flex-1 py-2 px-3 text-xs sm:text-sm font-medium transition-colors ${
-                        occasion === item
-                          ? "bg-[#113224] text-white"
-                          : "text-gray-600 hover:bg-[#d8d4cb]"
-                      }`}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
+                <OccasionSelector
+                  initialOccasion={occasion} // Passes your current parent 'occasion' state string
+                  onOccasionSelect={(selectedItem) => setOccasion(selectedItem)} // Updates your parent 'setOccasion' state
+                />
               </div>
 
               {/* Recipient */}
