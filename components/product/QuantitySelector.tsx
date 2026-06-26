@@ -10,6 +10,7 @@ import { Content } from "../ui";
  */
 interface QuantitySelectorProps {
   quantity: number;
+  limit?: number;
   childCount?: number;
   onIncrease: () => void;
   onDecrease: () => void;
@@ -27,6 +28,7 @@ interface QuantitySelectorProps {
 const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   quantity,
   childCount = 0,
+  limit=12,
   onIncrease,
   onDecrease,
   onchildIncrease,
@@ -201,7 +203,8 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
             {/* Plus */}
             <button
               onClick={onIncrease}
-              className="w-11 flex items-center justify-center  transition"
+             disabled={quantity >= Number(limit)}
+              className="w-11 flex items-center justify-center disabled:opacity-40 transition"
             >
               <svg
                 className="w-5 h-5"

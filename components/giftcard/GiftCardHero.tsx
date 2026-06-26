@@ -1,28 +1,22 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import { format } from "date-fns";
 import { Play } from "lucide-react";
-import { useRouter } from "next/navigation";
-import DateSelector from "../product/DateSelector";
-import TimeSlotSelector from "../product/TimeSlotSelector";
 import QuantitySelector from "../product/QuantitySelector";
-import BookingActions from "../product/BookingActions";
 import { WorkshopItem } from "@/services/workshop.service";
-import { BookingService } from "@/services/booking.service";
-import { getAvailabilityData } from "@/services/avaliablity.service";
 import { BookingData, Availability } from "@/types";
 import { useAuthStore } from "@/store/authStore";
 import MaterialSelector from "../product/MaterialSelector";
 import { WorkshopOption } from "@/services/workshop.service";
+import { BookingService } from "@/services/booking.service";
 
 function getUniqueMaterials(options?: WorkshopOption[]) {
   return (
     options
       ?.filter(
         (option) =>
-          option.title.toLowerCase().includes("adults") &&
-          !option.title.toLowerCase().includes("adults & kids"),
+          !option.title.toLowerCase().includes("adults & kids") &&
+          option.title.toLowerCase().includes("adults"),
       )
       .map((option) => ({
         ...option,
@@ -44,9 +38,10 @@ export default function GiftCardHero({
   setGrandTotal,
   onNext,
 }: GiftCardHeroProps) {
+  const bookingService = new BookingService();
   const [quantity, setQuantity] = useState(1);
   const [occasion, setOccasion] = useState("Birthday");
-  const [recipient, setRecipient] = useState("Kids");
+  const [recipient, setRecipient] = useState("Adults");
   const [message, setMessage] = useState("");
   const [availabilityError, setAvailabilityError] = useState("");
   const uniqueMaterials = useMemo(
@@ -86,27 +81,36 @@ export default function GiftCardHero({
     const bookingData: BookingData = {
       userId,
       bookingType: "gift",
+
       workshopId: product._id,
       optionId: selectedMaterial?._id || "",
-      people: recipient === "Adults & Kids" ? quantity + childCount : quantity,
-
-      ...(recipient === "Adults & Kids" && {
+      people: quantity,
+      giftDetails: {
+        occasion: occasion,
+        personalMessage: message,
+      },
+      ...(recipient === "Adults" && {
         adult: quantity,
-        child: childCount,
       }),
-      message:message
+      ...(recipient === "Kids" && {
+        child: quantity,
+      }),
+
+      // message:message
     };
 
     // send data to parent
-    onBookingDataChange(bookingData);
-    onNext?.();
-    const totalPeople =
-      recipient === "Adults & Kids" ? quantity + childCount : quantity;
 
-    const totalPrice = (selectedMaterial?.price || 0) * totalPeople;
-
-    setGrandTotal(totalPrice);
-    return true;
+    try {
+      await bookingService.addToCart(bookingData);
+      return true;
+    } catch (error) {
+      setAvailabilityError(
+        (error as Error)?.message ||
+          "Unable to add booking to cart. Please try again.",
+      );
+      return false;
+    }
   };
 
   return (
@@ -219,7 +223,7 @@ export default function GiftCardHero({
                   Who is this Gift for?
                 </label>
                 <div className="bg-[#e9e6df] p-1 flex gap-1">
-                  {["Adults", "Kids", "Adults & Kids"].map((item) => (
+                  {["Adults", "Kids"].map((item) => (
                     <button
                       key={item}
                       onClick={() => setRecipient(item)}
@@ -264,38 +268,16 @@ export default function GiftCardHero({
                   placeholder="Hope you enjoy getting your hands dirty and creating something beautiful"
                 />
               </div>
-              {/* Quantity & Add to Cart */}
-              {recipient != "Adults & Kids" ? (
-                <QuantitySelector
-                  quantity={quantity}
-                  onIncrease={() => setQuantity(quantity + 1)}
-                  onDecrease={() => setQuantity(Math.max(1, quantity - 1))}
-                  unitPrice={selectedMaterial?.price}
-                  currency={selectedMaterial?.currency ?? "AED"}
-                  onCart={handleCheck}
-                  buttonlabel="Add to gift card"
-                />
-              ) : (
-                <QuantitySelector
-                  quantity={quantity}
-                  onIncrease={() => setQuantity(quantity + 1)}
-                  onDecrease={() => setQuantity(Math.max(1, quantity - 1))}
-                  onchildIncrease={() => setChildCount(childCount + 1)}
-                  onchildDecrease={() =>
-                    setChildCount(Math.max(1, childCount - 1))
-                  }
-                  totalPrice={
-                    selectedMaterial?.price
-                      ? selectedMaterial.price * (quantity + childCount)
-                      : undefined
-                  }
-                  currency={selectedMaterial?.currency || "AED"}
-                  onCart={handleCheck}
-                  buttonlabel="Add to gift "
-                  child={true}
-                  childCount={childCount}
-                />
-              )}
+              <QuantitySelector
+                quantity={quantity}
+                onIncrease={() => setQuantity(1)}
+                onDecrease={() => setQuantity(1)}
+                limit={1}
+                unitPrice={selectedMaterial?.price}
+                currency={selectedMaterial?.currency ?? "AED"}
+                onCart={handleCheck}
+                buttonlabel="Add to cart"
+              />
               {availabilityError && (
                 <p className="text-sm text-red-600">{availabilityError}</p>
               )}

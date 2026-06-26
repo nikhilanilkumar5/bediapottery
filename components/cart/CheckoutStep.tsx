@@ -1,11 +1,13 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import FormInput from '@/components/form/FormInput';
-import { validateEmail } from '@/utils/validation';
-import { CartData, } from '@/services/cart.service';
-import { CheckoutPayload } from '@/types';
-import { BookingService, IBookingService } from '@/services/booking.service'
+import React, { useState } from "react";
+import FormInput from "@/components/form/FormInput";
+import { validateEmail } from "@/utils/validation";
+import { CartData } from "@/services/cart.service";
+import { CheckoutPayload } from "@/types";
+import { BookingService, IBookingService } from "@/services/booking.service";
+import { useAuthStore } from "@/store/authStore";
+import { useRouter } from "next/navigation";
 interface CheckoutFormData {
   firstName: string;
   lastName: string;
@@ -20,31 +22,42 @@ interface ValidationError {
 }
 
 const initialFormData: CheckoutFormData = {
-  firstName: '',
-  lastName: '',
-  address: '',
-  phone: '',
-  email: '',
+  firstName: "",
+  lastName: "",
+  address: "",
+  phone: "",
+  email: "",
 };
 
-export default function CheckoutStep({ onNext, onBack, data }: { onNext: () => void; onBack: () => void; data: CartData[] }) {
+export default function CheckoutStep({
+  onNext,
+  onBack,
+  data,
+}: {
+  onNext: () => void;
+  onBack: () => void;
+  data: CartData[];
+}) {
   const [formData, setFormData] = useState<CheckoutFormData>(initialFormData);
   const [errors, setErrors] = useState<ValidationError[]>([]);
-  const [formError, setFormError] = useState<string>('');
-  const [checkoutPayload, setCheckoutPayload] = useState<CheckoutPayload | null>(null);
+  const [formError, setFormError] = useState<string>("");
+  const [checkoutPayload, setCheckoutPayload] =
+    useState<CheckoutPayload | null>(null);
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [acceptedAddressDetails, setAcceptedAddressDetails] = useState(true);
   const [acceptedUpdates, setAcceptedUpdates] = useState(true);
   const cartGrandTotal = data?.[0]?.grandTotal ?? 0;
   const bookingService = new BookingService();
-
+  const userId: string = useAuthStore.getState().user?.userId ?? "";
   const hasItems = data?.[0]?.items?.length > 0;
   if (!hasItems) {
     return (
       <div className="w-full text-center py-24 text-gray-700">
         <h2 className="text-2xl font-semibold mb-3">Your cart is empty</h2>
         <p className="text-sm text-gray-500 mb-6">
-          There are no items available for checkout. Please add items to your cart and try again.
+          There are no items available for checkout. Please add items to your
+          cart and try again.
         </p>
         <div className="flex justify-center gap-3">
           <button
@@ -68,16 +81,16 @@ export default function CheckoutStep({ onNext, onBack, data }: { onNext: () => v
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => prev.filter((error) => error.field !== name));
-    if (formError) setFormError('');
+    if (formError) setFormError("");
   };
 
   const validatePhone = (value: string): ValidationError | null => {
     const trimmed = value.trim();
     if (!trimmed) {
-      return { field: 'phone', message: 'Phone number is required' };
+      return { field: "phone", message: "Phone number is required" };
     }
     if (!/^[0-9+\s-]{7,15}$/.test(trimmed)) {
-      return { field: 'phone', message: 'Enter a valid phone number' };
+      return { field: "phone", message: "Enter a valid phone number" };
     }
     return null;
   };
@@ -86,15 +99,24 @@ export default function CheckoutStep({ onNext, onBack, data }: { onNext: () => v
     const validationErrors: ValidationError[] = [];
 
     if (!formData.firstName.trim()) {
-      validationErrors.push({ field: 'firstName', message: 'First name is required' });
+      validationErrors.push({
+        field: "firstName",
+        message: "First name is required",
+      });
     }
 
     if (!formData.lastName.trim()) {
-      validationErrors.push({ field: 'lastName', message: 'Last name is required' });
+      validationErrors.push({
+        field: "lastName",
+        message: "Last name is required",
+      });
     }
 
     if (!formData.address.trim()) {
-      validationErrors.push({ field: 'address', message: 'Address is required' });
+      validationErrors.push({
+        field: "address",
+        message: "Address is required",
+      });
     }
 
     const emailError = validateEmail(formData.email);
@@ -109,8 +131,8 @@ export default function CheckoutStep({ onNext, onBack, data }: { onNext: () => v
 
     if (!acceptedAddressDetails) {
       validationErrors.push({
-        field: 'acceptedAddressDetails',
-        message: 'You must confirm your address details before checking out.',
+        field: "acceptedAddressDetails",
+        message: "You must confirm your address details before checking out.",
       });
     }
 
@@ -119,7 +141,7 @@ export default function CheckoutStep({ onNext, onBack, data }: { onNext: () => v
   };
 
   const buildCheckoutPayload = (): CheckoutPayload => {
-    const workshopMap = new Map<string, CheckoutPayload['workshops'][0]>();
+    const workshopMap = new Map<string, CheckoutPayload["workshops"][0]>();
 
     data.forEach((cart) => {
       cart.items.forEach((item) => {
@@ -143,6 +165,7 @@ export default function CheckoutStep({ onNext, onBack, data }: { onNext: () => v
 
     return {
       workshops: Array.from(workshopMap.values()),
+      userId: userId,
       customer: {
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -153,47 +176,50 @@ export default function CheckoutStep({ onNext, onBack, data }: { onNext: () => v
     };
   };
 
-const handleSubmit = async (
-  e: React.FormEvent<HTMLFormElement>
-) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  if (!validateForm()) {
-    return;
-  }
+    if (!validateForm()) {
+      return;
+    }
 
-  setIsSubmitting(true);
-  setFormError("");
+    setIsSubmitting(true);
+    setFormError("");
 
-  try {
-    const payload = buildCheckoutPayload();
+    try {
+      const payload = buildCheckoutPayload();
 
- localStorage.setItem('checkoutCartStep',"1");
-    console.log("Checkout payload:", payload);
+      localStorage.setItem("checkoutCartStep", "1");
+      console.log("Checkout payload:", payload);
 
-    await bookingService.bookNow(payload);
+      const raw = await bookingService.bookNow(payload);
+      if (raw.data.checkoutUrl) {
+        window.location.href = raw.data.checkoutUrl;
+        // onNext();
+      }
+    } catch (error: any) {
+      console.error(error);
 
-    onNext();
-  } catch (error: any) {
-    console.error(error);
-
-    setFormError(
-      error?.message ||
-        "Unable to continue. Please try again."
-    );
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+      setFormError(error?.message || "Unable to continue. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <>
       <div className="w-full lg:w-2/3 rounded-sm">
         <h2 className="text-xl font-semibold mb-8 pb-4 border-b border-gray-300 flex justify-between">
-          Billing details <span className="text-gray-500 text-base font-normal">(2)</span>
+          Billing details{" "}
+          <span className="text-gray-500 text-base font-normal">(2)</span>
         </h2>
 
-        <form id="checkout-form" onSubmit={handleSubmit} noValidate className="space-y-6">
+        <form
+          id="checkout-form"
+          onSubmit={handleSubmit}
+          noValidate
+          className="space-y-6"
+        >
           {formError && (
             <div className="p-4 bg-red-50 border border-red-200 rounded-sm text-sm text-red-600">
               {formError}
@@ -207,7 +233,7 @@ const handleSubmit = async (
               type="text"
               value={formData.firstName}
               onChange={handleChange}
-              error={errors.find((err) => err.field === 'firstName')?.message}
+              error={errors.find((err) => err.field === "firstName")?.message}
               required
             />
             <FormInput
@@ -216,7 +242,7 @@ const handleSubmit = async (
               type="text"
               value={formData.lastName}
               onChange={handleChange}
-              error={errors.find((err) => err.field === 'lastName')?.message}
+              error={errors.find((err) => err.field === "lastName")?.message}
               required
             />
           </div>
@@ -228,7 +254,7 @@ const handleSubmit = async (
             placeholder="Address"
             value={formData.address}
             onChange={handleChange}
-            error={errors.find((err) => err.field === 'address')?.message}
+            error={errors.find((err) => err.field === "address")?.message}
             required
           />
 
@@ -239,7 +265,7 @@ const handleSubmit = async (
               type="tel"
               value={formData.phone}
               onChange={handleChange}
-              error={errors.find((err) => err.field === 'phone')?.message}
+              error={errors.find((err) => err.field === "phone")?.message}
               required
             />
             <FormInput
@@ -248,7 +274,7 @@ const handleSubmit = async (
               type="email"
               value={formData.email}
               onChange={handleChange}
-              error={errors.find((err) => err.field === 'email')?.message}
+              error={errors.find((err) => err.field === "email")?.message}
               required
             />
           </div>
@@ -258,7 +284,7 @@ const handleSubmit = async (
       {/* Summary Sidebar (Similar to Cart, but with Terms checkboxes) */}
       <div className="w-full lg:w-1/3 bg-[#ece9e2] p-8 rounded-sm sticky top-8">
         {/* ... Include the Subtotal & Coupon blocks from CartStep ... */}
-        
+
         <div className="space-y-4 my-6 text-sm">
           <label className="flex items-start gap-3 cursor-pointer">
             <input
@@ -267,13 +293,22 @@ const handleSubmit = async (
               checked={acceptedAddressDetails}
               onChange={(e) => {
                 setAcceptedAddressDetails(e.target.checked);
-                setErrors((prev) => prev.filter((error) => error.field !== 'acceptedAddressDetails'));
+                setErrors((prev) =>
+                  prev.filter(
+                    (error) => error.field !== "acceptedAddressDetails",
+                  ),
+                );
               }}
             />
-            <span className="text-gray-700">I confirm that the address details entered are correct and will be used for delivery and billing purposes.</span>
+            <span className="text-gray-700">
+              I confirm that the address details entered are correct and will be
+              used for delivery and billing purposes.
+            </span>
           </label>
-          {errors.find((err) => err.field === 'acceptedAddressDetails') && (
-            <p className="text-red-600 text-sm ml-8">You must accept the address confirmation before continuing.</p>
+          {errors.find((err) => err.field === "acceptedAddressDetails") && (
+            <p className="text-red-600 text-sm ml-8">
+              You must accept the address confirmation before continuing.
+            </p>
           )}
           <label className="flex items-start gap-3 cursor-pointer">
             <input
@@ -282,7 +317,9 @@ const handleSubmit = async (
               checked={acceptedUpdates}
               onChange={(e) => setAcceptedUpdates(e.target.checked)}
             />
-            <span className="text-gray-700">Send me updates related to my order and shipping details.</span>
+            <span className="text-gray-700">
+              Send me updates related to my order and shipping details.
+            </span>
           </label>
         </div>
 
