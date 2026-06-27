@@ -4,13 +4,14 @@ import { useMemo, useState, useEffect } from "react";
 import { Play } from "lucide-react";
 import QuantitySelector from "../product/QuantitySelector";
 import { WorkshopItem } from "@/services/workshop.service";
-import { BookingData, Availability } from "@/types";
+import { BookingData } from "@/types";
 import { useAuthStore } from "@/store/authStore";
 import MaterialSelector from "../product/MaterialSelector";
 import { WorkshopOption } from "@/services/workshop.service";
 import { BookingService } from "@/services/booking.service";
 import OccasionSelector from "./OccasionSelector";
 import Link from "next/link";
+import ImageGrid from "../common/ImageGrid";
 
 function getUniqueMaterials(options?: WorkshopOption[]) {
   return (
@@ -29,16 +30,10 @@ function getUniqueMaterials(options?: WorkshopOption[]) {
 
 interface GiftCardHeroProps {
   product: WorkshopItem;
-  onBookingDataChange: (bookingData: BookingData) => void;
-  onNext?: () => void;
-  setGrandTotal: (grandTotal: number) => void;
 }
 
 export default function GiftCardHero({
   product,
-  onBookingDataChange,
-  setGrandTotal,
-  onNext,
 }: GiftCardHeroProps) {
   const bookingService = new BookingService();
   const [quantity, setQuantity] = useState(1);
@@ -46,11 +41,17 @@ export default function GiftCardHero({
   const [recipient, setRecipient] = useState("Adults");
   const [message, setMessage] = useState("");
   const [availabilityError, setAvailabilityError] = useState("");
+  const [showCartToast, setShowCartToast] = useState(false);
+
+  // 1. Get auth state from your store
+  const user = useAuthStore((state) => state.user);
+  const userId = user?.userId ?? "";
+
   const uniqueMaterials = useMemo(
     () => getUniqueMaterials(product?.options),
     [product?.options],
   );
-  const [showCartToast, setShowCartToast] = useState(false);
+
   const [selectedMaterialId, setSelectedMaterialId] = useState(
     () => getUniqueMaterials(product?.options)[0]?._id ?? "",
   );
@@ -63,27 +64,33 @@ export default function GiftCardHero({
       setSelectedMaterialId(uniqueMaterials[0]._id);
     }
   }, [uniqueMaterials, selectedMaterialId]);
-  const [childCount, setChildCount] = useState(1);
-  const userId = useAuthStore.getState().user?.userId ?? "";
+
   const selectedClay = useMemo(
-    () => product.options?.find((m) => m._id === selectedMaterialId),
-    [product.options, selectedMaterialId],
+    () => product?.options?.find((m) => m._id === selectedMaterialId),
+    [product?.options, selectedMaterialId],
   );
+
   const selectedMaterial = useMemo(() => {
     if (!selectedClay) return null;
 
-    return product.options?.find(
+    return product?.options?.find(
       (option) =>
         option.clayTypeId === selectedClay.clayTypeId &&
         option.title.toLowerCase().includes(recipient.toLowerCase()),
     );
-  }, [product.options, selectedClay, recipient]);
-
+  }, [product?.options, selectedClay, recipient,]);
   const handleCheck = async () => {
+    setAvailabilityError(""); // Clear previous errors
+
+    // 2. Intercept check if user is not logged in
+    if (!userId) {
+      setAvailabilityError("Your cart is tied to your account. Please log in to continue.");
+      return false;
+    }
+
     const bookingData: BookingData = {
       userId,
       bookingType: "gift",
-
       workshopId: product._id,
       optionId: selectedMaterial?._id || "",
       people: quantity,
@@ -97,19 +104,13 @@ export default function GiftCardHero({
       ...(recipient === "Kids" && {
         child: quantity,
       }),
-
-      // message:message
     };
 
-    // send data to parent
 
     try {
       await bookingService.addToCart(bookingData);
       setShowCartToast(true);
-
-      // Automatically clear the banner after 5 seconds
       setTimeout(() => setShowCartToast(false), 8000);
-
       return true;
     } catch (error) {
       setAvailabilityError(
@@ -139,63 +140,18 @@ export default function GiftCardHero({
       )}
       <div className="page-wrapper relative px-[17px] grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         {/* Left Column: Media Gallery */}
-        <div className="space-y-4 h-[calc(100vh-80px)] flex flex-col  ">
-          <div className="relative w-full flex-1 bg-gray-200 overflow-hidden">
-            <img
-              src={product.bannerImage || "/images/product/gift-card-1.png"}
-              alt="Gift boxes"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <button className="w-16 h-16 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/50 hover:bg-white/50 transition duration-300">
-                <Play className="text-white fill-white ml-1" size={24} />
-              </button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3">
-            {(product.images?.length > 0
-              ? product.images.slice(0, 3)
-              : [
-                  {
-                    _id: "1",
-                    image: "/images/product/gift-card-2.jpg",
-                    title: "Gift thumbnail 1",
-                  },
-                  {
-                    _id: "2",
-                    image: "/images/product/gift-card-3.jpg",
-                    title: "Gift thumbnail 2",
-                  },
-                  {
-                    _id: "3",
-                    image: "/images/product/gift-card-4.jpg",
-                    title: "Gift thumbnail 3",
-                  },
-                ]
-            ).map((img, i) => (
-              <div
-                key={img._id ?? i}
-                className="aspect-video bg-gray-200 overflow-hidden rounded"
-              >
-                <img
-                  src={img.image}
-                  alt={img.title || `Gift thumbnail ${i + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
+        <div className="space-y-4 h-[calc(100vh-80px)] flex flex-col">
+          <ImageGrid images={product?.images?.map((img) => img.image) || []} />
         </div>
 
         {/* Right Column: Content & Form */}
         <div className="flex flex-col lg:sticky lg:top-24 h-fit self-start">
           <div className="mb-8">
-            <h1 className="text-5xl font-neiko mb-4 text-[#113224]">
-              {product.title || "A Gift Made by Hand, from the Heart"}
+            <h1 className="text-5xl font-serif mb-4 text-[#113224]">
+              {product?.title || "A Gift Made by Hand, from the Heart"}
             </h1>
             <p className="text-[#113224]/80 leading-relaxed text-[17px]">
-              {product.shortDescription ||
+              {product?.shortDescription ||
                 "Give the gift of creativity, experiences, and lasting memories. Perfect for anyone who loves to create something truly unique and meaningful."}
             </p>
           </div>
@@ -211,15 +167,15 @@ export default function GiftCardHero({
             </div>
 
             <div className="p-8 space-y-8">
-              {/* Occasion */}
+              {/* Occasion Section */}
               <div>
                 <OccasionSelector
-                  initialOccasion={occasion} // Passes your current parent 'occasion' state string
-                  onOccasionSelect={(selectedItem) => setOccasion(selectedItem)} // Updates your parent 'setOccasion' state
+                  initialOccasion={occasion}
+                  onOccasionSelect={(selectedItem) => setOccasion(selectedItem)}
                 />
               </div>
 
-              {/* Recipient */}
+              {/* Recipient Selection */}
               <div>
                 <label className="block font-medium mb-3">
                   Who is this Gift for?
@@ -228,6 +184,7 @@ export default function GiftCardHero({
                   {["Adults", "Kids"].map((item) => (
                     <button
                       key={item}
+                      type="button"
                       onClick={() => setRecipient(item)}
                       className={`flex-1 py-3 text-sm font-medium transition-colors ${
                         recipient === item
@@ -241,10 +198,11 @@ export default function GiftCardHero({
                 </div>
               </div>
 
+              {/* Clay Type Selector */}
               {uniqueMaterials && uniqueMaterials.length > 0 && (
                 <div>
-                  <label className="block font-medium mb-3">
-                    choose your clay
+                  <label className="block font-medium mb-3 text-capitalize">
+                    Choose your clay
                   </label>
                   <MaterialSelector
                     materials={uniqueMaterials}
@@ -253,6 +211,8 @@ export default function GiftCardHero({
                   />
                 </div>
               )}
+
+              {/* Message Input text field */}
               <div>
                 <label className="block font-medium mb-3">
                   Add a personal message{" "}
@@ -270,19 +230,19 @@ export default function GiftCardHero({
                   placeholder="Hope you enjoy getting your hands dirty and creating something beautiful"
                 />
               </div>
+
+              {/* Quantity Handler */}
               <QuantitySelector
                 quantity={quantity}
-                onIncrease={() => setQuantity(1)}
-                onDecrease={() => setQuantity(1)}
-                limit={1}
+                onIncrease={() => setQuantity((prev) => prev + 1)}
+                onDecrease={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                limit={10}
                 unitPrice={selectedMaterial?.price}
                 currency={selectedMaterial?.currency ?? "AED"}
                 onCart={handleCheck}
-                buttonlabel="Add to cart"
+                buttonlabel={ "Add to cart" }
               />
-              {availabilityError && (
-                <p className="text-sm text-red-600">{availabilityError}</p>
-              )}
+
             </div>
           </div>
         </div>

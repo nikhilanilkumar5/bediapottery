@@ -44,11 +44,11 @@ export default function SuccessPage() {
 						</div>
 
 						<div className="relative">
-							<div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-[#f4ead7] to-[#dce8df] blur-2xl opacity-70 translate-y-6" />
-							<div className="relative rounded-[2rem] border border-white/70 bg-white/80 p-6 sm:p-8 shadow-[0_20px_60px_rgba(17,50,36,0.12)] backdrop-blur">
-								<div className="flex items-center justify-between border-b border-[#ece6db] pb-5">
+							
+							<div className="relative border border-white/70 bg-white/80 p-6 sm:p-8 shadow-[0_20px_60px_rgba(17,50,36,0.12)] backdrop-blur">
+								<div className="flex items-center justify-between ">
 									<div>
-										<p className="text-xs uppercase tracking-[0.2em] text-gray-500">Order summary</p>
+										{/* <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Order summary</p> */}
 										<h2 className="mt-2 text-2xl font-semibold">Thank you</h2>
 									</div>
 									<div className="h-14 w-14 rounded-full bg-[#113224] text-white flex items-center justify-center">
@@ -56,18 +56,9 @@ export default function SuccessPage() {
 									</div>
 								</div>
 
-								<div className="mt-6 space-y-4 text-sm">
-									<div className="flex items-center justify-between">
-										<span className="text-gray-500">Order date</span>
-										<span className="font-medium">18 Jun 2026</span>
-									</div>
-								</div>
+							
 
-								<div className="mt-8 rounded-2xl bg-[#fcfbf9] border border-[#ece6db] p-5">
-									<p className="text-sm text-gray-600 leading-6">
-										If you do not see the confirmation email, check your spam folder or contact support and we will resend the details.
-									</p>
-								</div>
+								
 							</div>
 						</div>
 					</div>

@@ -8,7 +8,7 @@ interface ImageGridProps {
 }
 
 const ImageGrid: React.FC<ImageGridProps> = ({ images, className = '' }) => {
-  if (!images || images.length < 4) return null
+  if (!images ) return null
 
   return (
     <div className={`flex flex-col gap-2 lg:h-screen ${className} mt-[20px] lg:mt-[20px]`}>

@@ -301,8 +301,9 @@ export default function CheckoutStep({
               }}
             />
             <span className="text-gray-700">
-              I confirm that the address details entered are correct and will be
-              used for delivery and billing purposes.
+              I confirm that the details entered are correct and will be used
+              for my workshop registration and communication regarding the
+              event.
             </span>
           </label>
           {errors.find((err) => err.field === "acceptedAddressDetails") && (
