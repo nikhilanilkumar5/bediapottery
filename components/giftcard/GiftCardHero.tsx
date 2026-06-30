@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import { Play } from "lucide-react";
+import { Play, User2 } from "lucide-react";
 import QuantitySelector from "../product/QuantitySelector";
 import { WorkshopItem } from "@/services/workshop.service";
 import { BookingData } from "@/types";
@@ -46,7 +46,7 @@ export default function GiftCardHero({
   // 1. Get auth state from your store
   const user = useAuthStore((state) => state.user);
   const userId = user?.userId ?? "";
-
+  const token: string | null = useAuthStore.getState().user?.token || null
   const uniqueMaterials = useMemo(
     () => getUniqueMaterials(product?.options),
     [product?.options],
@@ -83,7 +83,8 @@ export default function GiftCardHero({
     setAvailabilityError(""); // Clear previous errors
 
     // 2. Intercept check if user is not logged in
-    if (!userId) {
+    if (!token || token == null) {
+      console.log(token)
       setAvailabilityError("Your cart is tied to your account. Please log in to continue.");
       return false;
     }
@@ -122,7 +123,7 @@ export default function GiftCardHero({
   };
 
   return (
-    <section className="bg-[#f2ece3] min-h-screen py-12 font-sans text-[#113224]">
+    <section className="bg-[#f2ece3] min-h-screen md:py-12 py-3 font-sans text-[#113224]">
       {showCartToast && (
         <div className="fixed top-20 left-0 right-0 w-full bg-[#68bc60] text-white py-3.5 px-6 z-[9999] shadow-sm animate-in fade-in slide-in-from-top duration-300">
           <div className="page-wrapper flex justify-end items-center text-sm font-medium">
@@ -140,7 +141,7 @@ export default function GiftCardHero({
       )}
       <div className="page-wrapper relative px-[17px] grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         {/* Left Column: Media Gallery */}
-        <div className="space-y-4 h-[calc(100vh-80px)] flex flex-col">
+        <div className="space-y-4 md:h-[calc(100vh-80px)] flex flex-col">
           <ImageGrid images={product?.images?.map((img) => img.image) || []} />
         </div>
 
@@ -242,7 +243,14 @@ export default function GiftCardHero({
                 onCart={handleCheck}
                 buttonlabel={ "Add to cart" }
               />
-
+{availabilityError && (
+            <p className="text-sm text-red-600">{availabilityError} <Link
+									href="/login"
+									className="inline-flex items-center justify-center gap-2  border border-[#113224] px-6 py-1 font-medium text-[#113224] transition-colors hover:bg-[#113224] hover:text-white"
+								>
+									go to login
+								</Link></p>
+          )}
             </div>
           </div>
         </div>

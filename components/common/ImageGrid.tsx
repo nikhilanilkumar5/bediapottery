@@ -23,7 +23,7 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, className = '' }) => {
       </div>
 
       {/* Bottom Images → 30% */}
-      <div className="flex gap-2 flex-[3] min-h-0 h-[100px] lg:h-auto">
+      <div className="md:flex hidden gap-2 flex-[3] min-h-0 h-[100px] lg:h-auto ">
         {images.slice(1, 4).map((img, i) => (
           <div key={i} className="flex-1">
             <img
