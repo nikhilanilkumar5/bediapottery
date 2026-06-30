@@ -178,7 +178,7 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
         />
 
         {/* Right Section - Booking Panel */}
-        <div className=" p-6 lg:p-8 space-y-6 ">
+        <div className=" md:p-6 lg:p-8 space-y-6  ">
           <div>
                 <Title className="2xl:mb-7 mb-5 font-normal">{product?.title}</Title>
             {product?.description && (

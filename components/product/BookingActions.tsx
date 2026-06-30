@@ -19,11 +19,11 @@ const BookingActions: React.FC<BookingActionsProps> = ({
   className = '',
 }) => {
   return (
-    <div className={`space-y-3 ${className}`}>
+    <div className={`space-y-3 ${className} md:pb-0 pb-6`}>
       <button
         type="button"
         onClick={onBookNow}
-        className={`w-full px-6 py-4 font-medium transition-colors duration-200 ${
+        className={`w-full px-6 py-4 font-medium transition-colors duration-200  ${
           isBookingDisabled
             ? 'bg-gray-300 text-gray-700 cursor-not-allowed'
             : 'bg-primary text-white hover:bg-primary-dark'

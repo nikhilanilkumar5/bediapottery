@@ -28,7 +28,7 @@ const TimeSlotSelector: React.FC<TimeSlotSelectorProps> = ({
   return (
     <div className={`space-y-3 ${className}`}>
       <h3 className="text-lg font-medium text-gray-900">Select Time Slot</h3>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid xl:grid-cols-3 md:grid-cols-2 gap-3">
         {slots.map((slot) => (
           <button
             key={slot._id}

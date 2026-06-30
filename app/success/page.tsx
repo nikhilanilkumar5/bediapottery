@@ -28,7 +28,7 @@ export default function SuccessPage() {
 							</h1>
 
 							<p className="mt-5 max-w-xl text-base sm:text-lg text-gray-600 leading-7">
-								We have received your order and sent the confirmation details to your email. If you booked a workshop, our team will follow up with the next steps.
+								A confirmation email with all the details has been sent to your registered email address. We can't wait to welcome you!
 							</p>
 
 

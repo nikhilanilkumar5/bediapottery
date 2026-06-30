@@ -68,245 +68,149 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
           </Content>
         </div>
       )}
-      <div className={`w-full ${className}`}>
-        <div className={`${!child ? "flex" : ""} items-center w-full`}>
-          {/* Card */}
-          {/* Quantity Controls */}
+     <div className={`w-full ${className}`}>
+  <div className="flex flex-col md:flex-row md:items-center w-full gap-4">
+    {/* Card / Quantity Controls */}
+    {child ? (
+      <div className="md:flex flex-wrap items-center w-full gap-3 md:gap-4 mb-2 md:mb-0">
+        {/* Adult Controls */}
+        <div className="flex items-center flex-1 min-w-[140px] md:mb-0 mb-6">
+          <Content className="leading-relaxed !text-black font-semibold mr-3 shrink-0">
+            Adults
+          </Content>
+          <div className="flex items-center flex-1 justify-between gap-2 border border-black/30 py-2 px-3 md:py-4 md:px-3">
+            {/* Minus */}
+            <button
+              onClick={onDecrease}
+              disabled={quantity <= 1}
+              className="w-10 h-10 flex items-center justify-center disabled:opacity-40 transition shrink-0"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="black" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+              </svg>
+            </button>
 
-          {child ? (
-            <div className="flex items-center w-full mb-4">
-              <Content className=" leading-relaxed !text-black  font-semibold mr-3">
-                Adults
-              </Content>
-              <div className="flex items-center mr-10 gap-4 border border-black/30 py-4 px-3">
-                {/* Minus */}
-
-                <button
-                  onClick={onDecrease}
-                  disabled={quantity <= 1}
-                  className="w-11  flex items-center justify-center  disabled:opacity-40 transition"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="black"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M20 12H4"
-                    />
-                  </svg>
-                </button>
-
-                {/* Quantity */}
-                <Content className="text-center leading-relaxed !text-black">
-                  {quantity.toString().padStart(2, "0")}
-                </Content>
-
-                {/* Plus */}
-                <button
-                  onClick={onIncrease}
-                  className="w-11 flex items-center justify-center  transition"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="black"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <Content className=" leading-relaxed !text-black  font-semibold mr-3">
-                Child
-              </Content>
-              <div className="flex items-center mr-10 gap-4 border border-black/30 py-4 px-3">
-                {/* Minus */}
-
-                <button
-                  onClick={onchildDecrease}
-                  disabled={childCount <= 1}
-                  className="w-11  flex items-center justify-center  disabled:opacity-40 transition"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="black"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M20 12H4"
-                    />
-                  </svg>
-                </button>
-
-                {/* Quantity */}
-                <Content className="text-center leading-relaxed !text-black">
-                  {childCount.toString().padStart(2, "0")}
-                </Content>
-
-                {/* Plus */}
-                <button
-                  onClick={onchildIncrease}
-                  className="w-11 flex items-center justify-center  transition"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="black"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="flex items-center mr-10 gap-4 border border-black/30 py-4 px-3">
-              {/* Minus */}
-              <button
-                onClick={onDecrease}
-                disabled={quantity <= 1}
-                className="w-11  flex items-center justify-center  disabled:opacity-40 transition"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="black"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20 12H4"
-                  />
-                </svg>
-              </button>
-
-              {/* Quantity */}
-              <Content className="text-center leading-relaxed !text-black">
-                {quantity.toString().padStart(2, "0")}
-              </Content>
-
-              {/* Plus */}
-              <button
-                onClick={onIncrease}
-                disabled={quantity >= Number(limit)}
-                className="w-11 flex items-center justify-center disabled:opacity-40 transition"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="black"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-              </button>
-            </div>
-          )}
-          {/* Price + Button Section */}
-          <div className="flex  items-center justify-between bg-[#0f4a3c] text-white w-full py-[9px] pl-7 pr-3">
-            {/* Price */}
-            <Content className="font-medium !text-white">
-              {totalPrice} {currency}
+            {/* Quantity */}
+            <Content className="text-center leading-relaxed !text-black font-medium">
+              {quantity.toString().padStart(2, "0")}
             </Content>
 
-            {/* Add to Cart */}
+            {/* Plus */}
             <button
-              onClick={onCart}
-              className="flex items-center gap-4 group hover:shadow-sm"
+              onClick={onIncrease}
+              className="w-10 h-10 flex items-center justify-center transition shrink-0"
             >
-              <span className="">{buttonlabel}</span>
+              <svg className="w-5 h-5" fill="none" stroke="black" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+          </div>
+        </div>
 
-              <span
-                className="flex items-center justify-center w-10 h-10 
-        bg-white  transition-transform duration-300 
-        group-hover:translate-x-1"
-              >
-                <svg
-                  width="46"
-                  height="46"
-                  viewBox="0 0 46 46"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlnsXlink="http://www.w3.org/1999/xlink"
-                >
-                  <rect width="46" height="46" fill="white" />
-                  <mask
-                    id="mask0_1746_1317"
-                    style={{ maskType: "alpha" }}
-                    maskUnits="userSpaceOnUse"
-                    x="10"
-                    y="10"
-                    width="26"
-                    height="26"
-                  >
-                    <rect
-                      x="10"
-                      y="10"
-                      width="26"
-                      height="26"
-                      fill="url(#pattern0_1746_1317)"
-                    />
-                  </mask>
-                  <g mask="url(#mask0_1746_1317)">
-                    <rect
-                      x="10"
-                      y="10"
-                      width="26"
-                      height="26"
-                      fill="url(#pattern1_1746_1317)"
-                    />
-                    <rect x="10" y="10" width="26" height="26" fill="#0D463D" />
-                  </g>
-                  <defs>
-                    <pattern
-                      id="pattern0_1746_1317"
-                      patternContentUnits="objectBoundingBox"
-                      width="1"
-                      height="1"
-                    >
-                      <use
-                        xlinkHref="#image0_1746_1317"
-                        transform="scale(0.00195312)"
-                      />
-                    </pattern>
-                    <pattern
-                      id="pattern1_1746_1317"
-                      patternContentUnits="objectBoundingBox"
-                      width="1"
-                      height="1"
-                    >
-                      <use
-                        xlinkHref="#image0_1746_1317"
-                        transform="scale(0.00195312)"
-                      />
-                    </pattern>
-                    <image
+        {/* Child Controls */}
+        <div className="flex items-center flex-1 min-w-[140px] md:mr-6">
+          <Content className="leading-relaxed !text-black font-semibold mr-3 shrink-0">
+            Child
+          </Content>
+          <div className="flex items-center flex-1 justify-between gap-2 border border-black/30 py-2 px-3 md:py-4 md:px-3">
+            {/* Minus */}
+            <button
+              onClick={onchildDecrease}
+              disabled={childCount <= 1}
+              className="w-10 h-10 flex items-center justify-center disabled:opacity-40 transition shrink-0"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="black" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+              </svg>
+            </button>
+
+            {/* Quantity */}
+            <Content className="text-center leading-relaxed !text-black font-medium">
+              {childCount.toString().padStart(2, "0")}
+            </Content>
+
+            {/* Plus */}
+            <button
+              onClick={onchildIncrease}
+              className="w-10 h-10 flex items-center justify-center transition shrink-0"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="black" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    ) : (
+      <div className="flex items-center justify-between md:justify-start w-full md:w-auto md:mr-6 gap-4 border border-black/30 py-2 px-3 md:py-4 md:px-3">
+        {/* Minus */}
+        <button
+          onClick={onDecrease}
+          disabled={quantity <= 1}
+          className="w-11 h-10 flex items-center justify-center disabled:opacity-40 transition"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="black" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+          </svg>
+        </button>
+
+        {/* Quantity */}
+        <Content className="text-center leading-relaxed !text-black font-medium">
+          {quantity.toString().padStart(2, "0")}
+        </Content>
+
+        {/* Plus */}
+        <button
+          onClick={onIncrease}
+          disabled={quantity >= Number(limit)}
+          className="w-11 h-10 flex items-center justify-center disabled:opacity-40 transition"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="black" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+        </button>
+      </div>
+    )}
+
+    {/* Price + Button Section */}
+    <div className="flex items-center justify-between bg-[#0f4a3c] text-white w-full py-3 pl-4 pr-3 md:py-[9px] md:pl-7">
+      {/* Price */}
+      <Content className="font-medium !text-white whitespace-nowrap">
+        {totalPrice} {currency}
+      </Content>
+
+      {/* Add to Cart */}
+      <button
+        onClick={onCart}
+        className="flex items-center gap-3 md:gap-4 group hover:shadow-sm shrink-0"
+      >
+        <span className="text-sm md:text-base">{buttonlabel}</span>
+        <span className="flex items-center justify-center w-10 h-10 bg-white transition-transform duration-300 group-hover:translate-x-1 shrink-0">
+          <svg
+            width="46"
+            height="46"
+            viewBox="0 0 46 46"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
+            className="w-full h-full"
+          >
+            <rect width="46" height="46" fill="white" />
+            <mask id="mask0_1746_1317" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="10" y="10" width="26" height="26">
+              <rect x="10" y="10" width="26" height="26" fill="url(#pattern0_1746_1317)" />
+            </mask>
+            <g mask="url(#mask0_1746_1317)">
+              <rect x="10" y="10" width="26" height="26" fill="url(#pattern1_1746_1317)" />
+              <rect x="10" y="10" width="26" height="26" fill="#0D463D" />
+            </g>
+            <defs>
+              <pattern id="pattern0_1746_1317" patternContentUnits="objectBoundingBox" width="1" height="1">
+                <use xlinkHref="#image0_1746_1317" transform="scale(0.00195312)" />
+              </pattern>
+              <pattern id="pattern1_1746_1317" patternContentUnits="objectBoundingBox" width="1" height="1">
+                <use xlinkHref="#image0_1746_1317" transform="scale(0.00195312)" />
+              </pattern>
+                      <image
                       id="image0_1746_1317"
                       width="512"
                       height="512"

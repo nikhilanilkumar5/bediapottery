@@ -10,43 +10,45 @@ interface ProductCardProps {
   product: Product;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+export default function ProductCard({ product }: ProductCardProps) {
   const [imageError, setImageError] = useState(false);
 
   return (
-    <div  onClick={() => window.location.href = `/workshops/${product.mainSlug}/${product.slug}`} className="group cursor-pointer bg-secondary-dark hover:bg-white p-2 pb-3 transition-all duration-300 hover:shadow-soft">
-      {/* IMAGE CONTAINER */}
-      <div className="relative w-full h-[420px] overflow-hidden">
+    <Link
+      href={`/workshops/${product.mainSlug}/${product.slug}`}
+      className="group block"
+    >
+      <div className="relative overflow-hidden">
         {!imageError ? (
           <Image
-            src={product.imageUrl||"/images/banner/banner-2.png"}
+            src={product.imageUrl || "/images/banner/banner-2.png"}
             alt={product.title}
-            fill
-            className="object-cover"
+            width={500}
+            height={700}
             onError={() => setImageError(true)}
+            className="w-full h-[420px] object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full bg-gray-200" />
+          <div className="h-[420px] bg-gray-200" />
         )}
 
-        {/* OVERLAY */}
-       <div className="absolute inset-0 bg-[linear-gradient(171.31deg,rgba(0,0,0,0.4)_6.63%,rgba(0,0,0,0)_55.09%)] flex items-start justify-center">
-          
-          <Content className="text-white text-center mt-2 pt-8 2xl:!text-2xl  xl:!text-xl">
+        {/* Top Ribbon */}
+  <div
+  className="absolute top-0 left-0 inline-flex items-center gap-2
+             bg-primary text-secondary-off px-3 py-1.5 lg:px-5 lg:py-2"
+>
+  <Content className="!text-secondary-off">
+    Explore Now
+  </Content>
+</div>
+
+        {/* Bottom Title */}
+        <div className="absolute bottom-3 left-3 right-3 bg-[#d9d7d2]/95 py-3 px-4 text-center">
+            <Content className="text-primary text-center   2xl:!text-2xl  xl:!text-xl">
              {product.title}
           </Content>
         </div>
       </div>
-
-      {/* BUTTON */}
-      <Link
-        href={`/workshops/${product.mainSlug}/${product.slug}`}
-        className="block mt-3 w-full bg-primary text-white text-center py-4 text-lg font-medium hover:bg-primary-dark transition-colors duration-300"
-      >
-        Book Now
-      </Link>
-    </div>
+    </Link>
   );
-};
-
-export default ProductCard;
+}

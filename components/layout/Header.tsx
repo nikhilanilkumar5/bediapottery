@@ -6,7 +6,7 @@ import { navigationItems } from '@/constants/data'
 import Image from 'next/image'
 import { Content } from '../ui'
 import SearchPill from '../header/SearchPill'
-import { ChevronDown, Menu, X } from 'lucide-react'
+import { ChevronDown, Menu, X, Instagram, Facebook, Linkedin } from 'lucide-react'
 
 const Header: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -16,22 +16,26 @@ const Header: React.FC = () => {
     setOpenDropdown((prev) => (prev === href ? null : href))
   }
 
-  // Prevent background scrolling when the mobile menu is open
+  // STOPS SCROLLING COMPLETELY WHEN MOBILE MENU IS OPEN
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = 'hidden'
+      document.body.style.height = '100vh'
     } else {
-      document.body.style.overflow = 'unset'
+      document.body.style.overflow = ''
+      document.body.style.height = ''
     }
     return () => {
-      document.body.style.overflow = 'unset'
+      document.body.style.overflow = ''
+      document.body.style.height = ''
     }
   }, [mobileOpen])
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
-        <nav className="page-wrapper py-[7px] px-[17px]  relative bg-white z-50">
+      {/* Standard Desktop/Mobile Header Topbar */}
+      <header className="sticky top-0 z-50 bg-white border-b border-gray-200 w-full">
+        <nav className="page-wrapper py-[7px] px-[17px] relative bg-white z-50">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" onClick={() => setMobileOpen(false)}>
@@ -44,12 +48,12 @@ const Header: React.FC = () => {
               />
             </Link>
 
-            {/* Desktop nav */}
+            {/* Desktop Nav */}
             <div className="hidden lg:flex items-center 2xl:gap-[50px] xl:gap-6">
               {navigationItems.map((item) =>
                 item.children ? (
                   <div key={item.href} className="relative group">
-                    <div  className="flex items-center gap-1 cursor-pointer">
+                    <div className="flex items-center gap-1 cursor-pointer">
                       <Content className="hover:text-primary transition-colors duration-200">
                         {item.label}
                       </Content>
@@ -69,80 +73,109 @@ const Header: React.FC = () => {
                   </div>
                 ) : (
                   <Link key={item.href} href={item.href}>
-                    <Content className="hover:text-primary transition-colors duration-200">{item.label}</Content>
+                    <Content className="hover:text-primary transition-colors duration-200">
+                      {item.label}
+                    </Content>
                   </Link>
                 )
               )}
               <SearchPill />
             </div>
 
-            {/* Mobile right side: SearchPill icons + hamburger */}
-            <div className="flex lg:hidden items-center gap-[3rem]">
+            {/* Mobile Burger Trigger Button */}
+            <div className="flex lg:hidden items-center md:gap-[3rem] gap-5">
               <SearchPill />
               <button
-                aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-                onClick={() => setMobileOpen((prev) => !prev)}
+                aria-label="Open menu"
+                onClick={() => setMobileOpen(true)}
                 className="p-1 text-gray-700 hover:text-primary transition-colors duration-200"
               >
-                {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                <Menu className="w-6 h-6" />
               </button>
             </div>
           </div>
         </nav>
       </header>
 
-      {/* Mobile menu — fixed below header, above overlay */}
-      {mobileOpen && (
-        <div className="fixed top-[70px] left-0 right-0 bg-white border-t border-gray-100 px-[17px] pb-4 shadow-lg lg:hidden z-50">
+      {/* FULL-SCREEN VIBRANT RESPONSIVE MOBILE OVERLAY DRAWER */}
+      <div 
+        className={`fixed inset-0 bg-white text-primary z-[100] lg:hidden flex flex-col justify-between p-6 pt-4 transition-all duration-300
+          ${mobileOpen ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}`}
+      >
+        {/* Top Header Block Inside Menu Screen */}
+        <div className="w-full flex items-center justify-between">
+          <Link href="/" onClick={() => setMobileOpen(false)}>
+            {/* White variant logo file suggested here to stand out over vibrant color background */}
+           <Image 
+                src="/logo.svg" 
+                alt="Bedia Pottery Logo" 
+                width={290} 
+                height={31} 
+                className=" h-auto w-[290px] md:h-[31px]" 
+              />
+          </Link>
+          <button
+            aria-label="Close menu"
+            onClick={() => setMobileOpen(false)}
+            className="p-2 text-primary hover:opacity-80 transition-opacity"
+          >
+            <X className="w-8 h-8" />
+          </button>
+        </div>
+
+        {/* Main Vertical Link Elements Center List */}
+        <div className="flex-1 flex flex-col justify-center gap-5 my-auto overflow-y-auto max-h-[65vh] pr-2">
           {navigationItems.map((item) =>
             item.children ? (
-              <div key={item.href}>
+              <div key={item.href} className="w-full">
                 <button
                   onClick={() => toggleDropdown(item.href)}
-                  className="flex items-center justify-between w-full py-3 border-b border-gray-100"
+                  className="flex items-center justify-between w-full py-2 text-xl font-bold tracking-wide uppercase text-left"
                 >
-                  <span className="text-sm font-medium text-gray-800">{item.label}</span>
+                  <span>{item.label}</span>
                   <ChevronDown
-                    className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${openDropdown === item.href ? 'rotate-180' : ''}`}
+                    className={`w-6 h-6 text-white/80 transition-transform duration-200 ${openDropdown === item.href ? 'rotate-180' : ''}`}
                   />
                 </button>
-                {openDropdown === item.href && (
-                  <div className="pl-4 pb-1">
+                  <div className="pl-4 flex flex-col gap-2 mt-2 border-l-2 border-white/30">
                     {item.children.map((child) => (
                       <Link
                         key={child.href}
                         href={child.href}
                         onClick={() => setMobileOpen(false)}
-                        className="block py-2.5 text-sm text-gray-600 hover:text-primary transition-colors duration-150"
+                        className="block py-1.5 text-lg font-medium text-primary hover:text-white transition-colors"
                       >
                         {child.label}
                       </Link>
                     ))}
                   </div>
-                )}
               </div>
             ) : (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center py-3 border-b border-gray-100 text-sm font-medium text-gray-800 hover:text-primary transition-colors duration-200"
+                className="block py-2 text-xl font-bold tracking-wide uppercase hover:text-primary/80 transition-colors"
               >
                 {item.label}
               </Link>
             )
           )}
         </div>
-      )}
 
-      {/* Full-screen overlay — behind menu, above page content */}
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
-          onClick={() => setMobileOpen(false)}
-          aria-hidden="true"
-        />
-      )}
+        {/* Social Icons Footer Grid Row */}
+        <div className="flex items-center gap-6 pt-4 border-t border-white/20">
+          <a href="https://instagram.com" target="_blank" rel="noreferrer" className="text-primary hover:opacity-80 transition-opacity">
+            <Instagram className="w-7 h-7" />
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-primary hover:opacity-80 transition-opacity">
+            <Facebook className="w-7 h-7" />
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-primary hover:opacity-80 transition-opacity">
+            <Linkedin className="w-7 h-7" />
+          </a>
+        </div>
+      </div>
     </>
   )
 }

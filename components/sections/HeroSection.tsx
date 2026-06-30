@@ -50,67 +50,71 @@ useEffect(() => {
         </div>
 
         {/* ================= RIGHT CONTENT ================= */}
-        <div className="relative w-full lg:flex-1 lg:h-full overflow-hidden">
-          <div className="lg:absolute lg:inset-0 grid grid-cols-2 grid-rows-2 gap-3 lg:gap-[15px] p-3 lg:py-[15px] lg:pr-[15px] lg:pl-0">
-      {slide?.cards?.slice(0, 4)?.map((card: any, index: number) => (
-  <div
-    key={card._id ?? card.id}
-    className={`w-full overflow-hidden ${
-      index === 3
-        ? "bg-primary flex flex-col justify-center p-4 lg:p-6"
-        : "min-h-[35vw] lg:min-h-0 lg:h-full"
-    }`}
-  >
-    {/* FIRST 3 CARDS → IMAGE */}
-    {index < 3 ? (
-      <div className="relative w-full h-full min-h-[35vw] lg:min-h-0 overflow-hidden group">
-        <div
-          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-          style={{ backgroundImage: `url(${card.bannerImage})` }}
-        />
+      <div className="relative w-full lg:flex-1 lg:h-full overflow-hidden">
+  {/* Stacks 1-column on mobile, turns into a 2x2 grid on lg screens */}
+  <div className="grid grid-cols-1 gap-3 p-3 lg:absolute lg:inset-0 lg:grid-cols-2 lg:grid-rows-2 lg:gap-[15px] lg:py-[15px] lg:pr-[15px] lg:pl-0">
+    {slide?.cards?.slice(0, 4)?.map((card: any, index: number) => (
+      <div
+        key={card._id ?? card.id}
+        className={`w-full overflow-hidden ${
+          index === 3
+            ? "bg-primary flex flex-col justify-center p-4 lg:p-6 min-h-[40vw] lg:min-h-0"
+            : "min-h-[45vw] lg:min-h-0 lg:h-full"
+        }`}
+      >
+        {/* FIRST 3 CARDS → IMAGE */}
+        {index < 3 ? (
+          <div className="relative w-full h-full min-h-[45vw] lg:min-h-0 overflow-hidden group">
+            <div
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+              style={{ backgroundImage: `url(${card.bannerImage})` }}
+            />
 
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0)_-23.93%,rgba(0,0,0,0.9)_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0)_-23.93%,rgba(0,0,0,0.9)_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-        <div className="relative z-10 h-full w-full flex flex-col items-center justify-end text-center px-3 lg:px-6 opacity-0 translate-y-6 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-    
-          <Title className="!text-black bg-[#c9c9c9] w-[calc(100%-40px)] py-2 mb-2 lg:mb-4 leading-9 !text-base  font-normal">
-            {card.title}
-          </Title>
- <Link
-      href={`/workshops/${card.slug}`}
-      className="group inline-flex items-center gap-2 fixed top-0 left-0 lg:gap-4 bg-primary text-secondary-off 
-       px-3 py-1.5 lg:px-5 lg:py-2 transition-all duration-300 hover:bg-primary-dark "
-    >
-       <Content className="!text-secondary-off ">
-                       Explore Now
-                     </Content>
+            {/* Container for the content */}
+            <div className="relative z-10 h-full w-full flex flex-col items-center justify-end text-center px-3 lg:px-6 opacity-0 translate-y-6 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
+              
+              {/* Title positioned at the bottom area */}
+              <Title className="!text-black bg-[#c9c9c9] w-[calc(100%-40px)] py-2 mb-2 lg:mb-4 leading-9 !text-base font-normal">
+                {card.title}
+              </Title>
 
-    </Link>
+              {/* FIXED CHANGED TO ABSOLUTE: Positions the button in the top-left of the card image wrapper */}
+              <Link
+                href={`/workshops/${card.slug}`}
+                className="absolute top-0 left-0 inline-flex items-center gap-2 lg:gap-4 bg-primary text-secondary-off 
+                 px-3 py-1.5 lg:px-5 lg:py-2 transition-all duration-300 hover:bg-primary-dark"
+              >
+                <Content className="!text-secondary-off">
+                  Explore Now
+                </Content>
+              </Link>
 
-        </div>
-      </div>
-    ) : (
-      /* 4TH CARD → COLOR BG ONLY */
-      <div className="text-center flex flex-col items-center justify-center h-full">
-        <Subtitle className="!text-secondary-off mb-1 lg:mb-2 !text-[10px] lg:!text-sm">
-          {card.title}
-        </Subtitle>
-
-        <Title className="!text-secondary-off mb-2 lg:mb-4 !text-base lg:!text-[32px] font-normal">
-          {card.subtitle}
-        </Title>
-
-        <Content className="!text-secondary-off mb-4 lg:mb-10 hidden lg:block">
-          {card.shortDescription}
-        </Content>
-
-        <ExploreButton href={`/workshops/${card.slug}`}/>
-      </div>
-    )}
-  </div>
-))}
+            </div>
           </div>
-        </div>
+        ) : (
+          /* 4TH CARD → COLOR BG ONLY */
+          <div className="text-center flex flex-col items-center justify-center h-full py-6 lg:py-0">
+            <Subtitle className="!text-secondary-off mb-1 lg:mb-2 !text-[10px] lg:!text-sm">
+              {card.title}
+            </Subtitle>
+
+            <Title className="!text-secondary-off mb-2 lg:mb-4 !text-base lg:!text-[32px] font-normal">
+              {card.subtitle}
+            </Title>
+
+            <Content className="!text-secondary-off mb-4 lg:mb-10 hidden lg:block">
+              {card.shortDescription}
+            </Content>
+
+            <ExploreButton href={`/workshops/${card.slug}`}/>
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+</div>
 
       </div>
     </section>

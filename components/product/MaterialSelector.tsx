@@ -27,23 +27,29 @@ const MaterialSelector: React.FC<MaterialSelectorProps> = ({
   }
 
   return (
-    <div className={`space-y-3  mb-6 ${className}`}>
-    <div className="flex gap-3 w-full">
-  {materials.map((material) => (
-    <button
-      key={material._id}
-      onClick={() => onMaterialSelect(material._id)}
-      className={`flex-1 px-6 2xl:py-5 py-4 font-medium transition-colors duration-200 ${
-        selectedMaterialId === material._id
-          ? 'bg-primary text-secondary-dark  '
-        : 'bg-[#0D463D1A] text-primary  hover:bg-primary hover:text-secondary-dark'
-      }`}
-    >
-      {material.title}
-    </button>
-  ))}
+<div className={`space-y-3 mb-6 ${className}`}>
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+    {materials.map((material) => (
+      <button
+        key={material._id}
+        onClick={() => onMaterialSelect(material._id)}
+        className={`
+          w-full
+          px-4 py-3 md:px-6 md:py-4 2xl:py-5
+          font-medium text-sm md:text-base
+          transition-colors duration-200
+          ${
+            selectedMaterialId === material._id
+              ? "bg-primary text-secondary-dark"
+              : "bg-[#0D463D1A] text-primary hover:bg-primary hover:text-secondary-dark"
+          }
+        `}
+      >
+        {material.title}
+      </button>
+    ))}
+  </div>
 </div>
-    </div>
   )
 }
 
