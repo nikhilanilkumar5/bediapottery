@@ -36,17 +36,17 @@ export default async function CategoryPage({
                 {data.category?.title}
               </Title>
 
-              <Title className="mb-2.5 font-normal !text-2xl">
+              {/* <Title className="mb-2.5 font-normal !text-2xl">
                 ({data.category?.shortDescription})
-              </Title>
+              </Title> */}
             </div>
           )}
-
+{/* 
           {data.category?.description && (
             <div className="lg:max-w-lg flex-1">
               <Content>{data.category.description}</Content>
             </div>
-          )}
+          )} */}
         </div>
 
         {/* Products Grid */}
