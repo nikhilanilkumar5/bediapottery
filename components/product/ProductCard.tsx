@@ -15,7 +15,11 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Link
-      href={`/workshops/${product.mainSlug}/${product.slug}`}
+      href={
+        product.slug.includes("birthday")
+          ? `/workshops/${product.slug}`
+          : `/workshops/${product.mainSlug}/${product.slug}`
+      }
       className="group block"
     >
       <div className="relative overflow-hidden">
@@ -33,19 +37,17 @@ export default function ProductCard({ product }: ProductCardProps) {
         )}
 
         {/* Top Ribbon */}
-  <div
-  className="absolute top-0 left-0 inline-flex items-center gap-2
+        <div
+          className="absolute top-0 left-0 inline-flex items-center gap-2
              bg-primary text-secondary-off px-3 py-1.5 lg:px-5 lg:py-2"
->
-  <Content className="!text-secondary-off">
-    Explore Now
-  </Content>
-</div>
+        >
+          <Content className="!text-secondary-off">Explore Now</Content>
+        </div>
 
         {/* Bottom Title */}
         <div className="absolute bottom-3 left-3 right-3 bg-[#d9d7d2]/95 py-3 px-4 text-center">
-            <Content className="text-primary text-center   2xl:!text-2xl  xl:!text-xl">
-             {product.title}
+          <Content className="text-primary text-center   2xl:!text-2xl  xl:!text-xl">
+            {product.title}
           </Content>
         </div>
       </div>
