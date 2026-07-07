@@ -21,6 +21,12 @@ export interface HeroSlideCard {
   ctaLink?: string;
   slug?: string;
 }
+export interface HeroCategory {
+  _id?: string;
+  title?: string;
+  image?: string[];
+  slug?: string;
+}
 
 export interface HeroSlide {
   _id?: string;
@@ -32,6 +38,7 @@ export interface HeroSlide {
   imageUrl: string;
   layout?: string;
   cards?: HeroSlideCard[];
+  category?: HeroCategory;
 }
 export interface GoogleReview {
   _id: string;

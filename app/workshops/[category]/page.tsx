@@ -25,7 +25,7 @@ export default async function CategoryPage({
 
   return (
     <main className="min-h-screen bg-white">
-      <div className="page-wrapper pt-24">
+      <div className="page-wrapper pt-24 pb-16">
 
         {/* Header Section */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-20">

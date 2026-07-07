@@ -33,12 +33,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
 
           {/* TEXT */}
           <div className="absolute bottom-[80px] lg:bottom-[120px] w-full flex justify-start text-left z-30 page-wrapper">
-            <div className="max-w-md">
+            <div className="max-w-xl">
               {/* <Subtitle className="!text-white mb-1 lg:mb-2 !text-[10px] lg:!text-sm">
                 
                  {slide?.title}
-              </Subtitle> */}
-              <Title className="!text-white mb-2 lg:mb-4 font-normal !text-lg lg:!text-3xl">
+              </Subtitle> */} 
+              <Title className="!text-white mb-2 lg:mb-4 font-normal !text-lg lg:!text-3xl text-left">
                 {slide?.shortDescription}
               </Title>
               {/* <Content className="!text-white hidden lg:block">
@@ -53,7 +53,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
           {/* Stacks 1-column on mobile, turns into a 2x2 grid on lg screens */}
           <div className="grid grid-cols-1  p-3 lg:absolute lg:inset-0 lg:grid-cols-2 lg:grid-rows-2 gap-[5px] py-[0px] pr-[5px] pl-0">
             {slide?.cards?.slice(0, 4)?.map((card: any, index: number) => {
-              const cardHref = card?.slug ? `/workshops/${card.slug}` : "#";
+              const cardHref = card.category?.slug ? `/workshops/${card.category.slug}` : "#";
 
               return (
                 <Link
@@ -71,7 +71,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
                       {/* Background Image */}
                       <div
                         className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                        style={{ backgroundImage: `url(${card.bannerImage})` }}
+                        style={{ backgroundImage: `url(${card.category?.image})` }}
                       />
 
                       {/* Overlay Gradient */}
@@ -82,7 +82,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
                         {/* TITLE: Hidden by default, slides up and fades in on hover */}
                         <div className="opacity-0 translate-y-4 bg-slate-100 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 order-2">
                           <Title className="!text-primary leading-9 !text-lg font-normal px-3 py-1.5 text-center">
-                            {card.title}
+                            {card.category?.title}
                           </Title>
                         </div>
 

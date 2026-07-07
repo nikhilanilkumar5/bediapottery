@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
       <div className="  md:pt-14 pt-10 md:pb-8 pb-5">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-16 gap-6 md:mb-8 mb-5">
           {/* Left Column - Logo and Description */}
-          <div className="space-y-[30px]">
+          <div className="space-y-[30px] md:mt-16 mt-6">
             <Link href="/">
               <Image
                 src="/logo-white.svg"
@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
               A Premium Ceramic Studio Offers A Unique Fusion Of Art, Mental
               Health & Fun!
             </Content>
-            <div className="relative  overflow-hidden h-48">
+            {/* <div className="relative  overflow-hidden h-48">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.198509554!2d55.2703!3d25.2048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDEyJzE3LjMiTiA1NcKwMTYnMTMuMSJF!5e0!3m2!1sen!2sae!4v1234567890"
                 width="100%"
@@ -50,7 +50,7 @@ const Footer: React.FC = () => {
                   />
                 </svg>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Middle-Left Column - Links */}
