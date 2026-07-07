@@ -36,7 +36,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <div className="absolute inset-0 blur-sm "  />
             {data.category?.title && (
               <div className="flex-1 page-wrapper">
-                <Title className="mb-2.5 font-normal">
+                <Title className="mb-2.5 font-normal text-2xl">
                   {data.category?.title}
                 </Title>
 

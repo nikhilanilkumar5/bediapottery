@@ -13,6 +13,7 @@ import { useAuthStore } from '@/store/authStore';
 import QuantitySelector from '../product/QuantitySelector';
 import BookingActions from '../product/BookingActions';
 import MaterialSelector from '../product/MaterialSelector';
+import MaterialDescription from '../product/MaterialDescription';
 interface BirthdayProps {
   product: WorkshopItem;
   type?: 'kids' | 'adults';
@@ -290,6 +291,12 @@ const handleBookNow = async () => {
               materials={product?.options}
               selectedMaterialId={selectedMaterialId}
               onMaterialSelect={setSelectedMaterialId}
+            />
+          )}
+           {selectedMaterial && selectedMaterial.description && (
+            <MaterialDescription
+              materialName={selectedMaterial.title}
+              description={selectedMaterial.description}
             />
           )}
           </div>
