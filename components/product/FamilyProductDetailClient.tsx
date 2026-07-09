@@ -230,7 +230,7 @@ const uniqueMaterials = product?.options?.filter(option =>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Left Section - Media */}
         <ProductMedia
-          imageUrl={product?.images?.[0]?.image || '/images/product/1.png'}
+          imageUrl={product?.bannerImage || '/images/product/1.png'}
           alt={product?.title}
         />
 

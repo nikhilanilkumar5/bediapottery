@@ -1,10 +1,27 @@
-import React from "react";
+'use client';
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { footerLinks, socialMedia, openingHours } from "@/constants/data";
+import { footerLinks, socialMedia,  } from "@/constants/data";
 import Image from "next/image";
 import { Content } from "../ui";
+import { getOpeningHours, OpeningHour } from "@/services/hero.service";
 
 const Footer: React.FC = () => {
+const [openingHours, setOpeningHours] = useState<OpeningHour | null>(null);
+
+useEffect(() => {
+  const loadOpeningHours = async () => {
+    try {
+      const data = await getOpeningHours();
+      console.log("Opening Hours Data:", data);
+      setOpeningHours(data?.openingHours[0]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  loadOpeningHours();
+}, []);
   return (
     <footer className="bg-primary page-wrapper text-secondary-off">
       <div className="  md:pt-14 pt-10 md:pb-8 pb-5">
@@ -75,13 +92,13 @@ const Footer: React.FC = () => {
             <h3 className="font-semibold md:mb-10 mb-5 2xl:text-2xl  xl:text-xl">Opening Hours</h3>
             <ul className="space-y-4  2xl:text-[22px]  xl:text-lg">
               <li>
-                <p className="font-normal">{openingHours.weekdays.days}</p>
-                <p className="font-light">{openingHours.weekdays.hours}</p>
+                <p className="font-normal">{openingHours?.days}</p>
+                <p className="font-light">{openingHours?.openTime} - {openingHours?.closeTime}</p>
               </li>
-              <li className="md:mt-4 mt-2">
+              {/* <li className="md:mt-4 mt-2">
                 <p className="font-normal">{openingHours.sunday.days}</p>
                 <p className="font-light">{openingHours.sunday.hours}</p>
-              </li>
+              </li> */}
             </ul>
           </div>
 
