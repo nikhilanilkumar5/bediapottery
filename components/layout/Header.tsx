@@ -72,7 +72,7 @@ const Header: React.FC = () => {
                     </div>
                   </div>
                 ) : (
-                  <Link key={item.href} href={item.href}>
+                  <Link key={item.href} href={item.href} target={item.target}>
                     <Content className="hover:text-primary transition-colors duration-200">
                       {item.label}
                     </Content>
@@ -154,6 +154,7 @@ const Header: React.FC = () => {
               <Link
                 key={item.href}
                 href={item.href}
+                target={item.target}
                 onClick={() => setMobileOpen(false)}
                 className="block py-2 text-xl font-bold tracking-wide uppercase hover:text-primary/80 transition-colors"
               >

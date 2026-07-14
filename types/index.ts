@@ -3,6 +3,7 @@ import { CartData } from "@/services/cart.service";
 export interface NavigationItem {
   label: string;
   href: string;
+  target?: string;
   children?: { label: string; href: string }[];
 }
 

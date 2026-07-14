@@ -22,36 +22,35 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-white">
-      <div className=" pb-20 min-h-48">
+    <main className="min-h-screen bg-white page-wt">
+      <div className="md:py-20 py-10 ">
         {/* Header Section */}
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 ">
+        {/* <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 ">
           <div
-            className="relative overflow-hidden w-full py-16 mb-20 bg-cover bg-center"
+            className="relative overflow-hidden w-full flex items-center h-36 md:h-[400px] md:mb-20 mb-10 bg-cover bg-center"
             style={{
-              backgroundImage: `url(${data.category?.image?.[0]})`,
+              backgroundImage: `url(/images/banner/adults-banner-1.jpg)`,
+              backgroundSize: "cover",
+              backgroundPosition: "bottom",
             }}
           >
-            {/* Overlay */}
-            <div className="absolute inset-0 blur-sm "  />
-            {data.category?.title && (
-              <div className="flex-1 page-wrapper">
-                <Title className="mb-2.5 font-normal text-2xl">
-                  {data.category?.title}
-                </Title>
+            <div className="absolute inset-0 blur-sm " />
+          </div>
+        </div> */}
+         <div className="flex flex-col page-wrapper  lg:flex-row lg:items-end lg:justify-between gap-6 mb-20">
+          <div className="flex-1">
+            <Title className="mb-2.5 font-normal">{data.category.title}</Title>
 
-                {/* <Title className="mb-2.5 font-normal !text-2xl">
-                ({data.category?.shortDescription})
-              </Title> */}
-              </div>
-            )}
-            {/* 
-          {data.category?.description && (
+            <Title className="mb-2.5 font-normal !text-2xl">
+              ({data.category.shortDescription})
+            </Title>
+          </div>
+
+          {data.category.description && (
             <div className="lg:max-w-lg flex-1">
               <Content>{data.category.description}</Content>
             </div>
-          )} */}
-          </div>
+          )}
         </div>
         {/* Products Grid */}
         {data?.workshops.length > 0 ? (

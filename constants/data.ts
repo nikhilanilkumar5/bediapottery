@@ -22,7 +22,11 @@ export const navigationItems: NavigationItem[] = [
     ],
   },
   // { label: "Birthday Parties", href: "/birthday" },
-  { label: "Bedia Privé", href: "https://bediaprive.com" },
+ { 
+  label: "Bedia Privé", 
+  href: "https://bediaprive.com", 
+  target: "_blank" 
+}
 ];
 
 export const contentCards: ContentCard[] = [
@@ -157,6 +161,11 @@ export const socialMedia: SocialMedia[] = [
     name: "TikTok",
     icon: "/images/icons/tiktok.svg",
     href: "https://tiktok.com",
+  },
+  {
+    name: "Snapchat",
+    icon: "/images/icons/snapchat.svg",
+    href: "https://snapchat.com",
   },
 ];
 
