@@ -12,7 +12,7 @@ import TimeSlotSelector from './TimeSlotSelector'
 import QuantitySelector from './QuantitySelector'
 import BookingActions from './BookingActions'
 import { BookingService, IBookingService } from '@/services/booking.service'
-import { getAvailabilityData } from '@/services/avaliablity.service'
+import { getAvailabilityData, getPotteryCapacity, PotteryCapacityResult } from '@/services/avaliablity.service'
 import { Content, Title } from '../ui'
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
@@ -39,12 +39,23 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   const [slotError, setSlotError] = useState<string>('')
   const userId: string = useAuthStore.getState().user?.userId ?? ''
   const [availabilityError, setAvailabilityError] = useState<string>('')
-const router = useRouter()
+  const [capacityInfo, setCapacityInfo] = useState<PotteryCapacityResult | null>(null)
+  const [capacityLoading, setCapacityLoading] = useState(false)
+  const [capacityError, setCapacityError] = useState<string>('')
+  const router = useRouter()
   // Derived state - computed values
   const selectedMaterial = useMemo(
     () => product.options?.find((m) => m._id === selectedMaterialId),
     [product.options, selectedMaterialId]
   )
+
+  const quantityLimit = capacityInfo?.remainingCapacity ?? 12
+
+  useEffect(() => {
+    if (capacityInfo && quantity > capacityInfo.remainingCapacity) {
+      setQuantity(Math.max(1, capacityInfo.remainingCapacity))
+    }
+  }, [capacityInfo, quantity])
 
 
 
@@ -64,15 +75,49 @@ const handleDateSelect = (date: Date) => {
   } else {
     setSelectedDate(date)
     setSelectedSlotId(null)
-
   }
 
   setDateError('')
+  setAvailabilityError('')
 }
   const handleSlotSelect = (slotId: string) => {
     setSelectedSlotId(slotId)
     setSlotError('')
+    setAvailabilityError('')
   }
+
+  useEffect(() => {
+    const fetchCapacity = async () => {
+      if (!selectedDate || !selectedSlotId) {
+        setCapacityInfo(null)
+        setCapacityError('')
+        return
+      }
+
+      const slot = product.defaultSlots.find((s) => s._id === selectedSlotId)
+      if (!slot) return
+
+      setCapacityLoading(true)
+      setCapacityError('')
+      try {
+        const res = await getPotteryCapacity({
+          bookingDate: formattedDate,
+          startTime: slot.startTime,
+          endTime: slot.endTime,
+        })
+
+        setCapacityInfo(res.result ?? null)
+      } catch (err: any) {
+        console.error('Capacity fetch error', err)
+        setCapacityError(err?.message || 'Unable to fetch capacity')
+        setCapacityInfo(null)
+      } finally {
+        setCapacityLoading(false)
+      }
+    }
+
+    fetchCapacity()
+  }, [selectedDate, selectedSlotId, formattedDate, product.defaultSlots, product._id])
 
   const validateSelection = () => {
     let isValid = true
@@ -166,7 +211,7 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
   }
 };
 
-  const isBookingDisabled = !selectedDate || !selectedSlotId
+  const isBookingDisabled = !selectedDate || !selectedSlotId || quantity < 1 
 
   return (
     <div className="page-wrapper ">
@@ -232,9 +277,30 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
                 onSlotSelect={handleSlotSelect}
               />
               {slotError && (
-                <p className="mt-3 text-sm text-red-600">
-                  {slotError}
-                </p>
+                <p className="mt-3 text-sm text-red-600">{slotError}</p>
+              )}
+
+              {/* Capacity Info */}
+              {capacityLoading && (
+                <p className="mt-3 text-sm text-gray-600">Checking capacity...</p>
+              )}
+
+              {capacityError && (
+                <p className="mt-3 text-sm text-red-600">{capacityError}</p>
+              )}
+
+              {capacityInfo && (
+                capacityInfo.remainingCapacity===0 ? (
+                  <p className="mt-3 text-sm text-red-600">
+                    Sorry, this time slot is fully booked. Please select another time slot or date.
+                  </p>
+                ) : (
+                <div className="mt-3 text-sm text-green-700">
+                  <p>
+                    <strong>Available stock:</strong> {capacityInfo.remainingCapacity}
+                  </p>
+                </div>
+                )
               )}
             </div>
           )}
@@ -243,11 +309,12 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
             <div className="p-[18px] bg-white">
           <QuantitySelector
             quantity={quantity}
-            onIncrease={() => setQuantity(quantity + 1)}
+            limit={quantityLimit}
+            onIncrease={() => setQuantity(Math.min(quantityLimit, quantity + 1))}
             onDecrease={() => setQuantity(Math.max(1, quantity - 1))}
-            unitPrice={selectedMaterial ? selectedMaterial.price : 0  }
-            currency={selectedMaterial ? selectedMaterial.currency :'AED' }
-                  onCart={handleAddToCart}
+            unitPrice={selectedMaterial ? selectedMaterial.price : 0}
+            currency={selectedMaterial ? selectedMaterial.currency : 'AED'}
+            onCart={handleAddToCart}
           />
 </div>
           {/* Booking Actions */}

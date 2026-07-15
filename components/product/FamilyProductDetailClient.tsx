@@ -2,8 +2,8 @@
 
 import React, { useState, useMemo, useEffect } from 'react'
 import { format } from 'date-fns'
-import {  BookingData,Availability, AvailabilityResponse } from '@/types'
-import{ WorkshopItem} from '@/services/workshop.service'
+import { BookingData, Availability } from '@/types'
+import { WorkshopItem } from '@/services/workshop.service'
 import ProductMedia from './ProductMedia'
 import PriceDisplay from './PriceDisplay'
 import MaterialSelector from './MaterialSelector'
@@ -13,7 +13,7 @@ import TimeSlotSelector from './TimeSlotSelector'
 import QuantitySelector from './QuantitySelector'
 import BookingActions from './BookingActions'
 import { BookingService, IBookingService } from '@/services/booking.service'
-import { getAvailabilityData } from '@/services/avaliablity.service'
+import { getAvailabilityData, getPotteryCapacity, PotteryCapacityResult } from '@/services/avaliablity.service'
 import { Content, Title } from '../ui'
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
@@ -40,6 +40,9 @@ const FamilyProductDetailClient: React.FC<ProductDetailClientProps> = ({
   const [dateError, setDateError] = useState<string>('')
   const [slotError, setSlotError] = useState<string>('')
   const [availabilityError, setAvailabilityError] = useState<string>('')
+  const [capacityInfo, setCapacityInfo] = useState<PotteryCapacityResult | null>(null)
+  const [capacityLoading, setCapacityLoading] = useState(false)
+  const [capacityError, setCapacityError] = useState<string>('')
   const userId: string = useAuthStore.getState().user?.userId ?? ''
 const formattedDate = useMemo(() => {
   return selectedDate
@@ -52,6 +55,11 @@ const selectedMaterial = useMemo(
   () => product.options?.find((m) => m._id === selectedMaterialId),
   [product.options, selectedMaterialId]
 );
+
+  const totalGuests = quantity + childCount
+  const quantityLimit = Math.max(capacityInfo?.remainingCapacity ?? 12, 0)
+
+
   const validateSelection = () => {
     let isValid = true
     if (!selectedDate) {
@@ -137,12 +145,49 @@ const handleDateSelect = (date: Date) => {
   }
 
   setDateError('')
+  setAvailabilityError('')
+  setCapacityError('')
 }
   const handleSlotSelect = (slotId: string) => {
     setSelectedSlotId(slotId)
     setSlotError('')
+    setAvailabilityError('')
+    setCapacityError('')
   }
 
+  useEffect(() => {
+    const fetchCapacity = async () => {
+      if (!selectedDate || !selectedSlotId) {
+        setCapacityInfo(null)
+        setCapacityError('')
+        return
+      }
+
+      const slot = product.defaultSlots.find((s) => s._id === selectedSlotId)
+      if (!slot) return
+
+      setCapacityLoading(true)
+      setCapacityError('')
+      try {
+        const res = await getPotteryCapacity({
+          workshopId: product._id,
+          bookingDate: formattedDate,
+          startTime: slot.startTime,
+          endTime: slot.endTime,
+        })
+
+        setCapacityInfo(res.result ?? null)
+      } catch (err: any) {
+        console.error('Family capacity fetch error', err)
+        setCapacityError(err?.message || 'Unable to fetch capacity')
+        setCapacityInfo(null)
+      } finally {
+        setCapacityLoading(false)
+      }
+    }
+
+    fetchCapacity()
+  }, [selectedDate, selectedSlotId, formattedDate, product.defaultSlots, product._id])
 
 const handleAddToCart = async () => {
  const token: string | null = useAuthStore.getState().user?.token || null
@@ -173,6 +218,8 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
     return false;
   }
 
+  setAvailabilityError('')
+
   const bookingData: BookingData = {
     userId: userId,
      bookingType: "pottery",
@@ -189,11 +236,10 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
     workshopId: product._id,
     bookingDate: formattedDate,
     slotId: selectedSlotId!,
-    guests: quantity,
+    guests: totalGuests,
   };
 
   const availabilityResponse = await getAvailabilityData(availabilityData);
-
   const isAvailable = availabilityResponse?.result?.available === true;
   const isAvailableMessage = availabilityResponse?.result?.reason;
 
@@ -220,7 +266,11 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
 };
 
 
-  const isBookingDisabled = !selectedDate || !selectedSlotId
+  const isBookingDisabled =
+    !selectedDate ||
+    !selectedSlotId ||
+    totalGuests <= 0 ||
+    (capacityInfo?.remainingCapacity !== undefined && totalGuests > capacityInfo.remainingCapacity)
 const uniqueMaterials = product?.options?.filter(option =>
   option.title.toLowerCase().includes('adults') &&
   !option.title.toLowerCase().includes('adults & kids')
@@ -293,6 +343,28 @@ const uniqueMaterials = product?.options?.filter(option =>
                   {slotError}
                 </p>
               )}
+
+              {capacityLoading && (
+                <p className="mt-3 text-sm text-gray-600">Checking capacity...</p>
+              )}
+
+              {capacityError && (
+                <p className="mt-3 text-sm text-red-600">{capacityError}</p>
+              )}
+
+              {capacityInfo && !capacityError && (
+                capacityInfo.remainingCapacity === 0 ? (
+                  <p className="mt-3 text-sm text-red-600">
+                    Sorry, this time slot is fully booked. Please select another time slot or date.
+                  </p>
+                ) : (
+                  <div className="mt-3 text-sm text-green-700">
+                    <p>
+                      <strong>Available stock:</strong> {capacityInfo.remainingCapacity}
+                    </p>
+                  </div>
+                )
+              )}
             </div>
           )}
 
@@ -301,9 +373,18 @@ const uniqueMaterials = product?.options?.filter(option =>
              
           <QuantitySelector
   quantity={quantity}
-  onIncrease={() => setQuantity(quantity + 1)}
+  limit={quantityLimit}
+  onIncrease={() => {
+    if (totalGuests < quantityLimit) {
+      setQuantity(quantity + 1)
+    }
+  }}
   onDecrease={() => setQuantity(Math.max(1, quantity - 1))}
-  onchildIncrease={() => setChildCount(childCount + 1)}
+  onchildIncrease={() => {
+    if (totalGuests < quantityLimit) {
+      setChildCount(childCount + 1)
+    }
+  }}
   onchildDecrease={() => setChildCount(Math.max(1, childCount - 1))}
   totalPrice={totalPrice}
   currency={selectedMaterial?.currency || "AED"}

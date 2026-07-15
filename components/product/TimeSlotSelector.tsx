@@ -28,13 +28,13 @@ const TimeSlotSelector: React.FC<TimeSlotSelectorProps> = ({
   return (
     <div className={`space-y-3 ${className}`}>
       <h3 className="text-lg font-medium text-gray-900">Select Time Slot</h3>
-      <div className="grid xl:grid-cols-3 md:grid-cols-2 gap-3">
+      <div className="grid xl:grid-cols-3 lg:grid-cols-2 xl:gap-3 gap-2">
         {slots.map((slot) => (
           <button
             key={slot._id}
             onClick={() => slot.capacity && onSlotSelect(slot._id)}
             disabled={!slot.capacity}
-            className={`px-4 py-3  font-medium transition-colors duration-200 ${
+            className={`px-1 py-3  font-medium transition-colors duration-200 ${
               selectedSlotId === slot._id
                 ? 'bg-primary text-white border border-primary'
                 : slot.capacity

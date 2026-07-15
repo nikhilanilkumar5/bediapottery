@@ -21,11 +21,11 @@ export default function LoginPage() {
           <div className="w-full max-w-xl">
             <div className="2xl:mb-[60px] mb-10">
                 <Title className=" mb-4 font-normal !text-[40px]">
-                Join Our Creative Community
+                Create an Account & Track Your Booking
               </Title>
               <Content className="">
-            Sign up to explore workshops, manage bookings, and be part of our creative community.
-              </Content>
+          Create your Bedia account to manage your bookings, view your workshop history, and receive collection updates. Terracotta and Ceramic clients can track the progress of their creations until they're ready for collection.
+     </Content>
             </div>
 
             <LoginForm  />

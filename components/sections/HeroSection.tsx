@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { heroSlides } from "@/constants/data";
 import type { HeroSlide } from "@/types";
 import { Title, Subtitle, Content } from "@/components/ui";
 import ExploreButton from "../ui/ExploreButton";
@@ -13,11 +12,6 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
   const slide = slides?.[0]; // Use API hero slide if available
-  const data = getCategoryData("adults-workshop"); // Fallback data for static export;
-  useEffect(() => {
-    console.log("Received hero slides:", slide);
-    console.log("Received workshop data:", data);
-  }, [slide, data]);
   return (
     <section className="relative overflow-hidden bg-[#EDE7D9]">
       <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-var(--header-h))] lg:gap-[15px] ">

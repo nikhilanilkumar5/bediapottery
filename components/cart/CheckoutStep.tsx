@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import FormInput from "@/components/form/FormInput";
 import { validateEmail } from "@/utils/validation";
 import { CartData } from "@/services/cart.service";
@@ -46,7 +47,8 @@ export default function CheckoutStep({
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [acceptedAddressDetails, setAcceptedAddressDetails] = useState(true);
-  const [acceptedUpdates, setAcceptedUpdates] = useState(true);
+  const [acceptedTerms, setAcceptedTerms] = useState(true);
+  const [acceptedRefund, setAcceptedRefund] = useState(true);
   const cartGrandTotal = data?.[0]?.grandTotal ?? 0;
   const bookingService = new BookingService();
   const userId: string = useAuthStore.getState().user?.userId ?? "";
@@ -133,6 +135,20 @@ export default function CheckoutStep({
       validationErrors.push({
         field: "acceptedAddressDetails",
         message: "You must confirm your address details before checking out.",
+      });
+    }
+
+    if (!acceptedTerms) {
+      validationErrors.push({
+        field: "acceptedTerms",
+        message: "You must agree to the Terms & Conditions before checking out.",
+      });
+    }
+
+    if (!acceptedRefund) {
+      validationErrors.push({
+        field: "acceptedRefund",
+        message: "You must agree to the Refund & Reschedule Policy before checking out.",
       });
     }
 
@@ -294,16 +310,14 @@ export default function CheckoutStep({
               onChange={(e) => {
                 setAcceptedAddressDetails(e.target.checked);
                 setErrors((prev) =>
-                  prev.filter(
-                    (error) => error.field !== "acceptedAddressDetails",
-                  ),
+                  prev.filter((error) => error.field !== "acceptedAddressDetails"),
                 );
               }}
             />
             <span className="text-gray-700">
-              I confirm that the details entered are correct and will be used
-              for my workshop registration and communication regarding the
-              event.
+              I confirm that the details entered are accurate and will be
+              used for my workshop booking, registration, and related
+              communications.
             </span>
           </label>
           {errors.find((err) => err.field === "acceptedAddressDetails") && (
@@ -311,17 +325,48 @@ export default function CheckoutStep({
               You must accept the address confirmation before continuing.
             </p>
           )}
+
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"
               className="mt-1 accent-[#113224]"
-              checked={acceptedUpdates}
-              onChange={(e) => setAcceptedUpdates(e.target.checked)}
+              checked={acceptedTerms}
+              onChange={(e) => {
+                setAcceptedTerms(e.target.checked);
+                setErrors((prev) => prev.filter((error) => error.field !== "acceptedTerms"));
+              }}
             />
             <span className="text-gray-700">
-              Send me updates related to my order and shipping details.
+              I have read, understood, and agree to the{' '}
+              <Link href="/terms" className="text-[#113224] underline">Terms &amp; Conditions</Link>.
             </span>
           </label>
+          {errors.find((err) => err.field === "acceptedTerms") && (
+            <p className="text-red-600 text-sm ml-8">
+              You must agree to the Terms &amp; Conditions before continuing.
+            </p>
+          )}
+
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              className="mt-1 accent-[#113224]"
+              checked={acceptedRefund}
+              onChange={(e) => {
+                setAcceptedRefund(e.target.checked);
+                setErrors((prev) => prev.filter((error) => error.field !== "acceptedRefund"));
+              }}
+            />
+            <span className="text-gray-700">
+              I have read, understood, and agree to the{' '}
+              <Link href="/refund" className="text-[#113224] underline">Refund &amp; Reschedule Policy</Link>.
+            </span>
+          </label>
+          {errors.find((err) => err.field === "acceptedRefund") && (
+            <p className="text-red-600 text-sm ml-8">
+              You must agree to the Refund &amp; Reschedule Policy before continuing.
+            </p>
+          )}
         </div>
 
         <button

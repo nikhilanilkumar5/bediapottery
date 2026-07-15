@@ -78,7 +78,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
                 <Content className="leading-relaxed !text-black font-semibold mr-3 shrink-0">
                   Adults
                 </Content>
-                <div className="flex items-center flex-1 justify-between gap-2 border border-black/30 py-2 px-3 md:py-4 md:px-3">
+                <div className="flex items-center flex-1 justify-between gap-2 border border-black/30 py-2 px-3  md:px-3">
                   {/* Minus */}
                   <button
                     onClick={onDecrease}
@@ -134,7 +134,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
                 <Content className="leading-relaxed !text-black font-semibold mr-3 shrink-0">
                   Child
                 </Content>
-                <div className="flex items-center flex-1 justify-between gap-2 border border-black/30 py-2 px-3 md:py-4 md:px-3">
+                <div className="flex items-center flex-1 justify-between gap-2 border border-black/30 py-2 px-3  md:px-3">
                   {/* Minus */}
                   <button
                     onClick={onchildDecrease}
@@ -281,7 +281,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
           <div className="flex flex-col md:flex-row md:items-center w-full gap-4">
             {/* Card / Quantity Controls */}
 
-            <div className="flex items-center justify-between md:justify-start w-full md:w-auto md:mr-6 gap-4 border border-black/30 py-2 px-3 md:py-4 md:px-3">
+            <div className="flex items-center justify-between md:justify-start w-full md:w-auto md:mr-6 gap-4 border border-black/30 py-2 px-3  md:px-3">
               {/* Minus */}
               <button
                 onClick={onDecrease}

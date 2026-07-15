@@ -14,7 +14,7 @@ const KidsBirthdayPage = async () => {
    const data = await getWorkshopData("kids-birthday-party")
   return (
     <div>
-      <BirthdayHero product={data}/>
+      <BirthdayHero product={data} type="kids"/>
       <FeatureBanner />
       <BirthdayDetails product={data}/>
     </div>
