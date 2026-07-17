@@ -1,110 +1,109 @@
 export type CategoryData = {
-  _id: string
-  title: string
-  image?: string[]
-  description?: string
-  shortDescription?: string
-  slug?: string
-}
+  _id: string;
+  title: string;
+  image?: string[];
+  description?: string;
+  shortDescription?: string;
+  slug?: string;
+};
 
 export type WorkshopImage = {
-  image: string
-  title: string
-  _id: string
-}
+  image: string;
+  title: string;
+  _id: string;
+};
 
 export type WorkshopSlot = {
-  _id: string
-  label: string
-  startTime: string
-  endTime: string
-  capacity: number
-}
+  _id: string;
+  label: string;
+  startTime: string;
+  endTime: string;
+  capacity: number;
+};
 
 export type WorkshopInclude = {
-  _id: string
-  title: string
-}
+  _id: string;
+  title: string;
+};
 
 export type WorkshopOption = {
-  _id: string
-  clayTypeId: string
-  title: string
-  price: number
-  currency: string
-  priceDescription: string
-  description: string
-  inclusions: any[]
-  image: string
-}
+  _id: string;
+  clayTypeId: string;
+  clayTypeVideo?:string;
+  clayTypethumbnailImage?: string;
+
+  title: string;
+  price: number;
+  currency: string;
+  priceDescription: string;
+  description: string;
+  inclusions: any[];
+  image: string;
+};
 
 export type WorkshopItem = {
-  _id: string
-  title: string
-  bannerImage: string
+  _id: string;
+  title: string;
+  bannerImage: string;
 
-  images: WorkshopImage[]
+  images: WorkshopImage[];
 
-  categoryId: CategoryData
+  categoryId: CategoryData;
 
-  shortDescription: string
-  description: string
-  overview: string
-  videoUrl?: string
+  shortDescription: string;
+  description: string;
+  overview: string;
+  videoUrl?: string;
 
-  defaultSlots: WorkshopSlot[]
+  defaultSlots: WorkshopSlot[];
 
-  includes: WorkshopInclude[]
+  includes: WorkshopInclude[];
 
-  moreDetails: any[]
-  nonAvailabilityDates: any[]
-  nonAvailabilityDays: any[]
+  moreDetails: any[];
+  nonAvailabilityDates: any[];
+  nonAvailabilityDays: any[];
 
-  options: WorkshopOption[]
+  options: WorkshopOption[];
 
-  showOnHomepage: boolean
-  isActive: boolean
+  showOnHomepage: boolean;
+  isActive: boolean;
 
-  journeyImage: any[]
+  journeyImage: any[];
 
-  createdAt: string
-  slug: string
-}
-
+  createdAt: string;
+  slug: string;
+};
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
 function assertApiBaseUrl() {
   if (!API_BASE_URL) {
-    throw new Error("NEXT_PUBLIC_API_BASE_URL is not set in environment variables");
+    throw new Error(
+      "NEXT_PUBLIC_API_BASE_URL is not set in environment variables",
+    );
   }
 }
 
-export async function getWorkshopData(
-  slug: string
-): Promise<WorkshopItem> {
+export async function getWorkshopData(slug: string): Promise<WorkshopItem> {
   assertApiBaseUrl();
 
-  const res = await fetch(
-    `${API_BASE_URL}/workshop/bySlug/${slug}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      cache: "no-store",
-    }
-  );
+  const res = await fetch(`${API_BASE_URL}/workshop/bySlug/${slug}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+  });
 
   const raw = await res.json().catch(() => null);
 
-  console.log("Workshop API:", raw,slug);
+  console.log("Workshop API:", raw, slug);
 
   if (!res.ok) {
     throw new Error(
       `Workshop data failed: ${res.status} ${res.statusText}${
         raw ? ` - ${JSON.stringify(raw)}` : ""
-      }`
+      }`,
     );
   }
 

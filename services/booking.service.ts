@@ -58,6 +58,10 @@ const token : string | null = useAuthStore.getState().user?.token || null
       )
     }
 
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('cart:updated'))
+    }
+
     return raw
   }
 

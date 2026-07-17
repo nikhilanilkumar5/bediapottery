@@ -49,7 +49,7 @@ const Header: React.FC = () => {
             </Link>
 
             {/* Desktop Nav */}
-            <div className="hidden lg:flex items-center 2xl:gap-[50px] xl:gap-6">
+            <div className="hidden xl:flex items-center 2xl:gap-[50px] xl:gap-6">
               {navigationItems.map((item) =>
                 item.children ? (
                   <div key={item.href} className="relative group">
@@ -83,7 +83,7 @@ const Header: React.FC = () => {
             </div>
 
             {/* Mobile Burger Trigger Button */}
-            <div className="flex lg:hidden items-center md:gap-[3rem] gap-5">
+            <div className="flex xl:hidden items-center md:gap-[3rem] gap-5">
               <SearchPill />
               <button
                 aria-label="Open menu"

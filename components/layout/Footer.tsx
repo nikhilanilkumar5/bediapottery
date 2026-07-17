@@ -141,7 +141,7 @@ useEffect(() => {
 
             <div className="md:mb-4 mb-2">
               <h3 className=" 2xl:text-2xl  xl:text-xl font-medium md:mb-10 mb-5">Follow Us On:</h3>
-              <div className="flex gap-8">
+              <div className="flex 2xl:gap-8  xl:gap-6 gap-4">
                 {socialMedia.map((social) => (
                   <a
                     key={social.name}
@@ -169,11 +169,11 @@ useEffect(() => {
           <Content className="  !text-secondary-off ">
             Made With Love By Bedia Pottery LLC © 2023
           </Content>
-          <Content className="  !text-secondary-off  md:mt-0 mt-4">
+          {/* <Content className="  !text-secondary-off  md:mt-0 mt-4">
             <Link href="/privacy" className="">
               Privacy Policy
             </Link>
-          </Content>
+          </Content> */}
         </div>
       </div>
     </footer>

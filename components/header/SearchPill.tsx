@@ -1,5 +1,6 @@
 "use client";
 
+import { getCartData } from '@/services/cart.service';
 import { useAuthStore } from '@/store/authStore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -7,16 +8,45 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function SearchPill() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
   const getToken = useAuthStore((state) => state.getToken);
+  const userId = useAuthStore((state) => state.user?.userId);
+  const user = useAuthStore((state) => state.user?.email || null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const token = getToken();
+
+  const refreshCartCount = async () => {
+    if (!userId) {
+      setCartCount(0);
+      return;
+    }
+
+    try {
+      const data = await getCartData();
+      setCartCount(data?.[0]?.items?.length ?? 0);
+    } catch {
+      setCartCount(0);
+    }
+  };
+
   useEffect(() => {
-   console.log('Current auth token:', token);
-  }, [token]);
-  const user : string | null = useAuthStore.getState().user?.email || null
+    void refreshCartCount();
+
+    const handleCartUpdated = () => {
+      void refreshCartCount();
+    };
+
+    window.addEventListener('cart:updated', handleCartUpdated);
+    window.addEventListener('focus', handleCartUpdated);
+
+    return () => {
+      window.removeEventListener('cart:updated', handleCartUpdated);
+      window.removeEventListener('focus', handleCartUpdated);
+    };
+  }, [userId]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -47,9 +77,14 @@ export default function SearchPill() {
       {/* Cart Icon */}
       <Link
         href="/cart"
-        className="text-secondary-off shrink-0 hover:text-white transition-colors duration-200"
+        className="relative text-secondary-off shrink-0 hover:text-white transition-colors duration-200"
         aria-label="Shopping cart"
       >
+        {cartCount > 0 && (
+          <span className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-secondary-off  px-1 text-[10px] font-semibold text-black">
+            {cartCount}
+          </span>
+        )}
         <svg
           width="24"
           height="24"
@@ -85,8 +120,7 @@ export default function SearchPill() {
       <div className="relative flex items-center justify-center" ref={dropdownRef}>
         <button
           onClick={() => {
-            user ?(setUserMenuOpen(prev => !prev)):(router.push("/login"));
-            
+            user ? setUserMenuOpen((prev) => !prev) : router.push('/login');
           }}
           className="text-secondary-off shrink-0 hover:text-white transition-colors duration-200"
           aria-label="User account"

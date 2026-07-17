@@ -17,13 +17,16 @@ export const navigationItems: NavigationItem[] = [
       { label: "Family Pottery Workshop", href: "/workshops/family-pottery-workshop" },
       { label: "Kids Birthday Party", href: "/workshops/kids-birthday-party" },
       { label: "Adults Birthday Party", href: "/workshops/adults-birthday-party" },
-      { label: "Gift Cards", href: "/workshops/gift-cards" },
       // { label: "School Field Trips", href: "/workshops/school-field-trips" },
     ],
   },
   // { label: "Birthday Parties", href: "/birthday" },
  { 
-  label: "Bedia Privé", 
+  label: "Gift Cards", 
+  href: "/workshops/gift-cards", 
+},
+ { 
+  label: "Luxury Private Experience", 
   href: "https://bediaprive.com", 
   target: "_blank" 
 }
@@ -140,10 +143,12 @@ export const testimonials: GoogleReview[] = [
 
 
 export const footerLinks: FooterLink[] = [
-  { label: "Contact Us", href: "/contact" },
+  // { label: "Contact Us", href: "/contact" },
   { label: "About Us", href: "/about" },
   { label: "Faq", href: "/faq" },
   { label: "Terms & Conditions", href: "/terms" },
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Refund Policy", href: "/cancellation" },
 ];
 
 export const socialMedia: SocialMedia[] = [

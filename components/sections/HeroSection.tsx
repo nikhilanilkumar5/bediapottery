@@ -21,7 +21,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
             className="w-full h-full bg-cover bg-center flex items-end justify-center relative pb-[80px] lg:pb-[120px]"
             style={{ backgroundImage: `url(${slide?.imageUrl})` }}
           >
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0)_-23.93%,rgba(0,0,0,0.9)_100%)]" />
+            {/* <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0)_-23.93%,rgba(0,0,0,0.9)_100%)]" /> */}
           </div>
 
           {/* TEXT */}
@@ -33,7 +33,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
               <Title className="!text-white mb-2 lg:mb-4 font-normal !text-lg lg:!text-3xl">
                 {slide?.shortDescription}
               </Title>
-              <Content className="!text-white hidden lg:block">
+              <Content className="!text-white ">
                 {slide?.description}
               </Content>
             </div>
@@ -66,18 +66,18 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
                         }}
                       />
                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
-                      <div className="relative z-10 h-full w-full flex flex-col items-center justify-end text-center px-3 lg:px-6 pb-5">
+                      <div className="relative z-10 h-full w-full flex flex-col items-center  justify-center lg:justify-end text-center px-3 lg:px-6 pb-5">
                         <div className="opacity-0  group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-                          <Subtitle className="!text-secondary-off mb-1 lg:mb-2 !text-[10px] lg:!text-sm">
-                        {card.title}
+                          <Subtitle className="!text-secondary-off mb-1 lg:mb-2 !text-base">
+                       {card.category?.title}
                       </Subtitle>
 
                       <Title className="!text-secondary-off mb-2 lg:mb-4 !text-base lg:!text-[32px] font-normal">
                         {card.category?.subtitle}
                       </Title>
 
-                      <Content className="!text-secondary-off mb-4 lg:mb-10 hidden lg:block">
-                        {card.shortDescription}
+                      <Content className="!text-secondary-off mb-4 lg:mb-10 ">
+                        {card.category?.shortDescription}
                       </Content>
                           <ExploreButton href={`/workshops/${card.category?.slug}`} />
                         </div>
@@ -85,7 +85,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
                     </div>
                   ) : (
                     <div className="text-center  min-h-[420px] lg:min-h-full relative z-10 flex flex-col items-center justify-end ">
-                      <Subtitle className="!text-secondary-off mb-1 lg:mb-2 !text-[10px] lg:!text-sm">
+                      <Subtitle className="!text-secondary-off mb-1 lg:mb-2 ">
                         {card.category?.title}
                       </Subtitle>
 
@@ -93,11 +93,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
                         {card.category?.subtitle}
                       </Title>
 
-                      <Content className="!text-secondary-off mb-4 lg:mb-10 hidden md:block">
+                      <Content className="!text-secondary-off mb-4 lg:mb-10 ">
                         {card.category?.shortDescription}
                       </Content>
 
-                      <ExploreButton href={`/workshops/${card.slug}`} />
+                      <ExploreButton href={`/workshops/${card.category?.slug}`} />
                     </div>
                   )}
                 </div>

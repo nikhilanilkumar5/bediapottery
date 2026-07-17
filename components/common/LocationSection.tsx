@@ -10,7 +10,7 @@ const LocationSection: React.FC = () => {
     <section className="w-full ">
       <div className="">
         {/* Responsive Split Container Layout inspired by image_fd6f9b.jpg */}
-        <div className="grid grid-cols-1 lg:grid-cols-[30%_70%] border border-gray-200  overflow-hidden shadow-sm bg-white min-h-[450px] md:min-h-[550px]">
+        <div className="grid grid-cols-1 lg:grid-cols-[30%_70%] border border-gray-200  overflow-hidden shadow-sm bg-white min-h-full xl:min-h-[550px]">
           {/* Left Column: Storefront Presentation Image */}
           <div className="relative w-full lg:h-[300px] h-screen  min-h-[300px] lg:block hidden">
             <Image

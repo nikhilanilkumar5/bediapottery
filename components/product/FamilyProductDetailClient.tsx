@@ -277,7 +277,7 @@ const uniqueMaterials = product?.options?.filter(option =>
 );
   return (
     <div className="page-wrapper ">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 -ml-">
         {/* Left Section - Media */}
         <ProductMedia
           imageUrl={product?.bannerImage || '/images/product/1.png'}
@@ -360,7 +360,7 @@ const uniqueMaterials = product?.options?.filter(option =>
                 ) : (
                   <div className="mt-3 text-sm text-green-700">
                     <p>
-                      <strong>Available stock:</strong> {capacityInfo.remainingCapacity}
+                      <strong>Available slots:</strong> {capacityInfo.remainingCapacity}
                     </p>
                   </div>
                 )

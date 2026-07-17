@@ -26,9 +26,6 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   bookingService = new BookingService(),
   product
 }) => {
-  useEffect(() => {   
-    console.log('Received product data:', product)
-  }, [product])
   const [selectedMaterialId, setSelectedMaterialId] = useState(
     product.options?.[0]?._id || ''
   )
@@ -57,7 +54,11 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
     }
   }, [capacityInfo, quantity])
 
-
+const sampleVideos = [
+  { id: 1, thumbnailUrl: '/images/banner/banner-3.png', videoUrl: '/video/clay-1.mp4' },
+  { id: 2, thumbnailUrl: '/images/banner/banner-2.png', videoUrl: '/video/clay-2.mp4' },
+  { id: 3, thumbnailUrl: '/images/banner/banner-1.png', videoUrl: '/video/clay-3.mp4' },
+]
 
 const formattedDate = useMemo(() => {
   return selectedDate
@@ -220,6 +221,11 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
         <ProductMedia
           imageUrl={product?.images?.[0]?.image || '/images/product/1.png'}
           alt={product?.title}
+          videos={product?.options?.map((option) => ({
+            id: option._id,
+            thumbnailUrl: option.clayTypethumbnailImage || '/images/product/1.png',
+            videoUrl: option.clayTypeVideo || '',
+          })) || []}
         />
 
         {/* Right Section - Booking Panel */}
@@ -297,7 +303,7 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
                 ) : (
                 <div className="mt-3 text-sm text-green-700">
                   <p>
-                    <strong>Available stock:</strong> {capacityInfo.remainingCapacity}
+                    <strong>Available slots:</strong> {capacityInfo.remainingCapacity}
                   </p>
                 </div>
                 )

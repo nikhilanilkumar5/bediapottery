@@ -115,6 +115,10 @@ export async function deleteCart(deleteData: deleteCartData): Promise<CartData[]
     return [];
   }
 
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event('cart:updated'));
+  }
+
   return Array.isArray(result) ? result : [result];
 
 }

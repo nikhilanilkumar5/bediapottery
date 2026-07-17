@@ -58,7 +58,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Bottom Booking Bar */}
         <div className="mt-4 flex items-center justify-between bg-[#0D463D] text-white  py-3 px-6">
-          <span className="font-bold text-base md:text-lg">{price}</span>
+          {/* <span className="font-bold text-base md:text-lg">{price}</span> */}
           <span className="font-medium text-sm md:text-base">Book Now</span>
           <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#0D463D] transition-transform duration-300 group-hover:translate-x-1">
             <svg
