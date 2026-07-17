@@ -229,6 +229,7 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
         <ProductMedia
           imageUrl={product?.images?.[0]?.image || '/images/product/1.png'}
           alt={product?.title}
+          images={product?.images}
           videos={product?.options?.map((option) => ({
             id: option._id,
             thumbnailUrl: option.clayTypethumbnailImage || '/images/product/1.png',

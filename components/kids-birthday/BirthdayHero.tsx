@@ -253,7 +253,8 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
       <div className="page-wrapper px-[17px]  grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
         <div className="flex flex-col gap-4 h-full">
           <ProductMedia
-            imageUrl={product?.images?.[0]?.image || "/images/product/1.png"}
+          images={product?.images}
+            imageUrl={product?.bannerImage || "/images/product/1.png"}
             alt={product?.title}
             videos={
               product?.options?.map((option) => ({
