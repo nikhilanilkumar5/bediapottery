@@ -27,10 +27,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
           {/* TEXT */}
           <div className="absolute bottom-[80px] lg:bottom-[120px] w-full flex justify-center text-center z-30 px-4">
             <div className="max-w-xl">
-              <Subtitle className="!text-white mb-1 lg:mb-2 !text-[10px] lg:!text-sm">
+              <Subtitle className="!text-white mb-1 lg:mb-2 ">
                 {slide?.title}
               </Subtitle>
-              <Title className="!text-white mb-2 lg:mb-4 font-normal !text-lg lg:!text-3xl">
+              <Title className="!text-white mb-2 lg:mb-4 font-normal text-lg !md:text-2xl lg:!text-3xl">
                 {slide?.shortDescription}
               </Title>
               <Content className="!text-white ">
@@ -68,7 +68,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
                       <div className="relative z-10 h-full w-full flex flex-col items-center  justify-center lg:justify-end text-center px-3 lg:px-6 pb-5">
                         <div className="opacity-0  group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-                          <Subtitle className="!text-secondary-off mb-1 lg:mb-2 !text-base">
+                          <Subtitle className="!text-secondary-off mb-1 lg:mb-2">
                        {card.category?.title}
                       </Subtitle>
 
@@ -84,7 +84,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
                       </div>
                     </div>
                   ) : (
-                    <div className="text-center  min-h-[420px] lg:min-h-full relative z-10 flex flex-col items-center justify-end ">
+                    <div className="text-center  min-h-[420px] lg:min-h-full relative z-10 flex flex-col items-center lg:justify-end justify-center">
                       <Subtitle className="!text-secondary-off mb-1 lg:mb-2 ">
                         {card.category?.title}
                       </Subtitle>

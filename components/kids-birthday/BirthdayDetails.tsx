@@ -99,7 +99,7 @@ import { WorkshopItem } from "@/services/workshop.service";
         </div>
 
         {/* --- PACKAGE INCLUDES --- */}
-        <div>
+        {/* <div>
           <h2 className="text-2xl font-neiko text-[#113224] mb-6">Package Includes</h2>
           <div className="bg-white p-8 lg:p-10 shadow-sm">
             {(() => {
@@ -128,7 +128,7 @@ import { WorkshopItem } from "@/services/workshop.service";
               )
             })()}
           </div>
-        </div>
+        </div> */}
 
       </div>
     </section>

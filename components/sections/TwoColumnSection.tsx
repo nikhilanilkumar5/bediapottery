@@ -29,7 +29,7 @@ const TwoColumnSection: React.FC<TwoColumnSectionProps> = ({
   const contentSection = (
     <div className={``}>
       <Title className={`mt-[20px] lg:mt-[30px] mb-[30px] lg:mb-[54px] font-normal`}>{title}</Title>
-      <Content className={`leading-relaxed bg-[#EDE8E266] rounded-[20px] p-5 lg:p-[30px]`}>{description}</Content>
+      <Content className={`leading-relaxed bg-[#EDE8E266]  p-5 lg:p-[30px]`}>{description}</Content>
     </div>
   );
 

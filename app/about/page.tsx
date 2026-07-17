@@ -20,7 +20,7 @@ export default function AboutPage() {
         description={aboutPageData.hero.description}
         imageUrl={aboutPageData.hero.imageUrl}
       />
-      <div className="py-32 space-y-9">
+      <div className="py-32 space-y-9 page-wrapper">
         {/* Mission Section */}
         <TwoColumnSection
           title={aboutPageData.mission.title}

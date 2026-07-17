@@ -19,12 +19,14 @@ import { useAuthStore } from "@/store/authStore";
 
 interface ProductDetailClientProps {
   product: WorkshopItem
+  category: string
   bookingService?: IBookingService
 }
 
 const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   bookingService = new BookingService(),
-  product
+  product,  
+  category
 }) => {
   const [selectedMaterialId, setSelectedMaterialId] = useState(
     product.options?.[0]?._id || ''
@@ -162,6 +164,12 @@ const handleBookNow = async () => {
     router.push('/checkout')
   }
 }
+  const [activeTab, setActiveTab] = useState(
+    product.moreDetails?.[0]?._id || "",
+  );
+  const activeContent = product.moreDetails.find(
+    (item) => item._id === activeTab,
+  );
 
 const handlecheck = async (destination: 'cart' | 'checkout') => {
   if (!validateSelection()) {
@@ -239,7 +247,49 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
              
             )}
           </div>
+          {category === 'corporate-events' && (
+ <div className="bg-white p-6 shadow-sm">
+              <div className="flex gap-2 mb-4 flex-wrap">
+                {product.moreDetails?.map((detail) => (
+                  <button
+                    key={detail._id}
+                    onClick={() => setActiveTab(detail._id)}
+                    className={`flex-1 py-3 px-4 xl:text-base text-sm font-medium transition-colors ${activeTab === detail._id ? "bg-[#113224] text-white" : "bg-[#e9eceb] text-[#113224] hover:bg-[#dce1df]"}`}
+                  >
+                    {detail.title}
+                  </button>
+                ))}
 
+                <button
+                  onClick={() => setActiveTab("package")}
+                  className={`flex-1 py-3 px-4 xl:text-base text-sm  font-medium transition-colors ${activeTab === "package" ? "bg-[#113224] text-white" : "bg-[#e9eceb] text-[#113224] hover:bg-[#dce1df]"}`}
+                >
+                  Package Includes
+                </button>
+              </div>
+
+              <div className="bg-[#fcfcfa] border border-[#e5e5e5] max-h-72 overflow-y-auto  p-6 relative">
+                {activeTab === "package" ? (
+                  <ul className="list-disc pl-5 space-y-3 xl:text-base text-sm  text-gray-700 pr-8">
+                    {product.includes?.map((item) => (
+                      <li key={item._id}>{item.title}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="pr-8">
+                    <ul className="list-disc pl-5 space-y-3 xl:text-base text-sm  text-gray-700 pr-8">
+                      {activeContent?.description
+                        ?.split(".")
+                        .filter((item: string) => item.trim() !== "")
+                        .map((item: string, index: number | null | undefined) => (
+                          <li key={index}>{item.trim()}</li>
+                        ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 <div className="p-[18px] bg-white">
           {/* Material Selector */}
           {product?.options && product.options.length > 0 && (

@@ -11,12 +11,13 @@ interface PageProps {
 
 export default async function ProductDetailPage({ params }: PageProps) {
   const { slug } = await params;
+  const { category } = await params;
 
   const data = await getWorkshopData(slug)
 
   return (
     <main className="min-h-screen bg-secondary-dark">
-      <ProductDetailClient product={data} />
+      <ProductDetailClient product={data} category={category} />
     </main>
   )
 }

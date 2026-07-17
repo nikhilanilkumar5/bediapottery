@@ -274,7 +274,7 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
             <h2 className="text-[2rem] font-neiko text-[#113224] mb-4">
               {type === "kids" ? "(3 - 13 Years)" : "(above 18 Years)"}
             </h2>
-            <p className="text-sm text-gray-800 leading-relaxed pr-4">
+            <p className="xl:text-base text-sm  text-gray-800 leading-relaxed pr-4">
               Celebrate your kid's birthday at Bedia Pottery Studio! Enjoy a fun
               pottery experience in a serene setting. This booking is for a
               minimum of 12 kids. If you have more, we'll help accommodate.
@@ -288,7 +288,7 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
                   <button
                     key={detail._id}
                     onClick={() => setActiveTab(detail._id)}
-                    className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${activeTab === detail._id ? "bg-[#113224] text-white" : "bg-[#e9eceb] text-[#113224] hover:bg-[#dce1df]"}`}
+                    className={`flex-1 py-3 px-4 xl:text-base text-sm font-medium transition-colors ${activeTab === detail._id ? "bg-[#113224] text-white" : "bg-[#e9eceb] text-[#113224] hover:bg-[#dce1df]"}`}
                   >
                     {detail.title}
                   </button>
@@ -296,7 +296,7 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
 
                 <button
                   onClick={() => setActiveTab("package")}
-                  className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${activeTab === "package" ? "bg-[#113224] text-white" : "bg-[#e9eceb] text-[#113224] hover:bg-[#dce1df]"}`}
+                  className={`flex-1 py-3 px-4 xl:text-base text-sm  font-medium transition-colors ${activeTab === "package" ? "bg-[#113224] text-white" : "bg-[#e9eceb] text-[#113224] hover:bg-[#dce1df]"}`}
                 >
                   Package Includes
                 </button>
@@ -304,18 +304,18 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
 
               <div className="bg-[#fcfcfa] border border-[#e5e5e5] max-h-72 overflow-y-auto  p-6 relative">
                 {activeTab === "package" ? (
-                  <ul className="list-disc pl-5 space-y-4 text-[13px] text-gray-700 pr-8">
+                  <ul className="list-disc pl-5 space-y-3 xl:text-base text-sm  text-gray-700 pr-8">
                     {product.includes?.map((item) => (
                       <li key={item._id}>{item.title}</li>
                     ))}
                   </ul>
                 ) : (
                   <div className="pr-8">
-                    <ul className="list-disc pl-5 space-y-4 text-[13px] text-gray-700 pr-8">
+                    <ul className="list-disc pl-5 space-y-3 xl:text-base text-sm  text-gray-700 pr-8">
                       {activeContent?.description
                         ?.split(".")
                         .filter((item: string) => item.trim() !== "")
-                        .map((item: string, index: Key | null | undefined) => (
+                        .map((item: string, index: number | null | undefined) => (
                           <li key={index}>{item.trim()}</li>
                         ))}
                     </ul>

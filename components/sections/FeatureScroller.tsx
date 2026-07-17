@@ -36,7 +36,7 @@ export default function FeatureScroller() {
               return (
                 <div
                   key={`${feature.label}-${index}`}
-                  className="inline-flex min-w-[220px] max-w-[220px] flex-col items-center justify-center rounded-3xl border border-gray-200/80 bg-white/90 px-6 py-5 text-center shadow-sm"
+                  className="inline-flex min-w-[220px] max-w-[220px] flex-col items-center justify-center  border border-gray-200/80 bg-white/90 px-6 py-5 text-center shadow-sm"
                 >
                   <div className="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
                     <Icon size={24} />
