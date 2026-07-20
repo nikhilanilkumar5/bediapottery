@@ -13,10 +13,11 @@ const formatRelativeTime = (reviewTime: string | number): string => {
   // 1. Convert the input into a JavaScript Date object
   let reviewDate: Date;
 
-  if (typeof reviewTime === 'number' || !isNaN(Number(reviewTime))) {
+  if (typeof reviewTime === "number" || !isNaN(Number(reviewTime))) {
     const numTime = Number(reviewTime);
     // If the timestamp is in seconds (10 digits), convert to milliseconds (13 digits)
-    reviewDate = numTime < 10000000000 ? new Date(numTime * 1000) : new Date(numTime);
+    reviewDate =
+      numTime < 10000000000 ? new Date(numTime * 1000) : new Date(numTime);
   } else {
     // Treat as an ISO date string (e.g., "2026-07-15T12:00:00Z")
     reviewDate = new Date(reviewTime);
@@ -25,7 +26,7 @@ const formatRelativeTime = (reviewTime: string | number): string => {
   // 2. Calculate the difference in milliseconds from right now
   const now = new Date();
   const diffInMs = now.getTime() - reviewDate.getTime();
-  
+
   // Guard clause for future dates or instant matches
   if (diffInMs <= 0) return "Just now";
 
@@ -41,36 +42,72 @@ const formatRelativeTime = (reviewTime: string | number): string => {
     return "Just now";
   }
   if (diffInMins < 60) {
-    return `${diffInMins} ${diffInMins === 1 ? 'minute' : 'minutes'} ago`;
+    return `${diffInMins} ${diffInMins === 1 ? "minute" : "minutes"} ago`;
   }
   if (diffInHours < 24) {
-    return `${diffInHours} ${diffInHours === 1 ? 'hour' : 'hours'} ago`;
+    return `${diffInHours} ${diffInHours === 1 ? "hour" : "hours"} ago`;
   }
   if (diffInDays < 30) {
-    return `${diffInDays} ${diffInDays === 1 ? 'day' : 'days'} ago`;
+    return `${diffInDays} ${diffInDays === 1 ? "day" : "days"} ago`;
   }
   if (diffInMonths < 12) {
-    return `${diffInMonths} ${diffInMonths === 1 ? 'month' : 'months'} ago`;
+    return `${diffInMonths} ${diffInMonths === 1 ? "month" : "months"} ago`;
   }
-  return `${diffInYears} ${diffInYears === 1 ? 'year' : 'years'} ago`;
+  return `${diffInYears} ${diffInYears === 1 ? "year" : "years"} ago`;
+};
+const getAvatarColor = (name: string) => {
+  const colors = [
+    "bg-primary/10",
+    // "bg-indigo-300",
+    // "bg-emerald-200",
+    // "bg-rose-300",
+    // "bg-sky-300",
+    // "bg-violet-200",
+    // "bg-teal-300",
+    // "bg-fuchsia-7=300",
+  ];
+
+  if (!name) return "bg-amber-700";
+
+  // Create a quick hash from the string characters
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  // Select a deterministic index from the color array
+  const index = Math.abs(hash) % colors.length;
+  return colors[index];
 };
 
 const TestimonialCard: React.FC<Props> = ({ testimonial }) => {
   return (
     <div className="bg-[#E6DFD566] hover:shadow-sm  p-6 h-full flex flex-col justify-between  transition">
       {/* Header */}
-      <div className="flex items-start justify-between mb-[30px]">
-        <Image
-          // Fallback if the URL is empty or undefined
-          src={testimonial.profilePhotoUrl || "/images/default-avatar.png"}
-          alt={testimonial.authorName}
-          width={65}
-          height={65}
-         className="w-[65px] h-[65px] rounded-full object-cover"
-        />
-        <div></div>
+      <div className="bg-[#E6DFD566] hover:shadow-sm p-6 h-full flex flex-col justify-between transition">
+        {/* Header */}
+        <div className="flex items-start justify-between mb-[30px]">
+          {testimonial.profilePhotoUrl ? (
+            <Image
+              src={testimonial.profilePhotoUrl}
+              alt={testimonial.authorName}
+              width={65}
+              height={65}
+              className="w-[65px] h-[65px] rounded-full object-cover"
+            />
+          ) : (
+            <div
+              className={`w-[65px] h-[65px] rounded-full ${getAvatarColor(testimonial.authorName)} text-primary flex items-center justify-center text-xl font-semibold select-none`}
+            >
+              {testimonial.authorName
+                ? testimonial.authorName.charAt(0).toUpperCase()
+                : "N"}
+            </div>
+          )}
 
-        <GoogleIcon />
+          <div></div>
+          <GoogleIcon />
+        </div>
       </div>
 
       {/* Text */}
