@@ -1,6 +1,7 @@
 import React from 'react'
 import ProductDetailClient from '@/components/product/ProductDetailClient'
 import { getWorkshopData } from '@/services/workshop.service'
+import ClientLogosSlider from '@/components/testimonial/ClientLogosSlider';
 
 interface PageProps {
   params: Promise<{
@@ -18,6 +19,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
   return (
     <main className="min-h-screen bg-secondary-dark">
       <ProductDetailClient product={data} category={category} />
+         {category === 'corporate-events' && (
+          <ClientLogosSlider />
+         )}
     </main>
   )
 }

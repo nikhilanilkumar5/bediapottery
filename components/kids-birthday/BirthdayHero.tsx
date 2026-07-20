@@ -252,19 +252,24 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
     <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#113224]">
       <div className="page-wrapper px-[17px]  grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
         <div className="flex flex-col gap-4 h-full">
-          <ProductMedia
+         <ProductMedia
+          imageUrl={product?.bannerImage || "/images/product/1.png"}
+          alt={product?.title}
           images={product?.images}
-            imageUrl={product?.bannerImage || "/images/product/1.png"}
-            alt={product?.title}
-            videos={
-              product?.options?.map((option) => ({
+          videos={
+            product?.options
+              ?.filter(
+                (option) =>
+                  option.clayTypeVideo && option.clayTypethumbnailImage,
+              )
+              ?.map((option) => ({
                 id: option._id,
-                thumbnailUrl:
-                  option.clayTypethumbnailImage || "/images/product/1.png",
+                // The "|| ''" guarantees TypeScript a string is always provided
+                thumbnailUrl: option.clayTypethumbnailImage || "",
                 videoUrl: option.clayTypeVideo || "",
               })) || []
-            }
-          />
+          }
+        />
         </div>
 
         <div className="flex flex-col h-full">

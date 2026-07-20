@@ -279,9 +279,23 @@ const uniqueMaterials = product?.options?.filter(option =>
     <div className="page-wrapper ">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 -ml-">
         {/* Left Section - Media */}
-        <ProductMedia
-          imageUrl={product?.bannerImage || '/images/product/1.png'}
+       <ProductMedia
+          imageUrl={product?.bannerImage || "/images/product/1.png"}
           alt={product?.title}
+          images={product?.images}
+          videos={
+            product?.options
+              ?.filter(
+                (option) =>
+                  option.clayTypeVideo && option.clayTypethumbnailImage,
+              )
+              ?.map((option) => ({
+                id: option._id,
+                // The "|| ''" guarantees TypeScript a string is always provided
+                thumbnailUrl: option.clayTypethumbnailImage || "",
+                videoUrl: option.clayTypeVideo || "",
+              })) || []
+          }
         />
 
         {/* Right Section - Booking Panel */}

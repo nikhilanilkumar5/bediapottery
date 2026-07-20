@@ -1,20 +1,26 @@
 "use client";
 
-import { useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
+import { useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from 'swiper/modules';
+// @ts-ignore: side-effect import has no type declarations in this project
+import "swiper/css";
+// @ts-ignore: side-effect import has no type declarations in this project
+import "swiper/css/pagination";
 
 import VideoTestimonialCard from "./VideoTestimonialCard";
-import TestimonialCard from './TestimonialCard';
-import { getReviewsData } from '@/services/reviewService';
+import TestimonialCard from "./TestimonialCard";
+import { getReviewsData } from "@/services/reviewService";
 
 interface TestimonialsSliderProps {
   initialReviews: any[];
   totalPages: number;
 }
 
-const TestimonialsSlider = ({ initialReviews, totalPages }: TestimonialsSliderProps) => {
+const TestimonialsSlider = ({
+  initialReviews,
+  totalPages,
+}: TestimonialsSliderProps) => {
   // Use the passed down initial reviews to hydrate the state immediately
   const [testimonials, setTestimonials] = useState<any[]>(initialReviews);
   const [page, setPage] = useState<number>(1);
@@ -23,14 +29,14 @@ const TestimonialsSlider = ({ initialReviews, totalPages }: TestimonialsSliderPr
 
   const fetchNextReviews = async (pageToFetch: number) => {
     if (isLoading || !hasMore) return;
-    
+
     setIsLoading(true);
     try {
-      const data = await getReviewsData(pageToFetch, 10);
-      
+      const data = await getReviewsData(pageToFetch, 100);
+
       setTestimonials((prev) => [...prev, ...data.reviews]);
       setPage(data.currentPage);
-      
+
       if (data.currentPage >= data.totalPages || data.reviews.length === 0) {
         setHasMore(false);
       }
@@ -50,10 +56,15 @@ const TestimonialsSlider = ({ initialReviews, totalPages }: TestimonialsSliderPr
   return (
     <div className="w-full relative">
       <Swiper
+        modules={[Autoplay, ]} // 3. Pass Autoplay here
         spaceBetween={16}
         slidesPerView={1}
-        pagination={{ clickable: true }}
         onReachEnd={handleReachEnd}
+        autoplay={{
+          delay: 3000, // Time between slides in milliseconds (3 seconds)
+          disableOnInteraction: false, // Keeps autoplay running even after the user swipes manually
+          pauseOnMouseEnter: true, // Optional: pauses autoplay when hovering over the slider
+        }}
         breakpoints={{
           768: { slidesPerView: 2 },
           1024: { slidesPerView: 3 },
@@ -64,7 +75,7 @@ const TestimonialsSlider = ({ initialReviews, totalPages }: TestimonialsSliderPr
         {testimonials.map((item: any) => (
           <SwiperSlide key={item._id} className="!h-[480px]">
             <div className="w-full h-full">
-              {item.media ? (
+              {item.media?.videos.length > 0 ? (
                 <VideoTestimonialCard testimonial={item} />
               ) : (
                 <TestimonialCard testimonial={item} />

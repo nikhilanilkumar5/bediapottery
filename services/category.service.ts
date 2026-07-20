@@ -21,6 +21,8 @@ export type WorkshopItem = {
   journeyImage: any[];
   moreDetails: any[];
   slug: string;
+  price: number;
+  currency: string;
 };
 
 export type CategoryResponse = {

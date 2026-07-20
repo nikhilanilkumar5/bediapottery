@@ -13,7 +13,7 @@ export interface ReviewResponse {
   currentPage: number;
 }
 
-export async function getReviewsData(page = 1, limit = 10): Promise<ReviewResponse> {
+export async function getReviewsData(page : number, limit: number): Promise<ReviewResponse> {
   assertApiBaseUrl();
 
   const res = await fetch(`${API_BASE_URL}/reviews/all?page=${page}&limit=${limit}`, {

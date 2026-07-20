@@ -31,38 +31,42 @@ const ProductMedia: React.FC<ProductMediaProps> = ({
 }) => {
   const [activeVideoUrl, setActiveVideoUrl] = useState<string | null>(null)
   const [activeImageUrl, setActiveImageUrl] = useState<string | null>(null)
+const thumbnails = useMemo(() => {
+  const max = 3
+  const result: Array<
+    | ({ type: 'video' } & VideoItem)
+    | ({ type: 'image' } & { id: string | number; src: string; title?: string })
+  > = []
 
-  const thumbnails = useMemo(() => {
-    const max = 3
-    const result: Array<
-      | ({ type: 'video' } & VideoItem)
-      | ({ type: 'image' } & { id: string | number; src: string; title?: string })
-    > = []
+  // Safe fallback to an empty array if videos is null or undefined
+  const safeVideos = videos || []
 
-    // Add up to `max` videos first
-    for (const v of videos.slice(0, max)) {
-      result.push({ type: 'video', ...v })
+  // Add up to `max` videos first
+  for (const v of safeVideos.slice(0, max)) {
+    result.push({ type: 'video', ...v })
+  }
+
+  // If we still need more thumbnails (or if videos was null/empty), fill from images
+  const needed = max - result.length
+  if (needed > 0) {
+    // Safe fallback to an empty array if images is null or undefined
+    const safeImages = images || []
+    
+    const imageItems = safeImages.slice(0, needed)
+    for (const img of imageItems) {
+      result.push({ type: 'image', id: img._id, src: img.image, title: img.title })
     }
 
-    // If we still need more thumbnails, fill from images
-    const needed = max - result.length
-    if (needed > 0) {
-      // prefer the provided images prop, otherwise fall back to the main imageUrl
-      const imageItems = images.slice(0, needed)
-      for (const img of imageItems) {
-        result.push({ type: 'image', id: img._id, src: img.image, title: img.title })
-      }
-
-      // If still not enough, use the banner image
-      let fillIndex = 0
-      while (result.length < max && fillIndex < needed) {
-        result.push({ type: 'image', id: `banner-${fillIndex}`, src: imageUrl || '/images/product/1.png' })
-        fillIndex++
-      }
+    // If still not enough, use the banner image
+    let fillIndex = 0
+    while (result.length < max && fillIndex < needed) {
+      result.push({ type: 'image', id: `banner-${fillIndex}`, src: imageUrl || '/images/product/1.png' })
+      fillIndex++
     }
+  }
 
-    return result
-  }, [videos, images, imageUrl])
+  return result
+}, [videos, images, imageUrl])
 
   return (
     <div className={`flex lg:!-ml-20 lg:-mt-12 flex-col gap-2 ${className}`}>

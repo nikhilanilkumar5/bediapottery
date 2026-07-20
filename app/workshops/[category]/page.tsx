@@ -65,6 +65,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   slug: workshop.slug,
                   mainSlug: category,
                   description: workshop.shortDescription,
+                  price: workshop.price,
+                  currency: workshop.currency,
                 }}
               />
             ))}

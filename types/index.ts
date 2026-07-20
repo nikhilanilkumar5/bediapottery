@@ -117,6 +117,7 @@ export interface Product {
   id: string;
   title: string;
   price?: number;
+  currency?: string;
   originalPrice?: number;
   imageUrl: string;
   videoUrl?: string;
