@@ -99,7 +99,7 @@ const Header: React.FC = () => {
 
       {/* FULL-SCREEN VIBRANT RESPONSIVE MOBILE OVERLAY DRAWER */}
       <div 
-        className={`fixed inset-0 bg-white text-primary z-[100] lg:hidden flex flex-col justify-between p-6 pt-4 transition-all duration-300
+        className={`fixed inset-0 bg-white text-primary z-[100] lxl:hidden flex flex-col justify-between p-6 pt-4 transition-all duration-300
           ${mobileOpen ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}`}
       >
         {/* Top Header Block Inside Menu Screen */}

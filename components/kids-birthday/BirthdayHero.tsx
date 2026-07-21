@@ -42,7 +42,9 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
   ];
 
   const [makeType, setMakeType] = useState("");
-  const [quantity, setQuantity] = useState(type === "kids" ? 12 : 10);
+  const minQuantity = 12;
+  const maxQuantity = 25;
+  const [quantity, setQuantity] = useState(minQuantity);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showTimeSlots, setShowTimeSlots] = useState(false);
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
@@ -77,14 +79,20 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
     [selectedDate],
   );
 
-  const quantityLimit =
-    capacityInfo?.remainingCapacity ?? (type === "kids" ? 12 : 10);
+  const quantityLimit = Math.min(
+    maxQuantity,
+    capacityInfo?.remainingCapacity ?? maxQuantity,
+  );
 
   useEffect(() => {
-    if (capacityInfo && quantity > capacityInfo.remainingCapacity) {
-      setQuantity(Math.max(1, capacityInfo.remainingCapacity));
+    if (
+      capacityInfo &&
+      capacityInfo.remainingCapacity >= minQuantity &&
+      quantity > capacityInfo.remainingCapacity
+    ) {
+      setQuantity(capacityInfo.remainingCapacity);
     }
-  }, [capacityInfo, quantity]);
+  }, [capacityInfo, quantity, minQuantity]);
 
   const handleDateSelect = (date: Date) => {
     const isSameDate =
@@ -244,9 +252,8 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
   const isBookingDisabled =
     !selectedDate ||
     !selectedSlotId ||
-    quantity <= 0 ||
-    (capacityInfo?.remainingCapacity !== undefined &&
-      quantity > capacityInfo.remainingCapacity);
+    quantity < minQuantity ||
+    quantity > quantityLimit;
 
   return (
     <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#113224]">
@@ -423,7 +430,7 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
                 onIncrease={() => {
                   if (quantity < quantityLimit) setQuantity(quantity + 1);
                 }}
-                onDecrease={() => setQuantity(Math.max(1, quantity - 1))}
+                onDecrease={() => setQuantity(Math.max(minQuantity, quantity - 1))}
                 unitPrice={selectedMaterial ? selectedMaterial.price : 0}
                 currency={selectedMaterial ? selectedMaterial.currency : "AED"}
                 onCart={handleAddToCart}

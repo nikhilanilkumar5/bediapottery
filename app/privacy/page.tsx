@@ -14,7 +14,7 @@ export default function PrivacyPage() {
           At <strong>Bedia Pottery LLC</strong> (<strong>Bedia Pottery</strong>, <strong>we</strong>, <strong>our</strong>, or <strong>us</strong>), we are committed to protecting your privacy and handling your personal information responsibly. This Privacy Policy explains how we collect, use, store, and protect your personal data when you visit our website, make a booking, purchase our products or services, or otherwise interact with us.
         </Content>
 
-        <div className="mt-[40px] bg-white p-5 lg:p-10 rounded-[20px] shadow-lg">
+        <div className="mt-[40px] bg-white p-5 lg:p-10  shadow-lg">
           <div className="space-y-8 text-[#113224] leading-[1.8]">
             <div>
               <Content className="font-semibold text-xl mb-4">Information We Collect</Content>

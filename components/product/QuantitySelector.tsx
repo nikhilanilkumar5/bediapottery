@@ -28,7 +28,7 @@ interface QuantitySelectorProps {
 const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   quantity,
   childCount = 0,
-  limit = 12,
+  limit = 25,
   onIncrease,
   onDecrease,
   onchildIncrease,

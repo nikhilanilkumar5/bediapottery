@@ -1,11 +1,13 @@
 import { WorkshopItem } from "@/services/workshop.service";
 
   interface BirthdayProps {
-    product: WorkshopItem
+    product: WorkshopItem,
+    type?: "kids" | "adults"
   }
   
   const BirthdayDetails: React.FC<BirthdayProps> = ({
-    product
+    product,
+    type 
   }) => {
   const timelineSteps = [
     { num: '01', title: 'Arrival & Welcome', time: '15 Mins', desc: 'Kids Settle In And Get Ready For The Fun' },
@@ -54,7 +56,7 @@ import { WorkshopItem } from "@/services/workshop.service";
           </div>
         </div>
 
-        {/* --- NOTE FOR THE PARENTS --- */}
+{type === "kids" && (
         <div>
           <h2 className="text-2xl font-neiko text-[#113224] mb-6">Note For The Parents</h2>
           <div className="bg-white p-8 lg:p-10 shadow-sm">
@@ -71,7 +73,7 @@ import { WorkshopItem } from "@/services/workshop.service";
             </ul>
           </div>
         </div>
-
+)}
         {/* --- VENUE CAPACITY DETAILS --- */}
         <div>
           <h2 className="text-2xl font-neiko text-[#113224] mb-6">Venue Capacity Details</h2>

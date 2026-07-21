@@ -359,7 +359,7 @@ export default function CheckoutStep({
             />
             <span className="text-gray-700">
               I have read, understood, and agree to the{' '}
-              <Link href="/refund" className="text-[#113224] underline">Refund &amp; Reschedule Policy</Link>.
+              <Link href="/cancellation" className="text-[#113224] underline">Refund &amp; Reschedule Policy</Link>.
             </span>
           </label>
           {errors.find((err) => err.field === "acceptedRefund") && (

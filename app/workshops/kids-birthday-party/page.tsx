@@ -16,7 +16,7 @@ const KidsBirthdayPage = async () => {
     <div>
       <BirthdayHero product={data} type="kids"/>
       <FeatureBanner />
-      <BirthdayDetails product={data}/>
+      <BirthdayDetails product={data} type="kids"/>
     </div>
   )
 }

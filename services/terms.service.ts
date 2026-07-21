@@ -13,9 +13,10 @@ export async function getTermsData(): Promise<TermItem[]> {
 
   const res = await fetch(`${API_BASE_URL}/terms-and-conditions/all`, {
     method: "GET",
-    headers: {
+   headers: {
       "Content-Type": "application/json",
     },
+    cache: "no-store",
   });
 
   const raw = await res.json().catch(() => null);

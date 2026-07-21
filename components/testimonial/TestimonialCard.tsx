@@ -84,7 +84,7 @@ const TestimonialCard: React.FC<Props> = ({ testimonial }) => {
   return (
     <div className="bg-[#E6DFD566] hover:shadow-sm  p-6 h-full flex flex-col justify-between  transition">
       {/* Header */}
-      <div className="bg-[#E6DFD566] hover:shadow-sm p-6 h-full flex flex-col justify-between transition">
+      <div className=" flex flex-col justify-between transition">
         {/* Header */}
         <div className="flex items-start justify-between mb-[30px]">
           {testimonial.profilePhotoUrl ? (

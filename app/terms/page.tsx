@@ -38,6 +38,27 @@ export default async function TermsPage() {
               </div>
             </div>
           ))}
+          <div>
+              <Content className="font-semibold text-xl mb-4">Contact Information
+</Content>
+             
+              <div className="mt-3 space-y-2">
+                <p className="font-semibold">Bedia Pottery LLC</p>
+                <p className="font-semibold">Dubai, United Arab Emirates</p>
+                <p>
+                  <span className="font-semibold">Email: </span>
+                  <a href="mailto:booking@bediapottery.ae" className="text-primary underline">
+                    booking@bediapottery.ae
+                  </a>
+                </p>
+                <p>
+                  <span className="font-semibold">Website: </span>
+                  <a href="https://www.bediapottery.ae" target="_blank" rel="noopener noreferrer" className="text-primary underline">
+                    www.bediapottery.ae
+                  </a>
+                </p>
+              </div>
+            </div>
         </div>
       </div>
     </main>

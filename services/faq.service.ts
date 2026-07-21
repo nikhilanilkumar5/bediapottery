@@ -16,6 +16,7 @@ export async function getFaqData(): Promise<FAQItem[]> {
     headers: {
       "Content-Type": "application/json",
     },
+    cache: "no-store",
   });
 
   const raw = await res.json().catch(() => null);
