@@ -10,24 +10,23 @@ const LocationSection: React.FC = () => {
     <section className="w-full ">
       <div className="">
         {/* Responsive Split Container Layout inspired by image_fd6f9b.jpg */}
-        <div className="grid grid-cols-1 lg:grid-cols-[30%_70%] border border-gray-200  overflow-hidden shadow-sm bg-white min-h-full xl:min-h-[550px]">
+        <div className="grid grid-cols-1 lg:grid-cols-[30%_70%] lg:items-stretch border border-gray-200 overflow-hidden shadow-sm bg-white">
           {/* Left Column: Storefront Presentation Image */}
-          <div className="relative w-full lg:h-[300px] h-screen  min-h-[300px] lg:block hidden">
+          <div className="relative w-full aspect-[3/4] lg:aspect-[4/5] xl:aspect-[3/4] lg:block hidden">
             <Image
-              src="/images/banner/storefront.png" // Replace with your image asset path (referencing look from image_fd6f9b.jpg)
+              src="/images/banner/storefront.png"
               alt="Bedia Pottery Studio Entrance"
-              objectFit="center"
-              width={800}
-              height={600}
-              sizes="(max-w-1024px) 100vw, 35vw"
+              fill
+              className="object-cover object-center"
+              sizes="(max-width: 1024px) 100vw, 35vw"
               priority
             />
             {/* Dark tinted gradient overlay for better image contrast */}
-            <div className="absolute inset-0 bg-black/10 mix-blend-multiply" />
+            {/* <div className="absolute inset-0 bg-black/10 mix-blend-multiply" /> */}
           </div>
 
           {/* Right Column: Google Maps Screen & Overlaid Info Block */}
-          <div className="relative w-full h-[400px] lg:h-full min-h-[400px] bg-[#aad3df]">
+          <div className="relative w-full  md:h-full min-h-[400px] bg-[#aad3df]">
             {/* Interactive Embedded Live Map iframe */}
             <iframe
               title="Bedia Pottery Location Map"

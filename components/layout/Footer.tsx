@@ -23,8 +23,8 @@ useEffect(() => {
   loadOpeningHours();
 }, []);
   return (
-    <footer className="bg-primary page-wrapper text-secondary-off">
-      <div className="  md:pt-14 pt-10 md:pb-8 pb-5">
+    <footer className="bg-primary  text-secondary-off">
+      <div className="page-wrapper  md:pt-14 pt-10 md:pb-8 pb-5">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-16 gap-6 md:mb-8 mb-5">
           {/* Left Column - Logo and Description */}
           <div className="space-y-[30px] md:mt-16 mt-6">
