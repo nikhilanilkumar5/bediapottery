@@ -9,7 +9,7 @@ export default async function GiftPageClient({  } ) {
  const data = await getWorkshopData("a-gift-made-by-hand-from-the-heart")
  
   return (
-    <div className="min-h-screen bg-[#fcfbf9] font-sans text-[#113224]">
+    <div className="min-h-screen bg-[#E6DFD566] font-sans text-primary">
       <GiftCardHero
         product={data}
       />

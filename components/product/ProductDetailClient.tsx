@@ -276,51 +276,25 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
               </Content>
             )}
           </div>
-          {category === "corporate-events" && (
-            <div className="bg-white p-6 shadow-sm">
-              <div className="flex gap-2 mb-4 flex-wrap">
-                {product.moreDetails?.map((detail) => (
-                  <button
-                    key={detail._id}
-                    onClick={() => setActiveTab(detail._id)}
-                    className={`flex-1 py-3 px-4 xl:text-base text-sm font-medium transition-colors ${activeTab === detail._id ? "bg-[#113224] text-white" : "bg-[#e9eceb] text-[#113224] hover:bg-[#dce1df]"}`}
-                  >
-                    {detail.title}
-                  </button>
-                ))}
+        {category === "corporate-events" && (
+  <div className="bg-white p-6 shadow-sm">
+    {/* Header Label */}
+    <div className="mb-4">
+      <div className="py-3 px-4 xl:text-base text-sm font-medium bg-primary w-full text-white inline-block">
+        Package Includes
+      </div>
+    </div>
 
-                <button
-                  onClick={() => setActiveTab("package")}
-                  className={`flex-1 py-3 px-4 xl:text-base text-sm  font-medium transition-colors ${activeTab === "package" ? "bg-[#113224] text-white" : "bg-[#e9eceb] text-[#113224] hover:bg-[#dce1df]"}`}
-                >
-                  Package Includes
-                </button>
-              </div>
-
-              <div className="bg-[#fcfcfa] border border-[#e5e5e5] max-h-72 overflow-y-auto  p-6 relative">
-                {activeTab === "package" ? (
-                  <ul className="list-disc pl-5 space-y-3 xl:text-base text-sm  text-gray-700 pr-8">
-                    {product.includes?.map((item) => (
-                      <li key={item._id}>{item.title}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className="pr-8">
-                    <ul className="list-disc pl-5 space-y-3 xl:text-base text-sm  text-gray-700 pr-8">
-                      {activeContent?.description
-                        ?.split(".")
-                        .filter((item: string) => item.trim() !== "")
-                        .map(
-                          (item: string, index: number | null | undefined) => (
-                            <li key={index}>{item.trim()}</li>
-                          ),
-                        )}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+    {/* Content Area */}
+    <div className="bg-[#fcfcfa] border border-[#e5e5e5] max-h-72 overflow-y-auto p-6 relative">
+      <ul className="list-disc pl-5 space-y-3 xl:text-base text-sm text-gray-700 pr-8">
+        {product.includes?.map((item) => (
+          <li key={item._id}>{item.title}</li>
+        ))}
+      </ul>
+    </div>
+  </div>
+)}
           <div className="p-[18px] bg-white">
             {/* Material Selector */}
             {product?.options && product.options.length > 0 && (

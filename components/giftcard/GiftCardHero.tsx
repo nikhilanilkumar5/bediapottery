@@ -12,6 +12,7 @@ import { BookingService } from "@/services/booking.service";
 import OccasionSelector from "./OccasionSelector";
 import Link from "next/link";
 import ImageGrid from "../common/ImageGrid";
+import ProductMedia from "../product/ProductMedia";
 
 function getUniqueMaterials(options?: WorkshopOption[]) {
   return (
@@ -32,9 +33,7 @@ interface GiftCardHeroProps {
   product: WorkshopItem;
 }
 
-export default function GiftCardHero({
-  product,
-}: GiftCardHeroProps) {
+export default function GiftCardHero({ product }: GiftCardHeroProps) {
   const bookingService = new BookingService();
   const [quantity, setQuantity] = useState(1);
   const [occasion, setOccasion] = useState("Birthday");
@@ -46,7 +45,7 @@ export default function GiftCardHero({
   // 1. Get auth state from your store
   const user = useAuthStore((state) => state.user);
   const userId = user?.userId ?? "";
-  const token: string | null = useAuthStore.getState().user?.token || null
+  const token: string | null = useAuthStore.getState().user?.token || null;
   const uniqueMaterials = useMemo(
     () => getUniqueMaterials(product?.options),
     [product?.options],
@@ -78,14 +77,16 @@ export default function GiftCardHero({
         option.clayTypeId === selectedClay.clayTypeId &&
         option.title.toLowerCase().includes(recipient.toLowerCase()),
     );
-  }, [product?.options, selectedClay, recipient,]);
+  }, [product?.options, selectedClay, recipient]);
   const handleCheck = async () => {
     setAvailabilityError(""); // Clear previous errors
 
     // 2. Intercept check if user is not logged in
     if (!token || token == null) {
-      console.log(token)
-      setAvailabilityError("Your cart is tied to your account. Please log in to continue.");
+      console.log(token);
+      setAvailabilityError(
+        "Your cart is tied to your account. Please log in to continue.",
+      );
       return false;
     }
 
@@ -107,7 +108,6 @@ export default function GiftCardHero({
       }),
     };
 
-
     try {
       await bookingService.addToCart(bookingData);
       setShowCartToast(true);
@@ -123,7 +123,7 @@ export default function GiftCardHero({
   };
 
   return (
-    <section className="bg-[#f2ece3] min-h-screen md:py-12 py-3 font-sans text-[#113224]">
+    <section className="page-wrapper ">
       {showCartToast && (
         <div className="fixed top-20 left-0 right-0 w-full bg-[#68bc60] text-white py-3.5 px-6 z-[9999] shadow-sm animate-in fade-in slide-in-from-top duration-300">
           <div className="page-wrapper flex justify-end items-center text-sm font-medium">
@@ -139,26 +139,79 @@ export default function GiftCardHero({
           </div>
         </div>
       )}
-      <div className="page-wrapper relative px-[17px] grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-        {/* Left Column: Media Gallery */}
-        <div className="space-y-4 md:h-[calc(100vh-80px)] flex flex-col">
-          <ImageGrid images={product?.images?.map((img) => img.image) || []} />
-        </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 -ml-">
+        {/* Left Section - Media */}
+        <ProductMedia
+          imageUrl={product?.bannerImage || "/images/product/1.png"}
+          alt={product?.title}
+          images={product?.images}
+          videos={
+            product?.options
+              ?.filter(
+                (option) =>
+                  option.clayTypeVideo && option.clayTypethumbnailImage,
+              )
+              ?.map((option) => ({
+                id: option._id,
+                // The "|| ''" guarantees TypeScript a string is always provided
+                thumbnailUrl: option.clayTypethumbnailImage || "",
+                videoUrl: option.clayTypeVideo || "",
+              })) || []
+          }
+        />
 
         {/* Right Column: Content & Form */}
-        <div className="flex flex-col lg:sticky lg:top-24 h-fit self-start">
-          <div className="mb-8">
-            <h1 className="text-5xl font-serif mb-4 text-[#113224]">
-              {product?.title || "A Gift Made by Hand, from the Heart"}
-            </h1>
-            <p className="text-[#113224]/80 leading-relaxed text-[17px]">
-              {product?.shortDescription ||
-                "Give the gift of creativity, experiences, and lasting memories. Perfect for anyone who loves to create something truly unique and meaningful."}
-            </p>
-          </div>
+        <div className="flex flex-col lg:sticky lg:top-24 h-fit self-start mt-14">
+      
 
           <div className="bg-white shadow-xl shadow-black/5 flex flex-col">
-            <div className="bg-[#113224] text-white text-center py-6 px-4 relative overflow-hidden">
+               <div className="relative mb-8 bg-primary  px-6  overflow-hidden text-center text-white">
+            {/* Scattered Absolute Background Doodle Icons */}
+            <img
+              src="/images/gift/1.png"
+              alt=""
+              className="absolute top-4 left-6 w-6  pointer-events-none"
+            />
+            <img
+              src="/images/gift/2.png"
+              alt=""
+              className="absolute -top-2 left-36 w-12  pointer-events-none"
+            />
+            <img
+              src="/images/gift/3.png"
+              alt=""
+              className="absolute bottom-2 left-20 w-10  pointer-events-none"
+            />
+            <img
+              src="/images/gift/4.png"
+              alt=""
+              className="absolute -top-4 right-1/2 w-10  pointer-events-none"
+            />
+            <img
+              src="/images/gift/5.png"
+              alt=""
+              className="absolute -top-1 right-1/4 w-10  pointer-events-none"
+            />
+            <img
+              src="/images/gift/6.png"
+              alt=""
+              className="absolute bottom-4 right-32 w-8  pointer-events-none"
+            />
+            <img
+              src="/images/gift/7.png"
+              alt=""
+              className="absolute top-2 right-10 w-10  pointer-events-none"
+            />
+            <img
+              src="/images/gift/8.png"
+              alt=""
+              className="absolute bottom-0 -right-4 w-12  pointer-events-none"
+            />
+
+            {/* Foreground Content */}
+            <div className="relative z-10 max-w-2xl mx-auto">
+              <div className=" text-white text-center py-6 px-4 relative overflow-hidden">
               <h2 className="text-lg font-medium mb-1 relative z-10">
                 Customize Your Gift Card
               </h2>
@@ -167,6 +220,8 @@ export default function GiftCardHero({
               </p>
             </div>
 
+            </div>
+          </div>
             <div className="p-8 space-y-8">
               {/* Occasion Section */}
               <div>
@@ -178,19 +233,19 @@ export default function GiftCardHero({
 
               {/* Recipient Selection */}
               <div>
-                <label className="block font-medium mb-3">
+                <label className="block text-black font-medium mb-3">
                   Who is this Gift for?
                 </label>
-                <div className="bg-[#e9e6df] p-1 flex gap-1">
+                <div className="bg-white border-[0.5px] border-[#0D463D66] p-3 flex gap-3">
                   {["Adults", "Kids"].map((item) => (
                     <button
                       key={item}
                       type="button"
                       onClick={() => setRecipient(item)}
-                      className={`flex-1 py-3 text-sm font-medium transition-colors ${
+                      className={`flex-1 py-4 text-sm md:text-base font-normal transition-colors ${
                         recipient === item
-                          ? "bg-[#113224] text-white"
-                          : "text-gray-600 hover:bg-[#d8d4cb]"
+                          ? "bg-primary text-white"
+                          : "text-black hover:bg-primary bg-[#0D463D33] hover:text-white"
                       }`}
                     >
                       {item}
@@ -202,34 +257,38 @@ export default function GiftCardHero({
               {/* Clay Type Selector */}
               {uniqueMaterials && uniqueMaterials.length > 0 && (
                 <div>
-                  <label className="block font-medium mb-3 text-capitalize">
+                  <label className="block text-black font-medium mb-3 text-capitalize">
                     Choose your clay
                   </label>
-                  <MaterialSelector
-                    materials={uniqueMaterials}
-                    selectedMaterialId={selectedMaterialId}
-                    onMaterialSelect={setSelectedMaterialId}
-                  />
+                  <div className="bg-white border-[0.5px] border-[#0D463D66] p-3 flex gap-3">
+                    <MaterialSelector
+                      className="!mb-0 w-full"
+                      materials={uniqueMaterials}
+                      selectedMaterialId={selectedMaterialId}
+                      onMaterialSelect={setSelectedMaterialId}
+                    />
+                  </div>
                 </div>
               )}
 
               {/* Message Input text field */}
               <div>
-                <label className="block font-medium mb-3">
+                <label className="block text-black font-medium mb-3">
                   Add a personal message{" "}
                   <span className="text-gray-400 font-normal text-sm">
                     ({message.length} / 250 characters)
                   </span>
                 </label>
-
-                <textarea
-                  name="personalMessage"
-                  maxLength={250}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="w-full bg-[#dce1dd] text-[#113224] placeholder-[#113224]/50 border-none p-4 h-24 text-sm focus:ring-0 focus:outline-none resize-none"
-                  placeholder="Hope you enjoy getting your hands dirty and creating something beautiful"
-                />
+                <div className="bg-white border-[0.5px] border-[#0D463D66] p-3 flex gap-3">
+                  <textarea
+                    name="personalMessage"
+                    maxLength={250}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className="w-full bg-[#0D463D33] text-primary placeholder-primary/50 border-none p-4 h-24 text-sm focus:ring-0 focus:outline-none resize-none"
+                    placeholder="Hope you enjoy getting your hands dirty and creating something beautiful"
+                  />
+                </div>
               </div>
 
               {/* Quantity Handler */}
@@ -241,16 +300,19 @@ export default function GiftCardHero({
                 unitPrice={selectedMaterial?.price}
                 currency={selectedMaterial?.currency ?? "AED"}
                 onCart={handleCheck}
-                buttonlabel={ "Add to cart" }
+                buttonlabel={"Add to cart"}
               />
-{availabilityError && (
-            <p className="text-sm text-red-600">{availabilityError} <Link
-									href="/login"
-									className="inline-flex items-center justify-center gap-2  border border-[#113224] px-6 py-1 font-medium text-[#113224] transition-colors hover:bg-[#113224] hover:text-white"
-								>
-									go to login
-								</Link></p>
-          )}
+              {availabilityError && (
+                <p className="text-sm text-red-600">
+                  {availabilityError}{" "}
+                  <Link
+                    href="/login"
+                    className="inline-flex items-center justify-center gap-2  border border-primary px-6 py-1 font-medium text-primary transition-colors hover:bg-primary hover:text-white"
+                  >
+                    go to login
+                  </Link>
+                </p>
+              )}
             </div>
           </div>
         </div>

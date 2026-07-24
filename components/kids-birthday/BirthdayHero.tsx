@@ -1,13 +1,6 @@
 "use client";
-import { Key, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
-import {
-  Minus,
-  Plus,
-  ArrowRight,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
 import DateSelector from "../product/DateSelector";
 import { WorkshopItem } from "@/services/workshop.service";
 import TimeSlotSelector from "../product/TimeSlotSelector";
@@ -188,7 +181,7 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
 
     const bookingData: BookingData = {
       userId,
-      bookingType: "pottery",
+      bookingType: "birthday",
       workshopId: product._id,
       optionId: product.options?.[0]?._id || "",
       bookingDate: formattedDate,

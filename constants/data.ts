@@ -17,6 +17,7 @@ export const navigationItems: NavigationItem[] = [
       { label: "Family Pottery Workshop", href: "/workshops/family-pottery-workshop" },
       { label: "Kids Birthday Party", href: "/workshops/kids-birthday-party" },
       { label: "Adults Birthday Party", href: "/workshops/adults-birthday-party" },
+      { label: "Corporate Events", href: "/workshops/corporate-events" },
       // { label: "School Field Trips", href: "/workshops/school-field-trips" },
     ],
   },

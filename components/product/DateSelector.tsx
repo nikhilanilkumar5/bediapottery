@@ -171,8 +171,8 @@ const DateSelector: React.FC<DateSelectorProps> = ({
               }}
               className={`w-full px-3.5 py-3 border text-center transition-all 
                 ${isSelected
-                  ? "bg-[#113224] text-white border-[#113224] font-bold"
-                  : "bg-white text-[#113224] border-gray-200 hover:border-black opacity-70"
+                  ? "bg-primary text-white border-primary font-bold"
+                  : "bg-white text-primary border-gray-200 hover:border-black opacity-70"
                 }
               `}
             >

@@ -42,7 +42,7 @@ const clientLogos = [
 
 const ClientLogosSlider = () => {
   return (
-    <div className="mt-5   bg-secondary-dark p-6 md:p-8 lg:p-10 !pb-16">
+    <div className="mt-5   bg-white p-6 md:p-8 lg:p-10 !pb-16">
       
       {/* Optional Top Heading Track */}
       <div className="mb-8 text-center">
@@ -72,16 +72,17 @@ const ClientLogosSlider = () => {
         }}
         breakpoints={{
           640: { slidesPerView: 3 },
-          768: { slidesPerView: 5 },
-          1024: { slidesPerView: 6 },
+          768: { slidesPerView: 3 },
+          1440: { slidesPerView: 4 },
+          1920: { slidesPerView: 5 },
         }}
         className="flex items-center"
       >
         {clientLogos.map((logo, index) => (
           <SwiperSlide key={`${logo.name}-${index}`}>
             {/* Logo Wrapper Container with uniform dimensions and centering */}
-            <div className="flex h-[100px] w-full items-center justify-center  bg-white p-4 border border-[#efe2cf]/60 shadow-sm  transition-all duration-300">
-              <div className="relative w-full h-full max-h-[50px]">
+            <div className="flex h-40 w-full items-center justify-center  bg-white p-4 border border-[#efe2cf]/60 shadow-sm  transition-all duration-300">
+              <div className="relative w-full h-full ">
                 <Image
                   src={logo.src}
                   alt={`${logo.name} logo`}

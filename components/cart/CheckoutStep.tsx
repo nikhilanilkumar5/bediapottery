@@ -46,9 +46,9 @@ export default function CheckoutStep({
     useState<CheckoutPayload | null>(null);
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [acceptedAddressDetails, setAcceptedAddressDetails] = useState(true);
-  const [acceptedTerms, setAcceptedTerms] = useState(true);
-  const [acceptedRefund, setAcceptedRefund] = useState(true);
+  const [acceptedAddressDetails, setAcceptedAddressDetails] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [acceptedRefund, setAcceptedRefund] = useState(false);
   const cartGrandTotal = data?.[0]?.grandTotal ?? 0;
   const bookingService = new BookingService();
   const userId: string = useAuthStore.getState().user?.userId ?? "";

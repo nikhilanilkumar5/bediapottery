@@ -16,9 +16,9 @@ export default function OccasionSelector({
 }: OccasionSelectorProps) {
   const [occasion, setOccasion] = useState(initialOccasion);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // All available occasions combined into a single master list
   const allOccasions = [
     "Birthday",
     "Anniversary",
@@ -33,47 +33,51 @@ export default function OccasionSelector({
     "Just Because",
   ];
 
-  // Define which items are natively visible at different screen breakpoints
-  // Birthday & Anniversary -> Always visible
-  // Wedding -> Visible from 'sm' (640px) up
-  // Graduation -> Visible from 'md' (768px) up
-  const visibleOccasions = [
-    { name: "Birthday", className: "flex" },
-    { name: "Anniversary", className: "flex" },
-    { name: "Wedding", className: "hidden sm:flex" },
-    { name: "Graduation", className: "hidden md:flex" },
-  ];
+  // Primary visible items
+  const primaryOccasions = ["Birthday", "Anniversary", "Wedding", "Graduation"];
 
-  // The "more+" dropdown will automatically contain whatever is NOT currently visible on screen
-  const getExtraOccasions = () => {
-    // On small mobile screens (<640px), Wedding and Graduation move to the dropdown
-    const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
-    // On tablet screens (<768px), Graduation moves to the dropdown
-    const isTablet = typeof window !== "undefined" && window.innerWidth < 768;
+  const [containerWidth, setContainerWidth] = useState<number>(0);
 
-    return allOccasions.filter((item) => {
-      if (item === "Birthday" || item === "Anniversary") return false;
-      if (item === "Wedding" && isMobile) return true;
-      if (item === "Graduation" && (isMobile || isTablet)) return true;
-      
-      // Items that are always in the extra dropdown menu
-      return ![ "Birthday", "Anniversary", "Wedding", "Graduation" ].includes(item);
-    });
-  };
-
-  const [extraOccasions, setExtraOccasions] = useState<string[]>([]);
-
-  // Update dropdown items dynamically on window resize
+  // Measure container width directly instead of window.innerWidth
   useEffect(() => {
-    const handleResize = () => setExtraOccasions(getExtraOccasions());
-    handleResize(); // run initially
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    if (!containerRef.current) return;
+
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        setContainerWidth(entry.contentRect.width);
+      }
+    });
+
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
   }, []);
 
-  const isExtraSelected = extraOccasions.includes(occasion);
+  // Dynamically calculate visible items based on actual component width (not viewport screen width)
+  const getVisibleAndExtra = () => {
+    // If container is very narrow (< 420px), show 2 items
+    if (containerWidth > 0 && containerWidth < 420) {
+      return {
+        visible: ["Birthday", "Anniversary"],
+        extra: allOccasions.filter((i) => !["Birthday", "Anniversary"].includes(i)),
+      };
+    }
+    // If container is medium (< 580px), show 3 items
+    if (containerWidth >= 420 && containerWidth < 580) {
+      return {
+        visible: ["Birthday", "Anniversary", "Wedding"],
+        extra: allOccasions.filter((i) => !["Birthday", "Anniversary", "Wedding"].includes(i)),
+      };
+    }
+    // Otherwise show 4 main items
+    return {
+      visible: primaryOccasions,
+      extra: allOccasions.filter((i) => !primaryOccasions.includes(i)),
+    };
+  };
 
-  // Close dropdown when clicking outside
+  const { visible, extra } = getVisibleAndExtra();
+  const isExtraSelected = extra.includes(occasion);
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -91,59 +95,64 @@ export default function OccasionSelector({
   };
 
   return (
-    <div className={`w-full text-[#113224] ${className}`}>
-      <label className="block font-medium mb-3 text-sm sm:text-base">
+    <div className={`w-full text-primary ${className}`}>
+      <label className="block font-medium mb-3 text-sm sm:text-base text-black">
         Choose an Occasion
       </label>
-      
-      {/* Container adapts smoothly as items hide/show */}
-      <div className="bg-[#e9e6df] p-1 flex items-center gap-1 relative font-sans w-full">
-        {visibleOccasions.map((item) => {
-          const isSelected = occasion === item.name;
+
+      {/* Main Bar */}
+      <div
+        ref={containerRef}
+        className="bg-secondary-dark p-2 sm:p-3 flex items-center gap-2 relative font-sans w-full max-w-full overflow-hidden"
+      >
+        {visible.map((item) => {
+          const isSelected = occasion === item;
           return (
             <button
-              key={item.name}
+              key={item}
               type="button"
-              onClick={() => handleSelect(item.name)}
-              className={`py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium tracking-wide transition-all duration-150 items-center justify-center flex-1 text-center
-                ${item.className}
-                ${isSelected
-                  ? "bg-[#113224] text-white shadow-sm font-semibold"
-                  : "text-[#113224]/80 hover:bg-[#dcd8ce] bg-[#c3cbbf]/20"
+              onClick={() => handleSelect(item)}
+              className={`py-2.5 px-2 sm:px-3 lg:px-4 text-xs sm:text-sm font-medium tracking-wide transition-all duration-150 flex-1 text-center whitespace-nowrap
+                ${
+                  isSelected
+                    ? "bg-primary text-white shadow-sm"
+                    : "text-black hover:bg-primary bg-[#0D463D33] hover:text-white"
                 }
               `}
             >
-              {item.name}
+              {item}
             </button>
           );
         })}
 
-        {/* Dynamic "more+" action container */}
-        <div className="flex-1 relative" ref={dropdownRef}>
+        {/* Dropdown Menu */}
+        <div className="flex-1 min-w-[80px] relative" ref={dropdownRef}>
           <button
             type="button"
             onClick={() => setIsDropdownOpen((prev) => !prev)}
-            className={`w-full py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium tracking-wide transition-all duration-150 flex items-center justify-center gap-1
-              ${isExtraSelected
-                ? "bg-[#113224] text-white shadow-sm font-semibold"
-                : "text-[#113224]/80 hover:bg-[#dcd8ce] bg-[#c3cbbf]/20"
+            className={`w-full py-2.5 px-2 sm:px-3 text-xs sm:text-sm font-medium tracking-wide transition-all duration-150 flex items-center justify-center gap-1 whitespace-nowrap
+              ${
+                isExtraSelected
+                  ? "bg-primary text-white shadow-sm"
+                  : "text-black hover:bg-primary bg-[#0D463D33] hover:text-white"
               }
             `}
           >
             <span className="truncate">
               {isExtraSelected ? occasion : "more+"}
             </span>
-            <ChevronDown 
-              size={14} 
-              className={`transform transition-transform duration-200 flex-shrink-0 ${isDropdownOpen ? "rotate-180" : ""}`} 
+            <ChevronDown
+              size={14}
+              className={`transform transition-transform duration-200 flex-shrink-0 ${
+                isDropdownOpen ? "rotate-180" : ""
+              }`}
             />
           </button>
 
-          {/* Popover Dropdown menu */}
           {isDropdownOpen && (
             <div className="absolute right-0 top-full mt-1 w-48 sm:w-56 bg-white border border-gray-200 shadow-xl rounded-md overflow-hidden z-30">
               <div className="py-1 max-h-60 overflow-y-auto">
-                {extraOccasions.map((item) => {
+                {extra.map((item) => {
                   const isSelected = occasion === item;
                   return (
                     <button
@@ -151,9 +160,10 @@ export default function OccasionSelector({
                       type="button"
                       onClick={() => handleSelect(item)}
                       className={`w-full text-left px-4 py-2.5 text-sm transition-colors
-                        ${isSelected
-                          ? "bg-[#113224] text-white font-medium"
-                          : "text-gray-700 hover:bg-[#f2ece3]"
+                        ${
+                          isSelected
+                            ? "bg-primary text-white font-medium"
+                            : "text-gray-700 hover:bg-[#f2ece3]"
                         }
                       `}
                     >

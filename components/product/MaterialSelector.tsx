@@ -36,12 +36,12 @@ const MaterialSelector: React.FC<MaterialSelectorProps> = ({
         className={`
           w-full
           px-4 py-3 md:px-6 md:py-4 2xl:py-5
-          font-medium text-sm md:text-base
+           text-sm md:text-base
           transition-colors duration-200
           ${
             selectedMaterialId === material._id
-              ? "bg-primary text-secondary-dark"
-              : "bg-[#0D463D1A] text-primary hover:bg-primary hover:text-secondary-dark"
+              ? "bg-primary text-white "
+              : "bg-[#0D463D1A] text-primary hover:bg-primary hover:text-white"
           }
         `}
       >

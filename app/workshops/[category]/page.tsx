@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Content, Title } from "@/components/ui";
 import TestimonialsSection from "@/components/testimonial/TestimonialsSection";
 import { getCategoryData } from "@/services/category.service";
+import WorkshopCategoryList from "@/components/workshops/WorkshopCategoryList";
 
 interface CategoryPageProps {
   params: Promise<{
@@ -23,7 +24,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <main className="min-h-screen bg-white page-wt">
-      <div className="md:py-20 py-10 ">
+      <div className=" pt-16 ">
         {/* Header Section */}
         {/* <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 ">
           <div
@@ -37,11 +38,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <div className="absolute inset-0 blur-sm " />
           </div>
         </div> */}
-         <div className="flex flex-col page-wrapper  lg:flex-row lg:items-end lg:justify-between gap-6 mb-20">
+         <div className="flex flex-col page-wrapper  lg:flex-row lg:items-end lg:justify-between gap-6 md:mb-16 mb-8">
           <div className="flex-1">
             <Title className="mb-2.5 font-normal">{data.category.title}</Title>
 
-            <Title className="mb-2.5 font-normal !text-2xl">
+            <Title className="mb-2.5 font-normal  !text-lg xl:!text-2xl">
               ({data.category.shortDescription})
             </Title>
           </div>
@@ -52,6 +53,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </div>
           )}
         </div>
+        <WorkshopCategoryList
+          categoryTitle={data.category.title}
+          workshops={data.workshops}
+        />
+
         {/* Products Grid */}
         {data?.workshops.length > 0 ? (
           <div className=" page-wrapper grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

@@ -285,7 +285,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
           {/* Config Summary Card */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white p-4 border border-gray-100 rounded shadow-sm">
             <div>
-              <label className="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1.5">
+              <label className="block text-black text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1.5">
                 Occasion
               </label>
               <div className="w-full bg-[#113224] text-white py-2 px-3 rounded text-sm font-medium text-center truncate">
@@ -294,7 +294,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
             </div>
 
             <div>
-              <label className="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1.5">
+              <label className="block text-black text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1.5">
                 Selected Material Option
               </label>
               <div className="w-full bg-[#113224] text-white py-2 px-3 rounded text-sm font-medium text-center truncate">
@@ -313,7 +313,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="block text-xs font-semibold text-gray-600">First Name *</label>
+                <label className="block text-black text-xs font-semibold text-gray-600">First Name *</label>
                 <input
                   type="text"
                   name="firstName"
@@ -326,7 +326,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
                 )}
               </div>
               <div className="space-y-1">
-                <label className="block text-xs font-semibold text-gray-600">Last Name *</label>
+                <label className="block text-black text-xs font-semibold text-gray-600">Last Name *</label>
                 <input
                   type="text"
                   name="lastName"
@@ -341,7 +341,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
             </div>
 
             <div className="space-y-1">
-              <label className="block text-xs font-semibold text-gray-600">Address *</label>
+              <label className="block text-black text-xs font-semibold text-gray-600">Address *</label>
               <input
                 type="text"
                 name="address"
@@ -357,7 +357,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="block text-xs font-semibold text-gray-600">Phone *</label>
+                <label className="block text-black text-xs font-semibold text-gray-600">Phone *</label>
                 <input
                   type="tel"
                   name="phone"
@@ -371,7 +371,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
                 )}
               </div>
               <div className="space-y-1">
-                <label className="block text-xs font-semibold text-gray-600">Email Address *</label>
+                <label className="block text-black text-xs font-semibold text-gray-600">Email Address *</label>
                 <input
                   type="email"
                   name="email"
@@ -410,7 +410,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
           {/* Coupon Redemption Field */}
           <div className="bg-white p-4 border border-gray-100 rounded shadow-sm space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Voucher Code Verification</label>
+              <label className="block text-black text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Voucher Code Verification</label>
               <div className="flex border border-gray-200 rounded overflow-hidden">
                 <input
                   type="text"

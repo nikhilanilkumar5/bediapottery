@@ -16,18 +16,25 @@ const Header: React.FC = () => {
     setOpenDropdown((prev) => (prev === href ? null : href))
   }
 
-  // STOPS SCROLLING COMPLETELY WHEN MOBILE MENU IS OPEN
+  // GUARANTEED BACKGROUND SCROLL LOCK (Cross-browser / iOS compatible)
   useEffect(() => {
     if (mobileOpen) {
+      document.documentElement.style.overflow = 'hidden'
       document.body.style.overflow = 'hidden'
-      document.body.style.height = '100vh'
+      document.body.style.position = 'fixed'
+      document.body.style.width = '100%'
     } else {
+      document.documentElement.style.overflow = ''
       document.body.style.overflow = ''
-      document.body.style.height = ''
+      document.body.style.position = ''
+      document.body.style.width = ''
     }
+
     return () => {
+      document.documentElement.style.overflow = ''
       document.body.style.overflow = ''
-      document.body.style.height = ''
+      document.body.style.position = ''
+      document.body.style.width = ''
     }
   }, [mobileOpen])
 
@@ -60,9 +67,9 @@ const Header: React.FC = () => {
                       <ChevronDown className="w-3 h-3 text-gray-500 group-hover:text-primary transition-colors duration-200" />
                     </div>
                     <div className="absolute left-0 top-full mt-2 w-52 bg-white border border-gray-100 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                      {item.children.map((child) => (
+                      {item.children.map((child, i) => (
                         <Link
-                          key={child.href}
+                          key={i}
                           href={child.href}
                           className="block px-4 py-2.5 text-sm hover:bg-gray-50 hover:text-primary transition-colors duration-150"
                         >
@@ -97,22 +104,21 @@ const Header: React.FC = () => {
         </nav>
       </header>
 
-      {/* FULL-SCREEN VIBRANT RESPONSIVE MOBILE OVERLAY DRAWER */}
+      {/* FULL-SCREEN RESPONSIVE MOBILE OVERLAY DRAWER */}
       <div 
-        className={`fixed inset-0 bg-white text-primary z-[100] lxl:hidden flex flex-col justify-between p-6 pt-4 transition-all duration-300
+        className={`fixed inset-0 h-[100dvh] w-screen bg-white text-primary z-[100] xl:hidden flex flex-col justify-between p-6 transition-all duration-300
           ${mobileOpen ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}`}
       >
-        {/* Top Header Block Inside Menu Screen */}
-        <div className="w-full flex items-center justify-between">
+        {/* Fixed Top Header */}
+        <div className="w-full flex items-center justify-between pb-4 border-b border-gray-100 shrink-0">
           <Link href="/" onClick={() => setMobileOpen(false)}>
-            {/* White variant logo file suggested here to stand out over vibrant color background */}
-           <Image 
-                src="/logo.svg" 
-                alt="Bedia Pottery Logo" 
-                width={290} 
-                height={31} 
-                className=" h-auto w-[290px] md:h-[31px]" 
-              />
+            <Image 
+              src="/logo.svg" 
+              alt="Bedia Pottery Logo" 
+              width={290} 
+              height={31} 
+              className="h-auto w-[180px] md:w-[290px]" 
+            />
           </Link>
           <button
             aria-label="Close menu"
@@ -123,32 +129,36 @@ const Header: React.FC = () => {
           </button>
         </div>
 
-        {/* Main Vertical Link Elements Center List */}
-        <div className="flex-1 flex flex-col justify-center gap-5 my-auto overflow-y-auto max-h-[65vh] pr-2">
+        {/* Scrollable Center Content */}
+        <div className="flex-1 overflow-y-auto py-6 space-y-4 pr-1 overscroll-contain">
           {navigationItems.map((item) =>
             item.children ? (
               <div key={item.href} className="w-full">
                 <button
                   onClick={() => toggleDropdown(item.href)}
-                  className="flex items-center justify-between w-full py-2 text-xl font-bold tracking-wide uppercase text-left"
+                  className="flex items-center justify-between w-full py-2 text-base font-medium tracking-wide uppercase text-left"
                 >
                   <span>{item.label}</span>
                   <ChevronDown
-                    className={`w-6 h-6 text-white/80 transition-transform duration-200 ${openDropdown === item.href ? 'rotate-180' : ''}`}
+                    className={`w-5 h-5 text-primary/70 transition-transform duration-200 ${
+                      openDropdown === item.href ? 'rotate-180' : ''
+                    }`}
                   />
                 </button>
-                  <div className="pl-4 flex flex-col gap-2 mt-2 border-l-2 border-white/30">
-                    {item.children.map((child) => (
+                {openDropdown === item.href && (
+                  <div className="pl-4 flex flex-col gap-2 my-2 border-l-2 border-primary/20">
+                    {item.children.map((child, i) => (
                       <Link
-                        key={child.href}
+                        key={i}
                         href={child.href}
                         onClick={() => setMobileOpen(false)}
-                        className="block py-1.5 text-lg font-medium text-primary hover:text-white transition-colors"
+                        className="block py-1.5 text-base font-medium text-primary/80 hover:text-primary transition-colors"
                       >
                         {child.label}
                       </Link>
                     ))}
                   </div>
+                )}
               </div>
             ) : (
               <Link
@@ -156,7 +166,7 @@ const Header: React.FC = () => {
                 href={item.href}
                 target={item.target}
                 onClick={() => setMobileOpen(false)}
-                className="block py-2 text-xl font-bold tracking-wide uppercase hover:text-primary/80 transition-colors"
+                className="block py-2 text-base font-medium tracking-wide uppercase hover:text-primary/80 transition-colors"
               >
                 {item.label}
               </Link>
@@ -164,16 +174,16 @@ const Header: React.FC = () => {
           )}
         </div>
 
-        {/* Social Icons Footer Grid Row */}
-        <div className="flex items-center gap-6 pt-4 border-t border-white/20">
+        {/* Fixed Footer Icons */}
+        <div className="flex items-center gap-6 pt-4 border-t border-gray-100 shrink-0">
           <a href="https://instagram.com" target="_blank" rel="noreferrer" className="text-primary hover:opacity-80 transition-opacity">
-            <Instagram className="w-7 h-7" />
+            <Instagram className="w-6 h-6" />
           </a>
           <a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-primary hover:opacity-80 transition-opacity">
-            <Facebook className="w-7 h-7" />
+            <Facebook className="w-6 h-6" />
           </a>
           <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-primary hover:opacity-80 transition-opacity">
-            <Linkedin className="w-7 h-7" />
+            <Linkedin className="w-6 h-6" />
           </a>
         </div>
       </div>
