@@ -235,6 +235,7 @@ export interface Availability {
   bookingDate: string;
   slotId: string;
   guests: number;
+  bookingType?: string;
 }
 export interface AvailabilityResult {
   available: boolean;

@@ -36,8 +36,10 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
     product.options?.[0]?._id || "",
   );
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+   const minQuantity = category === "corporate-events" ? 12 : 1;
+  const maxQuantity = category === "corporate-events" ? 25 : 12;
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(minQuantity);
   const [dateError, setDateError] = useState<string>("");
   const [slotError, setSlotError] = useState<string>("");
   const userId: string = useAuthStore.getState().user?.userId ?? "";
@@ -53,31 +55,15 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
     [product.options, selectedMaterialId],
   );
 
-  const quantityLimit = capacityInfo?.remainingCapacity ?? 12;
-
+    const quantityLimit = Math.min(
+    maxQuantity,
+    capacityInfo?.remainingCapacity ?? maxQuantity,
+  );
   useEffect(() => {
     if (capacityInfo && quantity > capacityInfo.remainingCapacity) {
-      setQuantity(Math.max(1, capacityInfo.remainingCapacity));
+      setQuantity(Math.max(minQuantity, capacityInfo.remainingCapacity));
     }
-  }, [capacityInfo, quantity]);
-
-  const sampleVideos = [
-    {
-      id: 1,
-      thumbnailUrl: "/images/banner/banner-3.png",
-      videoUrl: "/video/clay-1.mp4",
-    },
-    {
-      id: 2,
-      thumbnailUrl: "/images/banner/banner-2.png",
-      videoUrl: "/video/clay-2.mp4",
-    },
-    {
-      id: 3,
-      thumbnailUrl: "/images/banner/banner-1.png",
-      videoUrl: "/video/clay-3.mp4",
-    },
-  ];
+  }, [capacityInfo, quantity, minQuantity]);
 
   const formattedDate = useMemo(() => {
     return selectedDate ? format(selectedDate, "yyyy-MM-dd") : "";
@@ -102,7 +88,15 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
     setSlotError("");
     setAvailabilityError("");
   };
-
+  useEffect(() => {
+    if (
+      capacityInfo &&
+      capacityInfo.remainingCapacity >= minQuantity &&
+      quantity > capacityInfo.remainingCapacity
+    ) {
+      setQuantity(capacityInfo.remainingCapacity);
+    }
+  }, [capacityInfo, quantity, minQuantity]);
   useEffect(() => {
     const fetchCapacity = async () => {
       if (!selectedDate || !selectedSlotId) {
@@ -116,11 +110,14 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
 
       setCapacityLoading(true);
       setCapacityError("");
+    
       try {
+          console.log("category", category);
         const res = await getPotteryCapacity({
           bookingDate: formattedDate,
           startTime: slot.startTime,
           endTime: slot.endTime,
+            ...(category === "corporate-events" && { bookingType: "events" }),
         });
 
         setCapacityInfo(res.result ?? null);
@@ -184,13 +181,9 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
       router.push("/checkout");
     }
   };
-  const [activeTab, setActiveTab] = useState(
-    product.moreDetails?.[0]?._id || "",
-  );
-  const activeContent = product.moreDetails.find(
-    (item) => item._id === activeTab,
-  );
-
+  // const [activeTab, setActiveTab] = useState(
+  //   product.moreDetails?.[0]?._id || "",
+  // );
   const handlecheck = async (destination: "cart" | "checkout") => {
     if (!validateSelection()) {
       return false;
@@ -199,11 +192,14 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
     const bookingData: BookingData = {
       userId: userId,
       workshopId: product._id,
-      bookingType: "pottery",
+
       optionId: selectedMaterialId,
       bookingDate: formattedDate,
       slotId: selectedSlotId!,
       people: quantity,
+      ...(category === "corporate-events"
+        ? { bookingType: "events" }
+        : { bookingType: "pottery" }),
     };
 
     const availabilityData: Availability = {
@@ -211,6 +207,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
       bookingDate: formattedDate,
       slotId: selectedSlotId!,
       guests: quantity,
+      ...(category === "corporate-events" && { bookingType: "events" }),
     };
 
     const availabilityResponse = await getAvailabilityData(availabilityData);
@@ -276,25 +273,25 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
               </Content>
             )}
           </div>
-        {category === "corporate-events" && (
-  <div className="bg-white p-6 shadow-sm">
-    {/* Header Label */}
-    <div className="mb-4">
-      <div className="py-3 px-4 xl:text-base text-sm font-medium bg-primary w-full text-white inline-block">
-        Package Includes
-      </div>
-    </div>
+          {category === "corporate-events" && (
+            <div className="bg-white p-6 shadow-sm">
+              {/* Header Label */}
+              <div className="mb-4">
+                <div className="py-3 px-4 xl:text-base text-sm font-medium bg-primary w-full text-white inline-block">
+                  Package Includes
+                </div>
+              </div>
 
-    {/* Content Area */}
-    <div className="bg-[#fcfcfa] border border-[#e5e5e5] max-h-72 overflow-y-auto p-6 relative">
-      <ul className="list-disc pl-5 space-y-3 xl:text-base text-sm text-gray-700 pr-8">
-        {product.includes?.map((item) => (
-          <li key={item._id}>{item.title}</li>
-        ))}
-      </ul>
-    </div>
-  </div>
-)}
+              {/* Content Area */}
+              <div className="bg-[#fcfcfa] border border-[#e5e5e5] max-h-72 overflow-y-auto p-6 relative">
+                <ul className="list-disc pl-5 space-y-3 xl:text-base text-sm text-gray-700 pr-8">
+                  {product.includes?.map((item) => (
+                    <li key={item._id}>{item.title}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
           <div className="p-[18px] bg-white">
             {/* Material Selector */}
             {product?.options && product.options.length > 0 && (
@@ -372,10 +369,12 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
             <QuantitySelector
               quantity={quantity}
               limit={quantityLimit}
-              onIncrease={() =>
-                setQuantity(Math.min(quantityLimit, quantity + 1))
-              }
-              onDecrease={() => setQuantity(Math.max(1, quantity - 1))}
+            onIncrease={() => {
+                  if (quantity < quantityLimit) setQuantity(quantity + 1);
+                }}
+          onDecrease={() =>
+                  setQuantity(Math.max(minQuantity, quantity - 1))
+                }
               unitPrice={selectedMaterial ? selectedMaterial.price : 0}
               currency={selectedMaterial ? selectedMaterial.currency : "AED"}
               onCart={handleAddToCart}

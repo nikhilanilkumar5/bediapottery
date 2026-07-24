@@ -164,7 +164,14 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
         {/* Right Column: Content & Form */}
         <div className="flex flex-col lg:sticky lg:top-24 h-fit self-start mt-14">
       
-
+ <div className="mb-6">
+            <h1 className="text-[2.5rem] leading-tight font-neiko text-[#113224] mb-1">
+              {product.title}
+            </h1>
+            <p className="xl:text-base text-sm  text-gray-800 leading-relaxed pr-4">
+          {product.description}
+            </p>
+          </div>
           <div className="bg-white shadow-xl shadow-black/5 flex flex-col">
                <div className="relative mb-8 bg-primary  px-6  overflow-hidden text-center text-white">
             {/* Scattered Absolute Background Doodle Icons */}

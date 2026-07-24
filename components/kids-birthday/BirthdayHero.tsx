@@ -133,6 +133,7 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
           bookingDate: formattedDate,
           startTime: slot.startTime,
           endTime: slot.endTime,
+          bookingType: "events",
         });
 
         setCapacityInfo(res.result ?? null);
@@ -181,7 +182,7 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
 
     const bookingData: BookingData = {
       userId,
-      bookingType: "birthday",
+      bookingType: "events",
       workshopId: product._id,
       optionId: product.options?.[0]?._id || "",
       bookingDate: formattedDate,
@@ -194,6 +195,7 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
       bookingDate: formattedDate,
       slotId: selectedSlotId!,
       guests: quantity,
+      bookingType: "events",
     };
 
     const availabilityResponse = await getAvailabilityData(availabilityData);
@@ -252,24 +254,24 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
     <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#113224]">
       <div className="page-wrapper px-[17px]  grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
         <div className="flex flex-col gap-4 h-full">
-         <ProductMedia
-          imageUrl={product?.bannerImage || "/images/product/1.png"}
-          alt={product?.title}
-          images={product?.images}
-          videos={
-            product?.options
-              ?.filter(
-                (option) =>
-                  option.clayTypeVideo && option.clayTypethumbnailImage,
-              )
-              ?.map((option) => ({
-                id: option._id,
-                // The "|| ''" guarantees TypeScript a string is always provided
-                thumbnailUrl: option.clayTypethumbnailImage || "",
-                videoUrl: option.clayTypeVideo || "",
-              })) || []
-          }
-        />
+          <ProductMedia
+            imageUrl={product?.bannerImage || "/images/product/1.png"}
+            alt={product?.title}
+            images={product?.images}
+            videos={
+              product?.options
+                ?.filter(
+                  (option) =>
+                    option.clayTypeVideo && option.clayTypethumbnailImage,
+                )
+                ?.map((option) => ({
+                  id: option._id,
+                  // The "|| ''" guarantees TypeScript a string is always provided
+                  thumbnailUrl: option.clayTypethumbnailImage || "",
+                  videoUrl: option.clayTypeVideo || "",
+                })) || []
+            }
+          />
         </div>
 
         <div className="flex flex-col h-full">
@@ -321,9 +323,11 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
                       {activeContent?.description
                         ?.split(".")
                         .filter((item: string) => item.trim() !== "")
-                        .map((item: string, index: number | null | undefined) => (
-                          <li key={index}>{item.trim()}</li>
-                        ))}
+                        .map(
+                          (item: string, index: number | null | undefined) => (
+                            <li key={index}>{item.trim()}</li>
+                          ),
+                        )}
                     </ul>
                   </div>
                 )}
@@ -423,7 +427,9 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
                 onIncrease={() => {
                   if (quantity < quantityLimit) setQuantity(quantity + 1);
                 }}
-                onDecrease={() => setQuantity(Math.max(minQuantity, quantity - 1))}
+                onDecrease={() =>
+                  setQuantity(Math.max(minQuantity, quantity - 1))
+                }
                 unitPrice={selectedMaterial ? selectedMaterial.price : 0}
                 currency={selectedMaterial ? selectedMaterial.currency : "AED"}
                 onCart={handleAddToCart}

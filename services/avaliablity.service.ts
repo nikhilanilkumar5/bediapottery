@@ -25,7 +25,7 @@ export async function getAvailabilityData(
 
   const raw = await res.json().catch(() => null);
 
-  console.log("Availability data API:", raw);
+  // console.log("Availability data API:", raw,availabilityData);
   if (!res.ok) {
     throw new Error(
       `Availability data failed: ${res.status} ${res.statusText}${
@@ -46,6 +46,7 @@ export type PotteryCapacityPayload = {
   bookingDate: string;
   startTime: string;
   endTime: string;
+  bookingType?: string;
   workshopId?: string;
 };
 
@@ -80,7 +81,7 @@ export async function getPotteryCapacity(
   });
 
   const raw = await res.json().catch(() => null);
-  console.log("Pottery capacity API:", raw);
+  // console.log("Pottery capacity API:", raw);
 
   if (!res.ok) {
     throw new Error(
