@@ -311,10 +311,11 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
             )}
           </div>
           {/* Date Selector */}
-          <div className="p-[18px] bg-white">
+          <div className="p-[18px]  bg-white">
             <DateSelector
               onDateSelect={handleDateSelect}
               selectedDate={selectedDate}
+              nonAvailabilityDays={product?.nonAvailabilityDays || []}
             />
             {dateError && (
               <p className="mt-3 text-sm text-red-600">{dateError}</p>

@@ -23,6 +23,8 @@ export interface CartItem {
   price: number;
   subtotal: number;
   currency: string;
+  wheelPottery?: number;
+  handBuild?: number;
 }
 
 export interface CartData {

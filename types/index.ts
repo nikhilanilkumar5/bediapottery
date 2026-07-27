@@ -158,6 +158,8 @@ export interface BookingData {
   people: number;
   adult?: number;
   child?: number;
+  handBuild?: number;
+  wheelPottery?: number;
 }
 
 export interface CheckoutWorkshopItem {
@@ -236,6 +238,8 @@ export interface Availability {
   slotId: string;
   guests: number;
   bookingType?: string;
+       handBuild?:number,
+      wheelPottery?:number,
 }
 export interface AvailabilityResult {
   available: boolean;

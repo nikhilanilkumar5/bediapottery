@@ -25,9 +25,9 @@ useEffect(() => {
   return (
     <footer className="bg-primary  text-secondary-off">
       <div className="page-wrapper  md:pt-14 pt-10 md:pb-8 pb-5">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-16 gap-6 md:mb-8 mb-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-16 gap-6 md:mb-0 mb-5">
           {/* Left Column - Logo and Description */}
-          <div className="space-y-[30px] md:mt-16 mt-6">
+          <div className="space-y-[30px] md:mt-0 mt-6">
             <Link href="/">
               <Image
                 src="/logo-white.svg"
@@ -71,7 +71,7 @@ useEffect(() => {
           </div>
 
           {/* Middle-Left Column - Links */}
-          <div className="md:mt-16 mt-6">
+          <div className="md:mt-0 mt-6 md:ml-10 ml-0">
             <h3 className=" 2xl:text-2xl  xl:text-xl font-medium md:mb-10 mb-5">Links</h3>
             <ul className="space-y-4">
               {footerLinks.map((link) => (
@@ -88,7 +88,7 @@ useEffect(() => {
           </div>
 
           {/* Middle-Right Column - Opening Hours */}
-          <div className="md:mt-16 mt-6">
+          <div className="md:mt-0 mt-6">
             <h3 className="font-semibold md:mb-10 mb-5 2xl:text-2xl  xl:text-xl">Opening Hours</h3>
             <ul className="space-y-4  2xl:text-[22px]  xl:text-lg">
               <li>
@@ -103,7 +103,7 @@ useEffect(() => {
           </div>
 
           {/* Right Column - Newsletter & Social Media */}
-          <div className="md:mt-16 mt-6">
+          <div className="md:mt-0 mt-6">
             <h3 className=" 2xl:text-2xl  xl:text-xl font-medium md:mb-10 mb-5">Contact Us</h3>
             <div className="mb-6 space-y-4">
               <a
@@ -165,7 +165,7 @@ useEffect(() => {
           </div>
         </div>
 
-        <div className=" md:pt-12 pt-8 md:flex justify-between items-center ">
+        <div className=" md:pt-0 pt-8 md:flex justify-between items-center ">
           <Content className="  !text-secondary-off ">
             Made With Love By Bedia Pottery LLC © 2023
           </Content>

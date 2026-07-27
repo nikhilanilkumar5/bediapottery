@@ -173,12 +173,12 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
             </p>
           </div>
           <div className="bg-white shadow-xl shadow-black/5 flex flex-col">
-               <div className="relative mb-8 bg-primary  px-6  overflow-hidden text-center text-white">
+               <div className="relative  bg-primary  px-6  overflow-hidden text-center text-white">
             {/* Scattered Absolute Background Doodle Icons */}
             <img
               src="/images/gift/1.png"
               alt=""
-              className="absolute top-4 left-6 w-6  pointer-events-none"
+              className="absolute top-4 left-6 w-6  pointer-events-none "
             />
             <img
               src="/images/gift/2.png"
@@ -193,17 +193,17 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
             <img
               src="/images/gift/4.png"
               alt=""
-              className="absolute -top-4 right-1/2 w-10  pointer-events-none"
+              className="absolute -top-4 right-1/2 w-10  pointer-events-none md:block hidden"
             />
             <img
               src="/images/gift/5.png"
               alt=""
-              className="absolute -top-1 right-1/4 w-10  pointer-events-none"
+              className="absolute -top-1 right-1/4 w-10  pointer-events-none md:block hidden"
             />
             <img
               src="/images/gift/6.png"
               alt=""
-              className="absolute bottom-4 right-32 w-8  pointer-events-none"
+              className="absolute bottom-4 right-32 w-8  pointer-events-nonen"
             />
             <img
               src="/images/gift/7.png"

@@ -272,8 +272,8 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
     totalGuests <= 0 ||
     (capacityInfo?.remainingCapacity !== undefined && totalGuests > capacityInfo.remainingCapacity)
 const uniqueMaterials = product?.options?.filter(option =>
-  option.title.toLowerCase().includes('adults') &&
-  !option.title.toLowerCase().includes('adults & kids')
+  !option.title.toLowerCase().includes('extra child') &&
+  !option.title.toLowerCase().includes('extra adult')
 );
   return (
     <div className="page-wrapper ">

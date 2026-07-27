@@ -18,6 +18,7 @@ import BookingActions from "../product/BookingActions";
 import MaterialSelector from "../product/MaterialSelector";
 import MaterialDescription from "../product/MaterialDescription";
 import ProductMedia from "../product/ProductMedia";
+import WorkshopQuantitySelector from "../product/WorkshopQuantitySelector";
 
 interface BirthdayProps {
   product: WorkshopItem;
@@ -29,15 +30,20 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
     console.log("Received product data in BirthdayHero:", product);
   }, [product]);
 
-  const makeTypes = [
-    { id: "wheel", label: "Wheel" },
-    { id: "hand-building", label: "Hand Building" },
-  ];
-
-  const [makeType, setMakeType] = useState("");
-  const minQuantity = 12;
+  const minQuantity = type === "kids" ? 12 : 25;
   const maxQuantity = 25;
-  const [quantity, setQuantity] = useState(minQuantity);
+
+  // Single quantity state (Kids)
+  const [quantity, setQuantity] = useState(12);
+
+  // Split quantity state (Adults)
+  const [wheelCount, setWheelCount] = useState(0);
+  const [handCount, setHandCount] = useState(0);
+
+  const totalAdultParticipants = wheelCount + handCount;
+  const currentTotalPeople =
+    type === "kids" ? quantity : totalAdultParticipants;
+
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showTimeSlots, setShowTimeSlots] = useState(false);
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
@@ -60,13 +66,6 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
     [product.options, selectedMaterialId],
   );
 
-  const [activeTab, setActiveTab] = useState(
-    product.moreDetails?.[0]?._id || "",
-  );
-  const activeContent = product.moreDetails.find(
-    (item) => item._id === activeTab,
-  );
-
   const formattedDate = useMemo(
     () => (selectedDate ? format(selectedDate, "yyyy-MM-dd") : ""),
     [selectedDate],
@@ -79,13 +78,14 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
 
   useEffect(() => {
     if (
+      type === "kids" &&
       capacityInfo &&
-      capacityInfo.remainingCapacity >= minQuantity &&
+      capacityInfo.remainingCapacity >= 12 &&
       quantity > capacityInfo.remainingCapacity
     ) {
       setQuantity(capacityInfo.remainingCapacity);
     }
-  }, [capacityInfo, quantity, minQuantity]);
+  }, [capacityInfo, quantity, type]);
 
   const handleDateSelect = (date: Date) => {
     const isSameDate =
@@ -175,27 +175,38 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
     return isValid;
   };
 
-  const handleCheck = async (destination: "cart" | "checkout") => {
+  const handleCheck = async (
+    destination: "cart" | "checkout",
+    overrideCounts?: { people?: number; hand?: number; wheel?: number },
+  ) => {
     if (!validateSelection()) return false;
 
     setAvailabilityError("");
+    
+    const hand = overrideCounts?.hand ?? handCount;
+    const wheel = overrideCounts?.wheel ?? wheelCount;
+    const peopleCount = overrideCounts?.people ?? (type === "kids" ? quantity : hand + wheel);
 
     const bookingData: BookingData = {
       userId,
       bookingType: "events",
       workshopId: product._id,
-      optionId: product.options?.[0]?._id || "",
+      optionId: selectedMaterialId || product.options?.[0]?._id || "",
       bookingDate: formattedDate,
       slotId: selectedSlotId!,
-      people: quantity,
+      people: peopleCount,
+      handBuild: hand,
+      wheelPottery: wheel,
     };
 
     const availabilityData: Availability = {
       workshopId: product._id,
       bookingDate: formattedDate,
       slotId: selectedSlotId!,
-      guests: quantity,
+      guests: peopleCount,
       bookingType: "events",
+      handBuild: hand,
+      wheelPottery: wheel,
     };
 
     const availabilityResponse = await getAvailabilityData(availabilityData);
@@ -224,13 +235,13 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
     }
   };
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (overrideCounts?: { people?: number; hand?: number; wheel?: number }) => {
     const token: string | null = useAuthStore.getState().user?.token || null;
     if (!token) {
       router.push("/login");
       return;
     }
-    const success = await handleCheck("cart");
+    const success = await handleCheck("cart", overrideCounts);
     if (success) router.push("/cart");
   };
 
@@ -244,15 +255,16 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
     if (success) router.push("/checkout");
   };
 
-  const isBookingDisabled =
-    !selectedDate ||
-    !selectedSlotId ||
-    quantity < minQuantity ||
-    quantity > quantityLimit;
+  // Enable check: Date and slot must be selected, and total people must meet bounds
+const isBookingDisabled =
+  !selectedDate ||
+  !selectedSlotId ||
+  currentTotalPeople < 12 ||
+  currentTotalPeople > quantityLimit;
 
   return (
     <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#113224]">
-      <div className="page-wrapper px-[17px]  grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+      <div className="page-wrapper px-[17px] grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
         <div className="flex flex-col gap-4 h-full">
           <ProductMedia
             imageUrl={product?.bannerImage || "/images/product/1.png"}
@@ -266,7 +278,6 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
                 )
                 ?.map((option) => ({
                   id: option._id,
-                  // The "|| ''" guarantees TypeScript a string is always provided
                   thumbnailUrl: option.clayTypethumbnailImage || "",
                   videoUrl: option.clayTypeVideo || "",
                 })) || []
@@ -280,95 +291,30 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
               {product.title}
             </h1>
             <h2 className="text-[2rem] font-neiko text-[#113224] mb-4">
-              {type === "kids" ? "(3 - 13 Years)" : "(above 18 Years)"}
+              {type === "kids" ? "(3 - 13 Years)" : "(14 years & above)"}
             </h2>
-            <p className="xl:text-base text-sm  text-gray-800 leading-relaxed pr-4">
-              Celebrate your kid's birthday at Bedia Pottery Studio! Enjoy a fun
-              pottery experience in a serene setting. This booking is for a
-              minimum of 12 kids. If you have more, we'll help accommodate.
+            <p className="xl:text-base text-sm text-gray-800 leading-relaxed pr-4">
+              {product.description}
             </p>
           </div>
 
           <div className="space-y-6">
-            <div className="bg-white p-6 shadow-sm">
-              <div className="flex gap-2 mb-4 flex-wrap">
-                {product.moreDetails?.map((detail) => (
-                  <button
-                    key={detail._id}
-                    onClick={() => setActiveTab(detail._id)}
-                    className={`flex-1 py-3 px-4 xl:text-base text-sm font-medium transition-colors ${activeTab === detail._id ? "bg-[#113224] text-white" : "bg-[#e9eceb] text-[#113224] hover:bg-[#dce1df]"}`}
-                  >
-                    {detail.title}
-                  </button>
-                ))}
-
-                <button
-                  onClick={() => setActiveTab("package")}
-                  className={`flex-1 py-3 px-4 xl:text-base text-sm  font-medium transition-colors ${activeTab === "package" ? "bg-[#113224] text-white" : "bg-[#e9eceb] text-[#113224] hover:bg-[#dce1df]"}`}
-                >
-                  Package Includes
-                </button>
-              </div>
-
-              <div className="bg-[#fcfcfa] border border-[#e5e5e5] max-h-72 overflow-y-auto  p-6 relative">
-                {activeTab === "package" ? (
-                  <ul className="list-disc pl-5 space-y-3 xl:text-base text-sm  text-gray-700 pr-8">
-                    {product.includes?.map((item) => (
-                      <li key={item._id}>{item.title}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className="pr-8">
-                    <ul className="list-disc pl-5 space-y-3 xl:text-base text-sm  text-gray-700 pr-8">
-                      {activeContent?.description
-                        ?.split(".")
-                        .filter((item: string) => item.trim() !== "")
-                        .map(
-                          (item: string, index: number | null | undefined) => (
-                            <li key={index}>{item.trim()}</li>
-                          ),
-                        )}
-                    </ul>
-                  </div>
+            {type === "adults" && (
+              <div className="p-[18px] bg-white">
+                {product?.options && product.options.length > 0 && (
+                  <MaterialSelector
+                    materials={product?.options}
+                    selectedMaterialId={selectedMaterialId}
+                    onMaterialSelect={setSelectedMaterialId}
+                  />
+                )}
+                {selectedMaterial && selectedMaterial.description && (
+                  <MaterialDescription
+                    materialName={selectedMaterial.title}
+                    description={selectedMaterial.description}
+                  />
                 )}
               </div>
-            </div>
-            {type === "adults" && (
-              <>
-                <div className="p-[18px] bg-white">
-                  {product?.options && product.options.length > 0 && (
-                    <MaterialSelector
-                      materials={product?.options}
-                      selectedMaterialId={selectedMaterialId}
-                      onMaterialSelect={setSelectedMaterialId}
-                    />
-                  )}
-                  {selectedMaterial && selectedMaterial.description && (
-                    <MaterialDescription
-                      materialName={selectedMaterial.title}
-                      description={selectedMaterial.description}
-                    />
-                  )}
-                </div>
-
-                <div className="p-[18px] bg-white space-y-3">
-                  <h3 className="text-lg font-medium text-gray-900">
-                    Choose Your Make Type
-                  </h3>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    {makeTypes.map((t) => (
-                      <button
-                        key={t.id}
-                        onClick={() => setMakeType(t.id)}
-                        className={`px-4 py-3 font-medium transition-colors duration-200 ${makeType === t.id ? "bg-primary text-white border border-primary" : "bg-white text-gray-700 border border-gray-300 hover:border-primary"}`}
-                      >
-                        {t.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </>
             )}
 
             <div className="p-[18px] bg-white">
@@ -381,7 +327,7 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
               )}
             </div>
 
-            {product?.defaultSlots.length > 0 && (
+            {product?.defaultSlots?.length > 0 && (
               <div className="p-[18px] bg-white">
                 <TimeSlotSelector
                   slots={product.defaultSlots.map((slot) => ({
@@ -421,19 +367,44 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
             )}
 
             <div className="p-[18px] bg-white">
-              <QuantitySelector
-                quantity={quantity}
-                limit={quantityLimit}
-                onIncrease={() => {
-                  if (quantity < quantityLimit) setQuantity(quantity + 1);
-                }}
-                onDecrease={() =>
-                  setQuantity(Math.max(minQuantity, quantity - 1))
-                }
-                unitPrice={selectedMaterial ? selectedMaterial.price : 0}
-                currency={selectedMaterial ? selectedMaterial.currency : "AED"}
-                onCart={handleAddToCart}
-              />
+              {type === "kids" ? (
+                <QuantitySelector
+                  quantity={quantity}
+                  limit={quantityLimit}
+                  onIncrease={() => {
+                    if (quantity < quantityLimit) setQuantity(quantity + 1);
+                  }}
+                  onDecrease={() =>
+                    setQuantity(Math.max(12, quantity - 1))
+                  }
+                  unitPrice={selectedMaterial ? selectedMaterial.price : 0}
+                  currency={
+                    selectedMaterial ? selectedMaterial.currency : "AED"
+                  }
+                  onCart={() => handleAddToCart({ people: quantity })}
+                />
+              ) : (
+                <WorkshopQuantitySelector
+                  maxLimit={quantityLimit}
+                  unitPrice={selectedMaterial ? selectedMaterial.price : 0}
+                  currency={
+                    selectedMaterial ? selectedMaterial.currency : "AED"
+                  }
+                  onChange={({ wheelCount: wCount, handCount: hCount }) => {
+                    setWheelCount(wCount);
+                    setHandCount(hCount);
+                  }}
+                  onCart={({ wheelCount: wCount, handCount: hCount }) => {
+                    setWheelCount(wCount);
+                    setHandCount(hCount);
+                    handleAddToCart({
+                      people: wCount + hCount,
+                      hand: hCount,
+                      wheel: wCount,
+                    });
+                  }}
+                />
+              )}
             </div>
 
             {availabilityError && (

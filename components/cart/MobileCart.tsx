@@ -82,15 +82,47 @@ export default function MobileCart({
                   {item.workshopId.title}
                 </h3>
                 <div className="flex justify-between items-center text-gray-500">
-                  <p>
-                    x {item.people}{" "}
-                    <span className="ml-1">
-                      {item.currency} {item.price.toFixed(2)}
-                    </span>
-                  </p>
-                  <p className="font-medium text-[#113224]">
-                    {item.currency} {item.subtotal.toFixed(2)}
-                  </p>
+                  {item.workshopId.title !== "Adult's Birthday Party" ? (
+                    /* IF NOT "Adult's Birthday Party" -> Show standard price breakdown */
+                    <>
+                      <p>
+                        x {item.people}{" "}
+                        <span className="ml-1">
+                          {item.currency} {item.price.toFixed(2)}
+                        </span>
+                      </p>
+                      <p className="font-medium text-[#113224]">
+                        {item.currency} {item.subtotal.toFixed(2)}
+                      </p>
+                    </>
+                  ) : (
+                    /* ELSE ("Adult's Birthday Party") -> Show custom technique breakdown or logic */
+                    <>
+                      <div className="">
+                        {(item.wheelPottery ?? 0) > 0 && (
+                          <p className="mb-2">
+                            x {item.wheelPottery} Wheel Pottery
+                            <span className="ml-1">
+                              {item.currency}{" "}
+                              {Number(item.price ?? 0).toFixed(2)}
+                            </span>
+                          </p>
+                        )}
+                         {(item.handBuild ?? 0) > 0 && (
+                        <p>
+                          x {item.handBuild}
+                          {" Hand Building"}
+                          <span className="ml-1">
+                            {item.currency} {item.price.toFixed(2)}
+                          </span>
+                        </p>
+                        )}
+                      </div>
+                      <p className="font-medium text-[#113224]">
+                        {item.currency} {item.subtotal.toFixed(2)}
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -111,12 +143,12 @@ export default function MobileCart({
           This button uses the onCheckout prop passed down from MasterCartFlow 
           to transition to Step 1 (the detailed CartStep) 
         */}
-          <button
-            onClick={onCheckout}
-            className="w-full bg-[#113224] text-white py-4 font-medium text-[15px] hover:bg-[#0c251a] transition-colors rounded-sm shadow-sm"
-          >
-            Checkout
-          </button>
+        <button
+          onClick={onCheckout}
+          className="w-full bg-[#113224] text-white py-4 font-medium text-[15px] hover:bg-[#0c251a] transition-colors rounded-sm shadow-sm"
+        >
+          Checkout
+        </button>
 
         {/* Payment Methods */}
         <div className="text-center pb-8">

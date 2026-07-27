@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import FormInput from "@/components/form/FormInput";
 import { validateEmail } from "@/utils/validation";
 import { CartData } from "@/services/cart.service";
 import { CheckoutPayload } from "@/types";
-import { BookingService, IBookingService } from "@/services/booking.service";
+import { BookingService } from "@/services/booking.service";
 import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
+
 interface CheckoutFormData {
   firstName: string;
   lastName: string;
@@ -39,20 +40,74 @@ export default function CheckoutStep({
   onBack: () => void;
   data: CartData[];
 }) {
-  const [formData, setFormData] = useState<CheckoutFormData>(initialFormData);
+  // -------------------------------------------------------------
+  // 1. Initialize State from sessionStorage (Lazy Initialization)
+  // -------------------------------------------------------------
+  const [formData, setFormData] = useState<CheckoutFormData>(() => {
+    if (typeof window !== "undefined") {
+      const saved = sessionStorage.getItem("checkout_form_data");
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {
+          console.error("Failed to parse cached checkout form data:", e);
+        }
+      }
+    }
+    return initialFormData;
+  });
+
+  const [acceptedAddressDetails, setAcceptedAddressDetails] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("checkout_accepted_address") === "true";
+    }
+    return false;
+  });
+
+  const [acceptedTerms, setAcceptedTerms] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("checkout_accepted_terms") === "true";
+    }
+    return false;
+  });
+
+  const [acceptedRefund, setAcceptedRefund] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("checkout_accepted_refund") === "true";
+    }
+    return false;
+  });
+
+  // -------------------------------------------------------------
+  // 2. Persist State Changes into sessionStorage
+  // -------------------------------------------------------------
+  useEffect(() => {
+    sessionStorage.setItem("checkout_form_data", JSON.stringify(formData));
+  }, [formData]);
+
+  useEffect(() => {
+    sessionStorage.setItem("checkout_accepted_address", String(acceptedAddressDetails));
+  }, [acceptedAddressDetails]);
+
+  useEffect(() => {
+    sessionStorage.setItem("checkout_accepted_terms", String(acceptedTerms));
+  }, [acceptedTerms]);
+
+  useEffect(() => {
+    sessionStorage.setItem("checkout_accepted_refund", String(acceptedRefund));
+  }, [acceptedRefund]);
+
+  // Standard component states
   const [errors, setErrors] = useState<ValidationError[]>([]);
   const [formError, setFormError] = useState<string>("");
-  const [checkoutPayload, setCheckoutPayload] =
-    useState<CheckoutPayload | null>(null);
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [acceptedAddressDetails, setAcceptedAddressDetails] = useState(false);
-  const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [acceptedRefund, setAcceptedRefund] = useState(false);
+  
   const cartGrandTotal = data?.[0]?.grandTotal ?? 0;
   const bookingService = new BookingService();
   const userId: string = useAuthStore.getState().user?.userId ?? "";
   const hasItems = data?.[0]?.items?.length > 0;
+
   if (!hasItems) {
     return (
       <div className="w-full text-center py-24 text-gray-700">
@@ -79,6 +134,7 @@ export default function CheckoutStep({
       </div>
     );
   }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -192,6 +248,14 @@ export default function CheckoutStep({
     };
   };
 
+  // Helper to clear saved storage upon completion
+  const clearCheckoutStorage = () => {
+    sessionStorage.removeItem("checkout_form_data");
+    sessionStorage.removeItem("checkout_accepted_address");
+    sessionStorage.removeItem("checkout_accepted_terms");
+    sessionStorage.removeItem("checkout_accepted_refund");
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -210,12 +274,12 @@ export default function CheckoutStep({
 
       const raw = await bookingService.bookNow(payload);
       if (raw.data.checkoutUrl) {
+        // Clear saved form data right before redirecting to payment gateway
+        clearCheckoutStorage();
         window.location.href = raw.data.checkoutUrl;
-        // onNext();
       }
     } catch (error: any) {
       console.error(error);
-
       setFormError(error?.message || "Unable to continue. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -297,10 +361,8 @@ export default function CheckoutStep({
         </form>
       </div>
 
-      {/* Summary Sidebar (Similar to Cart, but with Terms checkboxes) */}
+      {/* Summary Sidebar */}
       <div className="w-full lg:w-1/3 bg-[#ece9e2] p-8 rounded-sm sticky top-8">
-        {/* ... Include the Subtotal & Coupon blocks from CartStep ... */}
-
         <div className="space-y-4 my-6 text-sm">
           <label className="flex items-start gap-3 cursor-pointer">
             <input
@@ -310,7 +372,7 @@ export default function CheckoutStep({
               onChange={(e) => {
                 setAcceptedAddressDetails(e.target.checked);
                 setErrors((prev) =>
-                  prev.filter((error) => error.field !== "acceptedAddressDetails"),
+                  prev.filter((error) => error.field !== "acceptedAddressDetails")
                 );
               }}
             />
@@ -333,12 +395,21 @@ export default function CheckoutStep({
               checked={acceptedTerms}
               onChange={(e) => {
                 setAcceptedTerms(e.target.checked);
-                setErrors((prev) => prev.filter((error) => error.field !== "acceptedTerms"));
+                setErrors((prev) =>
+                  prev.filter((error) => error.field !== "acceptedTerms")
+                );
               }}
             />
             <span className="text-gray-700">
-              I have read, understood, and agree to the{' '}
-              <Link href="/terms" className="text-[#113224] underline">Terms &amp; Conditions</Link>.
+              I have read, understood, and agree to the{" "}
+              <Link
+                href="/terms"
+                rel="noopener noreferrer"
+                className="text-[#113224] underline"
+              >
+                Terms &amp; Conditions
+              </Link>
+              .
             </span>
           </label>
           {errors.find((err) => err.field === "acceptedTerms") && (
@@ -354,12 +425,21 @@ export default function CheckoutStep({
               checked={acceptedRefund}
               onChange={(e) => {
                 setAcceptedRefund(e.target.checked);
-                setErrors((prev) => prev.filter((error) => error.field !== "acceptedRefund"));
+                setErrors((prev) =>
+                  prev.filter((error) => error.field !== "acceptedRefund")
+                );
               }}
             />
             <span className="text-gray-700">
-              I have read, understood, and agree to the{' '}
-              <Link href="/cancellation" className="text-[#113224] underline">Refund &amp; Reschedule Policy</Link>.
+              I have read, understood, and agree to the{" "}
+              <Link
+                href="/cancellation"
+                rel="noopener noreferrer"
+                className="text-[#113224] underline"
+              >
+                Refund &amp; Reschedule Policy
+              </Link>
+              .
             </span>
           </label>
           {errors.find((err) => err.field === "acceptedRefund") && (

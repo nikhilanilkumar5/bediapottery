@@ -73,7 +73,41 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <h3 className="font-semibold text-[#113224] mb-2 text-[15px]">{item.workshopId.title}</h3>
-                      <p className="text-sm text-gray-500">x {item.people} <span className="ml-2">{item.currency} {item.price.toFixed(2)}</span></p>
+                        {item.workshopId.title !== "Adult's Birthday Party" ? (
+                    /* IF NOT "Adult's Birthday Party" -> Show standard price breakdown */
+                    <>
+                      <p>
+                        x {item.people}{" "}
+                        <span className="ml-1">
+                          {item.currency} {item.price.toFixed(2)}
+                        </span>
+                      </p>
+                    </>
+                  ) : (
+                    /* ELSE ("Adult's Birthday Party") -> Show custom technique breakdown or logic */
+                    <>
+                      <div className="">
+                        {(item.wheelPottery ?? 0) > 0 && (
+                          <p className="mb-2">
+                            x {item.wheelPottery} Wheel Pottery
+                            <span className="ml-1">
+                              {item.currency}{" "}
+                              {Number(item.price ?? 0).toFixed(2)}
+                            </span>
+                          </p>
+                        )}
+                         {(item.handBuild ?? 0) > 0 && (
+                        <p>
+                          x {item.handBuild}
+                          {" Hand Building"}
+                          <span className="ml-1">
+                            {item.currency} {item.price.toFixed(2)}
+                          </span>
+                        </p>
+                        )}
+                      </div>
+                    </>
+                  )}
                     </div>
                     <div className="text-right flex flex-col items-end">
                       <button
@@ -84,6 +118,7 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
                       >
                         ✕
                       </button>
+                      
                       <p className="font-semibold text-[#113224]">{item.currency} {item.subtotal.toFixed(2)}</p>
                     </div>
                   </div>
