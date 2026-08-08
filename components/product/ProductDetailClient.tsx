@@ -10,6 +10,7 @@ import MaterialDescription from "./MaterialDescription";
 import DateSelector from "./DateSelector";
 import TimeSlotSelector from "./TimeSlotSelector";
 import QuantitySelector from "./QuantitySelector";
+import WorkshopQuantitySelector from "./WorkshopQuantitySelector";
 import BookingActions from "./BookingActions";
 import { BookingService, IBookingService } from "@/services/booking.service";
 import {
@@ -24,6 +25,7 @@ import { useAuthStore } from "@/store/authStore";
 interface ProductDetailClientProps {
   product: WorkshopItem;
   category: string;
+  slug: string;
   bookingService?: IBookingService;
 }
 
@@ -31,15 +33,23 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   bookingService = new BookingService(),
   product,
   category,
+  slug,
 }) => {
   const [selectedMaterialId, setSelectedMaterialId] = useState(
     product.options?.[0]?._id || "",
   );
+  const isCouplesPackage = slug === "couples-pottery-package";
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-   const minQuantity = category === "corporate-events" ? 12 : 1;
-  const maxQuantity = category === "corporate-events" ? 25 : 12;
+
+  const minQuantity =
+    category === "corporate-events" ? 12 : isCouplesPackage ? 2 : 1;
+
+  const maxQuantity =
+    category === "corporate-events" ? 25 : isCouplesPackage ? 12 : 12;
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(minQuantity);
+  const [wheelCount, setWheelCount] = useState(0);
+  const [handCount, setHandCount] = useState(0);
   const [dateError, setDateError] = useState<string>("");
   const [slotError, setSlotError] = useState<string>("");
   const userId: string = useAuthStore.getState().user?.userId ?? "";
@@ -55,7 +65,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
     [product.options, selectedMaterialId],
   );
 
-    const quantityLimit = Math.min(
+  const quantityLimit = Math.min(
     maxQuantity,
     capacityInfo?.remainingCapacity ?? maxQuantity,
   );
@@ -110,14 +120,14 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
 
       setCapacityLoading(true);
       setCapacityError("");
-    
+
       try {
-          console.log("category", category);
+        console.log("category", category);
         const res = await getPotteryCapacity({
           bookingDate: formattedDate,
           startTime: slot.startTime,
           endTime: slot.endTime,
-            ...(category === "corporate-events" && { bookingType: "events" }),
+          ...(category === "corporate-events" && { bookingType: "events" }),
         });
 
         setCapacityInfo(res.result ?? null);
@@ -158,13 +168,17 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
     return isValid;
   };
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (overrideCounts?: {
+    people?: number;
+    hand?: number;
+    wheel?: number;
+  }) => {
     const token: string | null = useAuthStore.getState().user?.token || null;
     if (!token) {
       router.push("/login");
       return;
     }
-    const success = await handlecheck("cart");
+    const success = await handlecheck("cart", overrideCounts);
     if (success) {
       router.push("/cart");
     }
@@ -184,21 +198,31 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   // const [activeTab, setActiveTab] = useState(
   //   product.moreDetails?.[0]?._id || "",
   // );
-  const handlecheck = async (destination: "cart" | "checkout") => {
+  const handlecheck = async (
+    destination: "cart" | "checkout",
+    overrideCounts?: { people?: number; hand?: number; wheel?: number },
+  ) => {
     if (!validateSelection()) {
       return false;
     }
 
+    const peopleCount = overrideCounts?.people ?? quantity;
+    const handPeople = overrideCounts?.hand ?? handCount;
+    const wheelPeople = overrideCounts?.wheel ?? wheelCount;
+
     const bookingData: BookingData = {
       userId: userId,
       workshopId: product._id,
-
       optionId: selectedMaterialId,
       bookingDate: formattedDate,
       slotId: selectedSlotId!,
-      people: quantity,
+      people: peopleCount,
       ...(category === "corporate-events"
-        ? { bookingType: "events" }
+        ? {
+            bookingType: "events",
+            handBuild: handPeople,
+            wheelPottery: wheelPeople,
+          }
         : { bookingType: "pottery" }),
     };
 
@@ -206,8 +230,12 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
       workshopId: product._id,
       bookingDate: formattedDate,
       slotId: selectedSlotId!,
-      guests: quantity,
+      guests: peopleCount,
       ...(category === "corporate-events" && { bookingType: "events" }),
+      ...(category === "corporate-events" && {
+        handBuild: handPeople,
+        wheelPottery: wheelPeople,
+      }),
     };
 
     const availabilityResponse = await getAvailabilityData(availabilityData);
@@ -240,38 +268,46 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   const isBookingDisabled = !selectedDate || !selectedSlotId || quantity < 1;
 
   return (
-    <div className="page-wrapper ">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Left Section - Media */}
-        <ProductMedia
-          imageUrl={product?.bannerImage || "/images/product/1.png"}
-          alt={product?.title}
-          images={product?.images}
-          videos={
-            product?.options
-              ?.filter(
-                (option) =>
-                  option.clayTypeVideo && option.clayTypethumbnailImage,
-              )
-              ?.map((option) => ({
-                id: option._id,
-                // The "|| ''" guarantees TypeScript a string is always provided
-                thumbnailUrl: option.clayTypethumbnailImage || "",
-                videoUrl: option.clayTypeVideo || "",
-              })) || []
-          }
-        />
-        {/* Right Section - Booking Panel */}
-        <div className=" md:p-6 lg:p-8 space-y-6  ">
+    <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#113224]">
+      <div className="page-wrapper px-[17px] grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+        <div className="flex flex-col gap-4 h-full">
+          <ProductMedia
+            imageUrl={product?.bannerImage || "/images/product/1.png"}
+            alt={product?.title}
+            images={product?.images}
+            videos={
+              product?.options
+                ?.filter(
+                  (option) =>
+                    option.clayTypeVideo && option.clayTypethumbnailImage,
+                )
+                ?.map((option) => ({
+                  id: option._id,
+                  // The "|| ''" guarantees TypeScript a string is always provided
+                  thumbnailUrl: option.clayTypethumbnailImage || "",
+                  videoUrl: option.clayTypeVideo || "",
+                })) || []
+            }
+          />
+        </div>
+
+        <div className="flex flex-col h-full md:p-6 lg:p-8 lg:pb-0 space-y-6">
           <div>
             <Title className="2xl:mb-7 text-2xl mb-5 font-normal">
               {product?.title}
             </Title>
-            {product?.description && (
-              <Content className=" leading-relaxed mb-7">
-                {product?.description}
+            <div>
+              {product?.description && (
+                <Content className=" leading-relaxed mb-1">
+                  {product?.description}
+                </Content>
+              )}
+              <Content className=" leading-relaxed !text-black  font-semibold">
+                {" "}
+                All-inclusive: Clay, tools, aprons, instructor & 1.5-hour
+                session.
               </Content>
-            )}
+            </div>
           </div>
           {category === "corporate-events" && (
             <div className="bg-white p-6 shadow-sm">
@@ -311,7 +347,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
             )}
           </div>
           {/* Date Selector */}
-          <div className="p-[18px]  bg-white">
+          <div className="p-[18px] bg-white">
             <DateSelector
               onDateSelect={handleDateSelect}
               selectedDate={selectedDate}
@@ -367,19 +403,52 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
 
           {/* Quantity Selector */}
           <div className="p-[18px] bg-white">
-            <QuantitySelector
-              quantity={quantity}
-              limit={quantityLimit}
-            onIncrease={() => {
-                  if (quantity < quantityLimit) setQuantity(quantity + 1);
+            {category === "corporate-events" ? (
+              <WorkshopQuantitySelector
+                maxLimit={quantityLimit}
+                unitPrice={selectedMaterial ? selectedMaterial.price : 0}
+                currency={selectedMaterial ? selectedMaterial.currency : "AED"}
+                onChange={({ wheelCount: wCount, handCount: hCount }) => {
+                  setWheelCount(wCount);
+                  setHandCount(hCount);
                 }}
-          onDecrease={() =>
-                  setQuantity(Math.max(minQuantity, quantity - 1))
-                }
-              unitPrice={selectedMaterial ? selectedMaterial.price : 0}
-              currency={selectedMaterial ? selectedMaterial.currency : "AED"}
-              onCart={handleAddToCart}
-            />
+                onCart={({ wheelCount: wCount, handCount: hCount }) => {
+                  setWheelCount(wCount);
+                  setHandCount(hCount);
+                  handleAddToCart({
+                    people: wCount + hCount,
+                    hand: hCount,
+                    wheel: wCount,
+                  });
+                }}
+              />
+            ) : (
+              <QuantitySelector
+                quantity={quantity}
+                limit={quantityLimit}
+                onIncrease={() => {
+                  if (isCouplesPackage) {
+                    if (quantity + 2 <= quantityLimit) {
+                      setQuantity(quantity + 2);
+                    }
+                  } else {
+                    if (quantity < quantityLimit) {
+                      setQuantity(quantity + 1);
+                    }
+                  }
+                }}
+                onDecrease={() => {
+                  if (isCouplesPackage) {
+                    setQuantity(Math.max(2, quantity - 2));
+                  } else {
+                    setQuantity(Math.max(minQuantity, quantity - 1));
+                  }
+                }}
+                unitPrice={selectedMaterial ? selectedMaterial.price : 0}
+                currency={selectedMaterial ? selectedMaterial.currency : "AED"}
+                onCart={handleAddToCart}
+              />
+            )}
           </div>
           {/* Booking Actions */}
           {availabilityError && (
@@ -391,7 +460,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
           />
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

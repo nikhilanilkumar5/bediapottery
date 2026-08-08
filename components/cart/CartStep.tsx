@@ -99,7 +99,7 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
                          {(item.handBuild ?? 0) > 0 && (
                         <p>
                           x {item.handBuild}
-                          {" Hand Building"}
+                          {" HandBuilding"}
                           <span className="ml-1">
                             {item.currency} {item.price.toFixed(2)}
                           </span>

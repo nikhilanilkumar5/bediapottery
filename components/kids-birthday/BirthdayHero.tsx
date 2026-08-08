@@ -290,9 +290,9 @@ const isBookingDisabled =
             <h1 className="text-[2.5rem] leading-tight font-neiko text-[#113224] mb-1">
               {product.title}
             </h1>
-            <h2 className="text-[2rem] font-neiko text-[#113224] mb-4">
+            {/* <h2 className="text-[2rem] font-neiko text-[#113224] mb-4">
               {type === "kids" ? "(3 - 13 Years)" : "(14 years & above)"}
-            </h2>
+            </h2> */}
             <p className="xl:text-base text-sm text-gray-800 leading-relaxed pr-4">
               {product.description}
             </p>
@@ -367,7 +367,7 @@ const isBookingDisabled =
             )}
 
             <div className="p-[18px] bg-white">
-              {type === "kids" ? (
+              {/* {type === "kids" ? (
                 <QuantitySelector
                   quantity={quantity}
                   limit={quantityLimit}
@@ -383,7 +383,7 @@ const isBookingDisabled =
                   }
                   onCart={() => handleAddToCart({ people: quantity })}
                 />
-              ) : (
+              ) : ( */}
                 <WorkshopQuantitySelector
                   maxLimit={quantityLimit}
                   unitPrice={selectedMaterial ? selectedMaterial.price : 0}
@@ -404,7 +404,7 @@ const isBookingDisabled =
                     });
                   }}
                 />
-              )}
+              {/* )} */}
             </div>
 
             {availabilityError && (

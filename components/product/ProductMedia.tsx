@@ -69,30 +69,30 @@ const thumbnails = useMemo(() => {
 }, [videos, images, imageUrl])
 
   return (
-    <div className={`flex lg:!-ml-20 lg:-mt-12 flex-col gap-2 ${className}`}>
+    <div className={`grid grid-cols-1 gap-2 ${className} lg:h-full lg:min-h-[680px] lg:grid-rows-[calc(65%_-_10px)_35%]`}>
       
-      {/* Main Feature Window - ALWAYS stays as the Banner Image */}
-      <div className="relative w-full h-[450px] lg:h-[calc(100vh-var(--header-h))]  overflow-hidden  bg-black">
+      {/* Main Feature Window - fixed mobile height, full height on desktop */}
+      <div className="relative w-full h-[360px] sm:h-[520px] lg:h-full overflow-hidden bg-black">
         <Image
           src={imageUrl || '/images/product/1.png'}
           alt={alt}
           fill
           priority
           className="object-cover"
-          sizes="(max-width: 1024px) 100vw, 50vw"
+          sizes="(max-width: 768px) 100vw, 65vw"
         />
       </div>
 
-      {/* Bottom Horizontal Thumbnails (videos first, then images to fill) */}
+      {/* Bottom thumbnails row - 35% height on desktop */}
       {thumbnails.length > 0 && (
-        <div className={`flex gap-2 w-full transition-all duration-300 lg:h-[360px] h-[240px]`}>
+        <div className="w-full grid grid-cols-3 gap-2 h-full transition-all duration-300 min-h-40">
           {thumbnails.map((item) => {
             if (item.type === 'video') {
               return (
                 <button
                   key={item.id}
                   onClick={() => setActiveVideoUrl(item.videoUrl)}
-                  className="flex-1 relative h-full overflow-hidden transition-all duration-200 group hover:opacity-95 focus:outline-none"
+                  className="relative w-full h-full overflow-hidden transition-all duration-200 group hover:opacity-95 focus:outline-none"
                   aria-label={`Play video ${item.id} in full screen`}
                 >
                   <Image
@@ -100,7 +100,7 @@ const thumbnails = useMemo(() => {
                     alt={`Video thumbnail preview ${item.id}`}
                     fill
                     className="object-cover"
-                    sizes="(max-width: 768px) 33vw, 15vw"
+                    sizes="(max-width: 768px) 100vw, 35vw"
                   />
 
                   <div className="absolute inset-0 bg-black/20 flex items-center justify-center transition-colors group-hover:bg-black/40">
@@ -110,7 +110,7 @@ const thumbnails = useMemo(() => {
                         alt="playbutton"
                         width={64}
                         height={64}
-                        className=" w-full h-full object-cover"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                   </div>
@@ -122,7 +122,7 @@ const thumbnails = useMemo(() => {
               <button
                 key={item.id}
                 onClick={() => setActiveImageUrl(item.src)}
-                className="flex-1 relative h-full overflow-hidden transition-all duration-200 group hover:opacity-95 focus:outline-none"
+                className="relative w-full h-full overflow-hidden transition-all duration-200 group hover:opacity-95 focus:outline-none"
                 aria-label={`View image ${item.id}`}
               >
                 <Image
@@ -130,7 +130,7 @@ const thumbnails = useMemo(() => {
                   alt={item.title || `Image ${item.id}`}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 33vw, 15vw"
+                  sizes="(max-width: 768px) 100vw, 35vw"
                 />
               </button>
             )

@@ -23,6 +23,7 @@ interface QuantitySelectorProps {
   buttonlabel?: string;
   className?: string;
   child?: boolean;
+  content?: string;
 }
 
 const QuantitySelector: React.FC<QuantitySelectorProps> = ({
@@ -35,6 +36,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   onchildDecrease,
   onCart,
   unitPrice,
+  content,
   totalPrice,
   currency,
   className = "",
@@ -54,11 +56,10 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
       {limit > 1 ? (
         <div>
           <Content className=" leading-relaxed !text-black  font-semibold">
-            Select Quantity & Book Your Slot
+            Select Participants & Reserve Your Spot
           </Content>
           <Content className=" leading-relaxed">
-            Choose the number of participants and add the workshop to your cart
-            to confirm your booking.
+          {content || "Choose the number of participants and add the workshop to your cart to confirm your booking."}
           </Content>
         </div>
       ) : (

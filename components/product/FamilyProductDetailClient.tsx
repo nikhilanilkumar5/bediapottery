@@ -11,6 +11,7 @@ import MaterialDescription from './MaterialDescription'
 import DateSelector from './DateSelector'
 import TimeSlotSelector from './TimeSlotSelector'
 import QuantitySelector from './QuantitySelector'
+import MakeTypeSelector, { MakeType } from './MakeTypeSelector'
 import BookingActions from './BookingActions'
 import { BookingService, IBookingService } from '@/services/booking.service'
 import { getAvailabilityData, getPotteryCapacity, PotteryCapacityResult } from '@/services/avaliablity.service'
@@ -35,6 +36,7 @@ const FamilyProductDetailClient: React.FC<ProductDetailClientProps> = ({
   )
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null)
+  const [makeType, setMakeType] = useState<MakeType>('wheel')
   const [quantity, setQuantity] = useState(1)
   const [childCount, setChildCount] = useState(1)
   const [dateError, setDateError] = useState<string>('')
@@ -229,7 +231,9 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
     slotId: selectedSlotId!,
     people: quantity + childCount,
     adult: quantity,
-    child: childCount
+    child: childCount,
+    wheelPottery: makeType === 'wheel' ? quantity + childCount : undefined,
+    handBuild: makeType === 'handbuilding' ? quantity + childCount : undefined,
   };
 
   const availabilityData: Availability = {
@@ -277,7 +281,7 @@ const uniqueMaterials = product?.options?.filter(option =>
 );
   return (
     <div className="page-wrapper ">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 -ml-">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 -ml- lg:pb-4">
         {/* Left Section - Media */}
        <ProductMedia
           imageUrl={product?.bannerImage || "/images/product/1.png"}
@@ -299,15 +303,28 @@ const uniqueMaterials = product?.options?.filter(option =>
         />
 
         {/* Right Section - Booking Panel */}
-        <div className=" md:p-6 lg:p-8 space-y-6 ">
+        <div className=" md:p-6 lg:p-8 lg:pb-0  space-y-6 ">
           <div>
                 <Title className="2xl:mb-7 mb-5 font-normal">{product?.title}</Title>
-            {product?.description && (
-               <Content className=" leading-relaxed mb-7">
-                       {product?.description}
-                        </Content>
-             
-            )}
+           <div>
+                         {product?.description && (
+                           <Content className=" leading-relaxed mb-1">
+                             {product?.description}
+                           </Content>
+                         )}
+                         <Content className=" leading-relaxed !text-black  font-semibold">
+                           {" "}
+                           All-inclusive: Clay, tools, aprons, instructor & 1.5-hour
+                           session.
+                         </Content>
+                       </div>
+          </div>
+
+          <div className="p-[18px] bg-white">
+            <MakeTypeSelector
+              selectedType={makeType}
+              onTypeChange={setMakeType}
+            />
           </div>
 
 <div className="p-[18px] bg-white">
@@ -386,6 +403,7 @@ const uniqueMaterials = product?.options?.filter(option =>
             <div className="p-[18px] bg-white">
              
           <QuantitySelector
+          content={"Kids Category: 3-13 Years & Adults Category: 14 Years & Above "}
   quantity={quantity}
   limit={quantityLimit}
   onIncrease={() => {

@@ -42,7 +42,7 @@ const clientLogos = [
 
 const ClientLogosSlider = () => {
   return (
-    <div className="mt-5   bg-white p-6 md:p-8 lg:p-10 !pb-16">
+    <div className=" bg-white p-6 md:p-8 lg:p-10 !pb-16">
       
       {/* Optional Top Heading Track */}
       <div className="mb-8 text-center">

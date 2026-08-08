@@ -1,31 +1,34 @@
 import { AboutPageData } from "@/types";
-
 export const aboutPageData: AboutPageData = {
   hero: {
-    title: "A Place to Create, Connect, and Celebrate",
+    title: "Bedia (be·di·a)",
     subtitle: "About Us",
     description:
-      " Discover the joy of crafting at Bedia Pottery, a premium hub where art meets soul. Here, we offer a rich array of workshops tailored to foster creativity in both novices and veterans alike. From handbuilding and wire sculpture to pottery on the wheel. It's more than a class; it's an experience, an opportunity to relax, enjoy, and craft beautiful memories along with splendid pottery. Join us to indulge in the triple delight of pottery, shared joy, and creative growth. Our community welcomes every individual, whether a budding artist, where every creation is a masterpiece, and where every day is a celebration of artistic endeavor.",
+      "Bedia represents something truly unique—created by hand and impossible to duplicate. Every handmade piece tells its own story, and that belief is the foundation of our studio. Founded in 2023, Bedia Pottery was built with one vision: pottery should be more than a workshop—it should be an experience. We have redefined pottery in Dubai by creating a clean, hygienic, premium, and cozy studio where everyone feels welcome. Whether you're joining a pottery wheel class, handbuilding workshop, or celebrating with friends, family, or a loved one, our goal is simple: to help you relax, create, and make lasting memories. Our beginner-friendly workshops are guided by passionate instructors, while our warm hospitality ensures every guest enjoys a personal and unforgettable experience.",
     imageUrl: "/images/banner/about-banner.jpg",
-    points: "Pottery. People. Pleasure."
+    points: "Pottery. People. Pleasure.",
   },
+
   mission: {
     title: "Our Mission",
     description:
-      "Bedia Pottery is devoted to creating a nurturing space that goes beyond a typical workshop; it is a haven of creativity where every individual is respected, encouraged, and nurtured to reach their fullest artistic potential. With a diverse range of offerings from clay and wire sculpting to pottery on wheel and specialized kids sessions, we are here to guide you at every step of your artistic journey, fostering a community where learning is a joyous, shared experience, and where every creation is a celebration of the artistic spirit.",
+      "Our mission is to make pottery accessible, memorable, and meaningful for everyone. We are committed to delivering premium pottery experiences in a clean, welcoming environment where creativity, genuine hospitality, and human connection come together. Every workshop is thoughtfully designed to help people slow down, create with confidence, and leave with both a handmade piece and a lasting memory.",
     imageUrl: "/images/about/mission.jpg",
     imagePosition: "right" as const,
   },
+
   vision: {
     title: "Our Vision",
     description:
-      "At Bedia Pottery, our vision is to establish a lively center for artistic expression, where individuals of all ages and backgrounds come together to create not just stunning pottery, but also deep, meaningful connections. We aspire to cultivate a thriving community that celebrates creativity, inspiring everyone to discover and nurture their artistic talents. Through shared experiences and a collective passion for the arts, we aim to forge lasting relationships that enrich our lives and the community as a whole.",
+      "Our vision is to become the world's most loved pottery experience brand by continuously redefining how people connect with clay. Beyond our studio workshops, we are expanding our creative journey through Bedia Privé—the world's first luxury Clay & Dine experience—where life's special moments are celebrated through creativity, fine dining, and unforgettable memories instead of traditional celebrations. We are also introducing Home Pottery, bringing the complete pottery experience directly into people's homes. We believe everyone deserves the opportunity to slow down, create something truly unique by hand, and experience the joy that comes with it.",
     imageUrl: "/images/about/vision.jpg",
     imagePosition: "left" as const,
   },
+
   fullWidth: {
-    title: "A Unique Fusion Of Art Mental Health & Fun",
-    subtitle: "Where creativity nurtures the mind, uplifts the soul, and sparks joy.",
+    title: "A Unique Fusion of Art, Wellness & Meaningful Experiences",
+    subtitle:
+      "Where creativity brings people together, inspires lasting memories, and transforms everyday moments into unforgettable experiences.",
     backgroundImageUrl: "/images/banner/about-footer-banner.jpg",
   },
 };

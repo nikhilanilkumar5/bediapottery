@@ -37,7 +37,7 @@ import { WorkshopItem } from "@/services/workshop.service";
   {
     num: "05",
     title: "Drying & Packing",
-    time: "15 Mins",
+    time: "00 Mins",
     desc: "Your Pot Is Carefully Packed To Take Home By Our Team",
     note: "Only For Air Dry Clay",
   },
@@ -98,7 +98,7 @@ const currentTimeline =
 
             <div className="bg-white p-8 lg:p-10 text-center shadow-sm flex flex-col items-center">
               <div className="bg-[#e4ece8] text-[#113224] w-full py-4 text-[15px] mb-8">
-                Hand building: Mold clay with your hands with step-by-step guidance 
+                Handbuilding: Mold clay with your hands with step-by-step guidance 
               </div>
               <p className="text-[14px] text-black mb-2">Minimum Number Of Participants: 12</p>
               <p className="text-[14px] text-black">Maximum Number Of Participants: 25</p>
@@ -152,7 +152,7 @@ const currentTimeline =
           </div>
         </div>
  <div>
-          <h2 className="text-2xl font-neiko text-[#113224] mb-6">Birthday Pottery Event Timeline</h2>
+          <h2 className="text-2xl font-neiko text-[#113224] mb-6">Birthday Party Event Timeline</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             {currentTimeline.map((step, i) => (
               <div key={i} className="bg-white p-6 flex flex-col items-center text-center shadow-sm">

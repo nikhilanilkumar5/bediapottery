@@ -103,7 +103,7 @@ export default function OccasionSelector({
       {/* Main Bar */}
       <div
         ref={containerRef}
-        className="bg-secondary-dark p-2 sm:p-3 flex items-center gap-2 relative font-sans w-full max-w-full overflow-hidden"
+        className="bg-secondary-dark p-2 sm:p-3 flex items-center gap-2 relative font-sans w-full max-w-full "
       >
         {visible.map((item) => {
           const isSelected = occasion === item;
@@ -150,7 +150,7 @@ export default function OccasionSelector({
           </button>
 
           {isDropdownOpen && (
-            <div className="absolute right-0 top-full mt-1 w-48 sm:w-56 bg-white border border-gray-200 shadow-xl rounded-md overflow-hidden z-30">
+            <div className="absolute right-0 top-full z-50 mt-1 w-48 sm:w-56 bg-white border border-gray-200 shadow-xl rounded-md overflow-hidden ">
               <div className="py-1 max-h-60 overflow-y-auto">
                 {extra.map((item) => {
                   const isSelected = occasion === item;

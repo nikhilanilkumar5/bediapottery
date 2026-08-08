@@ -20,12 +20,17 @@ const MaterialDescription: React.FC<MaterialDescriptionProps> = ({
   className = '',
 }) => {
   const [isOpen, setIsOpen] = useState(false)
-
+const items = description.includes("•")
+  ? description
+      .split("•")
+      .map(item => item.trim())
+      .filter(Boolean)
+  : [description];
   return (
     <div className={` bg-[#EDE8E266] border border-[#0D463D33] ${className}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-gray-50 transition-colors rounded-lg"
+        className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-gray-50 transition-colors "
       >
      
          <Content className=" leading-relaxed  font-semibold">
@@ -45,14 +50,17 @@ const MaterialDescription: React.FC<MaterialDescriptionProps> = ({
           />
         </svg>
       </button>
-      {isOpen && (
-        <div className="px-4 pb-4  border-t border-gray-200 pt-4">
-           <Content className=" leading-relaxed ">
-                                   {description}
-                                  </Content>
-        
-        </div>
-      )}
+    {isOpen && (
+  <div className="px-4 pb-4 border-t border-gray-200 pt-4">
+    <ul className="list-disc pl-5 space-y-2">
+      {items.map((item, index) => (
+        <li key={index}>
+          <Content>{item}</Content>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
     </div>
   )
 }

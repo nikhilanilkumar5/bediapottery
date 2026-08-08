@@ -8,12 +8,22 @@ interface WorkshopQuantitySelectorProps {
   currency: string;
   maxLimit?: number; // Overall combined cap (e.g. 25)
   buttonLabel?: string;
-  onChange?: (details: { wheelCount: number; handCount: number; totalPrice: number }) => void;
-  onCart: (details: { wheelCount: number; handCount: number; totalPrice: number }) => void;
+  onChange?: (details: {
+    wheelCount: number;
+    handCount: number;
+    totalPrice: number;
+  }) => void;
+  onCart: (details: {
+    wheelCount: number;
+    handCount: number;
+    totalPrice: number;
+  }) => void;
   className?: string;
 }
 
-export const WorkshopQuantitySelector: React.FC<WorkshopQuantitySelectorProps> = ({
+export const WorkshopQuantitySelector: React.FC<
+  WorkshopQuantitySelectorProps
+> = ({
   unitPrice = 0,
   currency,
   maxLimit = 25,
@@ -88,7 +98,8 @@ export const WorkshopQuantitySelector: React.FC<WorkshopQuantitySelectorProps> =
           Select Participants for Each Technique
         </Content>
         <Content className="leading-relaxed text-sm text-gray-600">
-          Wheel max 16 participants, Hand Building max 25 participants. Combined total cannot exceed {TOTAL_MAX}.
+          Minimum 12 participants • Maximum 25 participants (combined
+          total){" "}
         </Content>
       </div>
 
@@ -111,8 +122,18 @@ export const WorkshopQuantitySelector: React.FC<WorkshopQuantitySelectorProps> =
               disabled={wheelCount <= WHEEL_MIN}
               className="w-10 h-10 border border-black/30 flex items-center justify-center disabled:opacity-30 transition bg-white"
             >
-              <svg className="w-4 h-4" fill="none" stroke="black" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="black"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M20 12H4"
+                />
               </svg>
             </button>
 
@@ -126,8 +147,18 @@ export const WorkshopQuantitySelector: React.FC<WorkshopQuantitySelectorProps> =
               disabled={wheelCount >= WHEEL_MAX || totalPersons >= TOTAL_MAX}
               className="w-10 h-10 border border-black/30 flex items-center justify-center disabled:opacity-30 transition bg-white"
             >
-              <svg className="w-4 h-4" fill="none" stroke="black" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="black"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
               </svg>
             </button>
           </div>
@@ -137,7 +168,7 @@ export const WorkshopQuantitySelector: React.FC<WorkshopQuantitySelectorProps> =
         <div className="bg-gray-50 border border-gray-200 p-4 rounded-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex-1">
             <h4 className="font-semibold text-black text-sm md:text-base">
-              Hand Building
+              HandBuilding
             </h4>
             <p className="text-xs text-gray-500">
               Mold clay with hands (Max {HAND_MAX})
@@ -151,8 +182,18 @@ export const WorkshopQuantitySelector: React.FC<WorkshopQuantitySelectorProps> =
               disabled={handCount <= HAND_MIN}
               className="w-10 h-10 border border-black/30 flex items-center justify-center disabled:opacity-30 transition bg-white"
             >
-              <svg className="w-4 h-4" fill="none" stroke="black" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="black"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M20 12H4"
+                />
               </svg>
             </button>
 
@@ -166,8 +207,18 @@ export const WorkshopQuantitySelector: React.FC<WorkshopQuantitySelectorProps> =
               disabled={handCount >= HAND_MAX || totalPersons >= TOTAL_MAX}
               className="w-10 h-10 border border-black/30 flex items-center justify-center disabled:opacity-30 transition bg-white"
             >
-              <svg className="w-4 h-4" fill="none" stroke="black" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="black"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
               </svg>
             </button>
           </div>
@@ -176,7 +227,8 @@ export const WorkshopQuantitySelector: React.FC<WorkshopQuantitySelectorProps> =
         {/* Validation Warning */}
         {totalPersons < TOTAL_MIN && (
           <p className="text-xs text-amber-700 font-medium">
-            * Private events require a minimum of {TOTAL_MIN} total participants.
+            * Private events require a minimum of {TOTAL_MIN} total
+            participants.
           </p>
         )}
         {totalPersons > TOTAL_MAX && (

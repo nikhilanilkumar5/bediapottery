@@ -36,11 +36,18 @@ const AboutHeroSection: React.FC<AboutHeroProps> = ({
           <Title className=" mb-6 font-normal max-w-md !leading-[120%]">
             {title}
           </Title>
-          <Content className="!font-medium leading-relaxed mb-6">
+          {/* <Content className="!font-medium leading-relaxed mb-6">
             {points}
-          </Content>
+          </Content> */}
           <Content className=" leading-relaxed">
-            {description}
+            Bedia means something truly unique, created by hand, that no one can ever duplicate. Every handmade piece carries its own story, and that belief is the foundation of our studio.
+<br />
+<br />
+Founded in 2023, Bedia Pottery was created with one vision: pottery should be more than a workshop “it should be an experience.“
+<br />
+<br />
+We set out to redefine pottery in Dubai by creating a clean, hygienic, premium, and cozy pottery studio where everyone feels welcome. Whether you're joining a pottery wheel class, handbuilding workshop, or a creative experience with friends, family, or a loved one, our goal is simple: to help you relax, create, and make lasting memories. Our beginner-friendly workshops are guided by passionate instructors, but what truly defines Bedia is our hospitality. Every guest is welcomed with care, every detail is thoughtfully considered, and every visit is designed to feel warm, personal, and unforgettable.
+
           </Content>
         </div>
       </div>

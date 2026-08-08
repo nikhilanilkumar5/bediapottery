@@ -148,15 +148,15 @@ useEffect(() => {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-14 h-14 rounded-full border-[0.5px] border-secondary-off flex items-center justify-center hover:border-white/50 transition-colors duration-200"
+                    className="h-11 w-11 rounded-full border-[0.5px] border-secondary-off flex items-center justify-center hover:border-white/50 transition-colors duration-200"
                     aria-label={social.name}
                   >
                     <Image
                       src={social.icon}
                       alt={social.name}
-                      width={24}
-                      height={24}
-                      className="w-7 h-7"
+                      width={20}
+                      height={20}
+                      className="w-5 h-5"
                     />
                   </a>
                 ))}

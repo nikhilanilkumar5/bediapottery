@@ -79,7 +79,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
                       <Content className="!text-secondary-off mb-4 lg:mb-10 ">
                         {card.category?.shortDescription}
                       </Content>
-                          <ExploreButton href={`/workshops/${card.category?.slug}`} />
+                          <ExploreButton href={cardHref} />
                         </div>
                       </div>
                     </div>
@@ -97,7 +97,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
                         {card.category?.shortDescription}
                       </Content>
 
-                      <ExploreButton href={`/workshops/${card.category?.slug}`} />
+                      <ExploreButton href={cardHref} />
                     </div>
                   )}
                 </div>

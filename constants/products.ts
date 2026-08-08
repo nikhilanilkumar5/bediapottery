@@ -10,7 +10,7 @@ export const categories: Category[] = [
   },
   {
     id: '2',
-    name: 'Hand building',
+    name: 'Handbuilding',
     slug: 'hand-building',
     description: 'Learn the art of hand-building pottery using various techniques.',
   },

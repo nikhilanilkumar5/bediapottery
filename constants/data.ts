@@ -156,22 +156,22 @@ export const socialMedia: SocialMedia[] = [
   {
     name: "Facebook",
     icon: "/images/icons/fb.svg",
-    href: "https://facebook.com",
+    href: "https://www.facebook.com/bediapottery/",
   },
   {
     name: "Instagram",
     icon: "/images/icons/insta.svg",
-    href: "https://instagram.com",
+    href: "https://www.instagram.com/bediapottery/",
   },
   {
     name: "TikTok",
     icon: "/images/icons/tiktok.svg",
-    href: "https://tiktok.com",
+    href: "https://www.tiktok.com/@bedia.pottery",
   },
   {
     name: "Snapchat",
     icon: "/images/icons/snapchat.svg",
-    href: "https://snapchat.com",
+    href: "https://www.snapchat.com/add/bediapotteryllc?share_id=L-4TibqRyo8&locale=en-GB",
   },
 ];
 
