@@ -51,8 +51,6 @@ export async function validateGiftData(
 
   const raw = await res.json().catch(() => null);
 
-  console.log("Gift validation API:", raw);
-
   if (!res.ok) {
     throw new Error(
       `Gift validation failed: ${res.status} ${res.statusText}${
@@ -90,7 +88,6 @@ export async function confirmGiftRedeem(
 
   const raw = await res.json().catch(() => null);
 
-  console.log("Gift redemption confirmation API:", raw);
 
   if (!res.ok) {
     throw new Error(

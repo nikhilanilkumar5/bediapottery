@@ -122,7 +122,6 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
       setCapacityError("");
 
       try {
-        console.log("category", category);
         const res = await getPotteryCapacity({
           bookingDate: formattedDate,
           startTime: slot.startTime,

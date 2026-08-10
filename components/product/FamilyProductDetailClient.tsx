@@ -28,9 +28,6 @@ const FamilyProductDetailClient: React.FC<ProductDetailClientProps> = ({
   bookingService = new BookingService(),
   product
 }) => {
-  useEffect(() => {   
-    console.log('Received product data:', product)
-  }, [product])
   const [selectedMaterialId, setSelectedMaterialId] = useState(
     product.options?.[0]?._id || ''
   )
@@ -139,11 +136,6 @@ const handleDateSelect = (date: Date) => {
     setSelectedDate(date)
     setSelectedSlotId(null)
 
-    console.log('Date object:', date)
-    console.log(
-      'Formatted:',
-      format(date, 'yyyy-MM-dd')
-    )
   }
 
   setDateError('')

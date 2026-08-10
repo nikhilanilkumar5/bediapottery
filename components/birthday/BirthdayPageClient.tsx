@@ -35,11 +35,9 @@ const BirthdayPageClient: React.FC<BirthdayPageClientProps> = ({
   const handlePackageSelect = (packageId: string) => {
     setSelectedPackageId(packageId)
     // Can be extended with booking logic
-    console.log('Selected package:', packageId)
   }
 
   const handlePricingSelect = (tierId: string) => {
-    console.log('Selected pricing tier:', tierId)
     // Can be extended with navigation to booking form
   }
 

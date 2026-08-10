@@ -21,6 +21,7 @@ export async function getReviewsData(page : number, limit: number): Promise<Revi
     headers: {
       "Content-Type": "application/json",
     },
+     cache: "no-store",
   });
 
   const raw = await res.json().catch(() => null);

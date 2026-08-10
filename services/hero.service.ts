@@ -28,11 +28,11 @@ export async function getHeroSlides(): Promise<HeroSlide[]> {
     headers: {
       "Content-Type": "application/json",
     },
+    cache: "no-store",
   });
 
   const raw = await res.json().catch(() => null);
 
-  console.log("Hero slides APIv:", raw);
   if (!res.ok) {
     throw new Error(
       `Hero slides failed: ${res.status} ${res.statusText}${
@@ -62,7 +62,6 @@ export async function getOpeningHours(): Promise<OpeningHoursResponse> {
 
   const raw = await res.json().catch(() => null);
 
-  console.log("Opening Hours API:", raw);
 
   if (!res.ok) {
     throw new Error(

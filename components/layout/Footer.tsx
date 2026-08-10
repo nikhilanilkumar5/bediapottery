@@ -13,7 +13,6 @@ useEffect(() => {
   const loadOpeningHours = async () => {
     try {
       const data = await getOpeningHours();
-      console.log("Opening Hours Data:", data);
       setOpeningHours(data?.openingHours[0]);
     } catch (error) {
       console.error(error);

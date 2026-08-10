@@ -26,10 +26,6 @@ interface BirthdayProps {
 }
 
 const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
-  useEffect(() => {
-    console.log("Received product data in BirthdayHero:", product);
-  }, [product]);
-
   const minQuantity = type === "kids" ? 12 : 25;
   const maxQuantity = 25;
 

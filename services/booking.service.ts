@@ -47,7 +47,6 @@ const token : string | null = useAuthStore.getState().user?.token || null
       .json()
       .catch(() => null)
 
-    console.log('Add to cart API:', raw)
 
     if (!res.ok || raw?.success === false || raw?.msuccess === false) {
       throw new Error(
@@ -87,8 +86,6 @@ const token : string | null = useAuthStore.getState().user?.token || null
     const raw = await res
       .json()
       .catch(() => null)
-
-    console.log('Book now API:', raw)
 
     if (!res.ok || raw?.success === false || raw?.msuccess === false) {
       throw new Error(

@@ -97,7 +97,6 @@ export async function getWorkshopData(slug: string): Promise<WorkshopItem> {
 
   const raw = await res.json().catch(() => null);
 
-  console.log("Workshop API:", raw, slug);
 
   if (!res.ok) {
     throw new Error(

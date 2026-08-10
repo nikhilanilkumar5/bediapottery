@@ -270,7 +270,6 @@ export default function CheckoutStep({
       const payload = buildCheckoutPayload();
 
       localStorage.setItem("checkoutCartStep", "1");
-      console.log("Checkout payload:", payload);
 
       const raw = await bookingService.bookNow(payload);
       if (raw.data.checkoutUrl) {

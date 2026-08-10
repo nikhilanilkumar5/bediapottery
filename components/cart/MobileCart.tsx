@@ -1,5 +1,4 @@
-"use client";
-import React, { useEffect } from "react";
+
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { CartData, deleteCart } from "@/services/cart.service";
@@ -18,9 +17,6 @@ export default function MobileCart({
   const cartTotal = data?.[0]?.totalAmount ?? 0;
   const currency = cartItems?.[0]?.currency || "AED";
 
-  useEffect(() => {
-    console.log("Cart data received in MobileCart:", cartItems);
-  }, [cartItems]);
 
   if (cartItems.length === 0) {
     return (

@@ -21,7 +21,6 @@ export async function getTermsData(): Promise<TermItem[]> {
 
   const raw = await res.json().catch(() => null);
 
-  console.log("Terms data API:", raw);
   if (!res.ok) {
     throw new Error(
       `Terms data failed: ${res.status} ${res.statusText}${

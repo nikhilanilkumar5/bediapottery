@@ -103,7 +103,6 @@ export async function deleteCart(deleteData: deleteCartData): Promise<CartData[]
 
   const raw = await res.json().catch(() => null);
 
-  console.log("Cart data API:", raw);
   if (!res.ok) {
     throw new Error(
       `Cart data failed: ${res.status} ${res.statusText}${

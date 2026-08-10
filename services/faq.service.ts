@@ -32,9 +32,6 @@ export async function getFaqData(
   params.set("limit", String(limit));
 
   const url = `${API_BASE_URL}/faq/all?${params.toString()}`;
-
-  console.log("FAQ URL:", url);
-
   const res = await fetch(url, {
     method: "GET",
     headers: {
@@ -44,9 +41,6 @@ export async function getFaqData(
   });
 
   const raw = await res.json().catch(() => null);
-
-  console.log("FAQ API response:", raw);
-  console.log("FAQ count:", raw?.result?.faqs?.length);
 
   if (!res.ok) {
     throw new Error(

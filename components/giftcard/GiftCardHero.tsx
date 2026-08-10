@@ -83,7 +83,6 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
 
     // 2. Intercept check if user is not logged in
     if (!token || token == null) {
-      console.log(token);
       setAvailabilityError(
         "Your cart is tied to your account. Please log in to continue.",
       );
