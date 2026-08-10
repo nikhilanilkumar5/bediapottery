@@ -1,10 +1,11 @@
-import React from "react";
+
 import ProductCard from "@/components/product/ProductCard";
 import { notFound } from "next/navigation";
 import { Content, Title } from "@/components/ui";
 import TestimonialsSection from "@/components/testimonial/TestimonialsSection";
 import { getCategoryData } from "@/services/category.service";
 import WorkshopCategoryList from "@/components/workshops/WorkshopCategoryList";
+import { getWorkshopData } from "@/services/workshop.service";
 
 interface CategoryPageProps {
   params: Promise<{
@@ -16,7 +17,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category } = await params;
 
   const data = await getCategoryData(category);
-
+ const giftData = await getWorkshopData("a-gift-made-by-hand-from-the-heart")
   // Check category exists
   if (!data.totalCount || data.totalCount === 0) {
     notFound();
@@ -76,6 +77,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 }}
               />
             ))}
+             <ProductCard
+                product={{
+                  id: giftData._id,
+                  title: giftData.title,
+                  imageUrl: giftData.bannerImage,
+                  slug: "",
+                  mainSlug: "gift-cards",
+                  description: giftData.shortDescription,
+                  price: giftData.options[1].price,
+                  currency: giftData.options[1].currency,
+                }}
+              />
           </div>
         ) : (
           <div className="text-center py-16">

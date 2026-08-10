@@ -25,7 +25,6 @@ export async function getReviewsData(page : number, limit: number): Promise<Revi
 
   const raw = await res.json().catch(() => null);
 
-  console.log(`Reviews data API (Page ${page}):`, raw);
   
   if (!res.ok) {
     throw new Error(

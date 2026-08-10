@@ -1,6 +1,5 @@
 
-import FaqList from "@/components/faq/FaqList"
-import { Title, Content } from "@/components/ui"
+import { Title } from "@/components/ui"
 import { FaqSearch } from "@/components/faq/FaqSearch"
 import { getFaqData } from "@/services/faq.service"
 
@@ -10,21 +9,16 @@ export const metadata = {
 }
 
 export default async function FAQPage() {
-  const faqData = await getFaqData()
+  const faqData = await getFaqData("general", 1, 100,)
 
   return (
     <main className="min-h-screen bg-[#F3EFE8]">
       <section className="page-wrapper px-[17px]  py-24">
-          <Title className="mb-12 text-center">
-            General Frequently Asked Questions
-          </Title>
-         <FaqSearch />
+        <Title className="mb-12 text-center">
+          General Frequently Asked Questions
+        </Title>
 
-
-        {/* FAQ LIST */}
-        <div className="">
-          <FaqList items={faqData} />
-        </div>
+        <FaqSearch initialItems={faqData} category="general" />
       </section>
     </main>
   )

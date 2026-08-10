@@ -26,7 +26,7 @@ const faqData = await getFaqData(category, 1, 8)
           <ClientLogosSlider />
          )}
       {faqData.length > 0 && (
-        <section className="page-wrapper lg:px-[17px] py-12 lg:py-24">
+        <section className="page-wrapper  py-12 lg:py-24">
          <Title className="lg:mb-12 mb-8 text-center">
             General Frequently Asked Questions
           </Title>

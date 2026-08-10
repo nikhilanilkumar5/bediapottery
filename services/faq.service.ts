@@ -9,11 +9,11 @@ function assertApiBaseUrl() {
     );
   }
 }
-
 export async function getFaqData(
   category?: string,
   page = 1,
-  limit = 10
+  limit = 100,
+  searchLetters?: string,
 ): Promise<FAQItem[]> {
   assertApiBaseUrl();
 
@@ -23,23 +23,30 @@ export async function getFaqData(
     params.set("category", category);
   }
 
+  const trimmedSearch = searchLetters?.trim();
+  if (trimmedSearch && trimmedSearch.length >= 3) {
+    params.set("search", trimmedSearch);
+  }
+
   params.set("page", String(page));
   params.set("limit", String(limit));
 
-  const res = await fetch(
-    `${API_BASE_URL}/faq/all?${params.toString()}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      cache: "no-store",
-    }
-  );
+  const url = `${API_BASE_URL}/faq/all?${params.toString()}`;
+
+  console.log("FAQ URL:", url);
+
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+  });
 
   const raw = await res.json().catch(() => null);
 
-  console.log("FAQ data API:", raw);
+  console.log("FAQ API response:", raw);
+  console.log("FAQ count:", raw?.result?.faqs?.length);
 
   if (!res.ok) {
     throw new Error(
