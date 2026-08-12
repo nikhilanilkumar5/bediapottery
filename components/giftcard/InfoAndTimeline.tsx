@@ -32,10 +32,15 @@ export default function InfoAndTimeline({ product }: GiftCardHeroProps) {
           </div>
 
           {/* Tab Content */}
-          <div className="text-sm text-gray-800 leading-relaxed max-w-5xl whitespace-pre-wrap">
-            {product?.moreDetails?.find((t) => t._id === activeTab)
-              ?.description || "Select a tab to see more details."}
-          </div>
+          <Content className="!text-sm text-gray-800 leading-relaxed  whitespace-pre-wrap">
+            <span
+              dangerouslySetInnerHTML={{
+                __html:
+                  product?.moreDetails?.find((t) => t._id === activeTab)
+                    ?.description || "Select a tab to see more details.",
+              }}
+            />
+          </Content>
         </div>
 
         {/* --- TIMELINE SECTION --- */}

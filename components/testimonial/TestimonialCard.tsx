@@ -112,7 +112,7 @@ const TestimonialCard: React.FC<Props> = ({ testimonial }) => {
 
       {/* Text */}
 
-      <Content className="  leading-none font-normal mb-5">
+      <Content className="  leading-1.5 font-normal mb-5">
         {testimonial.text}
       </Content>
       <div className="">

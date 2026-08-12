@@ -303,8 +303,8 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
               )}
               <Content className=" leading-relaxed !text-black  font-semibold">
                 {" "}
-                All-inclusive: Clay, tools, aprons, instructor & 1.5-hour
-                session.
+                All-inclusive: Clay, tools, aprons, instructor &  {category === "corporate-events" ? "2-hour event." : "1.5-hour session."}
+                 
               </Content>
             </div>
           </div>

@@ -1,7 +1,7 @@
 "use client"
 
-import Image from "next/image"
 import React from "react"
+import Image from "next/image"
 import { Content } from "../ui"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -16,34 +16,32 @@ const FaqItemSmall: React.FC<FaqItemProps> = ({
   question,
   answer,
   isOpen,
-  onToggle
+  onToggle,
 }) => {
   return (
     <div className="bg-white shadow-sm overflow-hidden">
-      {/* QUESTION */}
       <button
+        type="button"
         onClick={onToggle}
-        className="w-full flex items-center justify-between px-3 py-2 text-left"
+        className="group w-full flex items-center justify-between px-3 py-2 text-left"
       >
         <span className="font-medium text-sm text-darkblack">
           {question}
         </span>
 
-        <motion.div
-          animate={{ rotate: isOpen ? 90 : 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-        >
-          <Image
-            src="/images/icons/circle-arrow.svg"
-            alt="Toggle"
-            width={24}
-            height={24}
-            className="w-[24px] h-[24px]"
-          />
-        </motion.div>
+        <Image
+          src="/images/icons/circle-arrow.svg"
+          alt="Toggle"
+          width={46}
+          height={46}
+          className={`
+            w-[32px] h-[32px] shrink-0
+            transition-transform duration-300 ease-in-out
+            ${isOpen ? "rotate-90" : "rotate-0"}
+          `}
+        />
       </button>
 
-      {/* ANSWER */}
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
@@ -51,20 +49,25 @@ const FaqItemSmall: React.FC<FaqItemProps> = ({
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{
-              duration: 0.45,
-              ease: [0.16, 1, 0.3, 1], // super smooth
+              height: {
+                duration: 0.35,
+                ease: [0.22, 1, 0.36, 1],
+              },
+              opacity: {
+                duration: 0.2,
+              },
             }}
             className="overflow-hidden"
           >
-            <motion.div
-              initial={{ y: -6 }}
-              animate={{ y: 0 }}
-              exit={{ y: -6 }}
-              transition={{ duration: 0.35 }}
-              className="mx-3 mb-2 bg-[#EDE8E266] border-[0.5px] border-[#0D463D33] p-2 "
-            >
-              <Content className="!text-sm">{answer}</Content>
-            </motion.div>
+            <div className="mx-3 mb-2 bg-[#EDE8E266] border-[0.5px] border-[#0D463D33] p-2">
+              <Content className="!text-sm">
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: answer,
+                  }}
+                />
+              </Content>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
