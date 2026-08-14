@@ -1,7 +1,8 @@
 'use client'
 
 import React, { useState, useMemo, useEffect } from 'react'
-import { format } from 'date-fns'
+import { format, isToday } from 'date-fns'
+import { useFilteredTimeSlots } from '@/hooks/useFilteredTimeSlots'
 import { BookingData, Availability } from '@/types'
 import { WorkshopItem } from '@/services/workshop.service'
 import ProductMedia from './ProductMedia'
@@ -48,6 +49,10 @@ const formattedDate = useMemo(() => {
     ? format(selectedDate, 'yyyy-MM-dd')
     : ''
 }, [selectedDate])
+
+// Filter time slots for today based on UAE timezone using custom hook
+const availableSlots = useFilteredTimeSlots(selectedDate, product.defaultSlots)
+
 const router = useRouter()
   // Derived state - computed values
 const selectedMaterial = useMemo(
@@ -351,10 +356,10 @@ const uniqueMaterials = product?.options?.filter(option =>
           </div>
 
           {/* Time Slots */}
-          {product?.defaultSlots.length > 0 && (
+          {availableSlots.length > 0 && (
             <div className="p-[18px] bg-white">
               <TimeSlotSelector
-                slots={product.defaultSlots.map((slot) => ({
+                slots={availableSlots.map((slot) => ({
                   ...slot,
                   capacity: Boolean(slot.capacity),
                 }))}

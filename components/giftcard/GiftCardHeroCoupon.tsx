@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState, ChangeEvent } from "react";
-import { format } from "date-fns";
+import { format, isToday } from "date-fns";
+import { useFilteredTimeSlots } from "@/hooks/useFilteredTimeSlots";
 import { Play } from "lucide-react";
 import { useRouter } from "next/navigation";
 import DateSelector from "../product/DateSelector";
@@ -100,6 +101,9 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
   const formattedDate = useMemo(() => {
     return selectedDate ? format(selectedDate, "yyyy-MM-dd") : "";
   }, [selectedDate]);
+
+  // Filter time slots for today based on UAE timezone using custom hook
+  const availableSlots = useFilteredTimeSlots(selectedDate, workshop.defaultSlots);
 
   const handleDateSelect = (date: Date) => {
     const isSameDate =
@@ -393,10 +397,10 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
           </div>
 
           {/* Time Slots Box */}
-          {workshop.defaultSlots?.length > 0 && (
+          {availableSlots?.length > 0 && (
             <div className="bg-white p-4 border border-gray-100 rounded shadow-sm">
               <TimeSlotSelector
-                slots={workshop.defaultSlots.map((slot) => ({
+                slots={availableSlots.map((slot) => ({
                   ...slot,
                   capacity: Boolean(slot.capacity),
                 }))}

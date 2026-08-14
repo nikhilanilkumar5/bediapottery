@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { format } from "date-fns";
+import { format, isToday } from "date-fns";
+import { useFilteredTimeSlots } from "@/hooks/useFilteredTimeSlots";
 import DateSelector from "../product/DateSelector";
 import { WorkshopItem } from "@/services/workshop.service";
 import TimeSlotSelector from "../product/TimeSlotSelector";
@@ -66,6 +67,9 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
     () => (selectedDate ? format(selectedDate, "yyyy-MM-dd") : ""),
     [selectedDate],
   );
+
+  // Filter time slots for today based on UAE timezone using custom hook
+  const availableSlots = useFilteredTimeSlots(selectedDate, product.defaultSlots);
 
   const quantityLimit = Math.min(
     maxQuantity,
@@ -323,10 +327,10 @@ const isBookingDisabled =
               )}
             </div>
 
-            {product?.defaultSlots?.length > 0 && (
+            {availableSlots?.length > 0 && (
               <div className="p-[18px] bg-white">
                 <TimeSlotSelector
-                  slots={product.defaultSlots.map((slot) => ({
+                  slots={availableSlots.map((slot) => ({
                     ...slot,
                     capacity: Boolean(slot.capacity),
                   }))}
