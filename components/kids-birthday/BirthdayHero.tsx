@@ -259,7 +259,7 @@ const isBookingDisabled =
   currentTotalPeople > quantityLimit;
 
   return (
-    <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#113224]">
+    <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#0D463D]">
       <div className="page-wrapper px-[17px] grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
         <div className="flex flex-col gap-4 h-full">
           <ProductMedia
@@ -283,10 +283,10 @@ const isBookingDisabled =
 
         <div className="flex flex-col h-full">
           <div className="mb-6">
-            <h1 className="text-[2.5rem] leading-tight font-neiko text-[#113224] mb-1">
+            <h1 className="text-[2.5rem] leading-tight font-neiko text-[#0D463D] mb-1">
               {product.title}
             </h1>
-            {/* <h2 className="text-[2rem] font-neiko text-[#113224] mb-4">
+            {/* <h2 className="text-[2rem] font-neiko text-[#0D463D] mb-4">
               {type === "kids" ? "(3 - 13 Years)" : "(14 years & above)"}
             </h2> */}
             <p className="xl:text-base text-sm text-gray-800 leading-relaxed pr-4">

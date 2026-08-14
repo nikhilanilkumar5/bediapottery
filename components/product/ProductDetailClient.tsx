@@ -267,7 +267,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   const isBookingDisabled = !selectedDate || !selectedSlotId || quantity < 1;
 
   return (
-    <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#113224]">
+    <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#0D463D]">
       <div className="page-wrapper px-[17px] grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
         <div className="flex flex-col gap-4 h-full">
           <ProductMedia

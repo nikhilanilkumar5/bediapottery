@@ -15,7 +15,7 @@ export default function PrivacyPage() {
         </Content>
 
         <div className="mt-[40px] bg-white p-5 lg:p-10  shadow-lg">
-          <div className="space-y-8 text-[#113224] leading-[1.8]">
+          <div className="space-y-8 text-[#0D463D] leading-[1.8]">
             <div>
               <Content className="font-semibold text-xl mb-4">Information We Collect</Content>
               <Content>

@@ -29,7 +29,7 @@ const ExploreButton: React.FC<ExploreButtonProps> = ({
 
       {/* Arrow Circle */}
       <span
-        className="flex items-center justify-center w-8 h-8 lg:w-[46px] lg:h-[46px] 
+        className="flex items-center justify-center w-6 h-6 lg:w-8 lg:h-8 
         bg-white  transition-transform duration-300 
         group-hover:translate-x-1"
       >

@@ -14,7 +14,7 @@ export default function CancellationPage() {
           At Bedia Pottery LLC, each workshop booking reserves a dedicated seat, instructor time, studio resources, and materials prepared specifically for your session. As workshop capacities are limited, we kindly ask all participants to carefully review the following policy before making a reservation.
         </Content>
 
-        <div className="mt-[40px] bg-white p-5 lg:p-10 shadow-lg text-[#113224] leading-[1.8]">
+        <div className="mt-[40px] bg-white p-5 lg:p-10 shadow-lg text-[#0D463D] leading-[1.8]">
           <div className="space-y-8">
             <section>
               <Content className="font-semibold text-xl mb-4">1. Customer Cancellations</Content>

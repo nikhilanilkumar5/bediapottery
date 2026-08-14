@@ -21,11 +21,11 @@ export default function FeatureBanner() {
                 key={index}
                 className="flex flex-col items-center justify-center px-4"
               >
-                <div className="text-[#113224] mb-4 h-12 flex items-center justify-center">
+                <div className="text-[#0D463D] mb-4 h-12 flex items-center justify-center">
                   <Icon size={36} strokeWidth={1.2} />
                 </div>
 
-                <span className="text-[#113224] text-[13px] md:text-[14px] font-medium text-center whitespace-nowrap">
+                <span className="text-[#0D463D] text-[13px] md:text-[14px] font-medium text-center whitespace-nowrap">
                   {feature.label}
                 </span>
               </div>

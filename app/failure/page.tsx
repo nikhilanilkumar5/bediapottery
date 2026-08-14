@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function FailurePage() {
   return (
-    <main className="min-h-screen bg-[#fcfbf9] text-[#113224] overflow-hidden">
+    <main className="min-h-screen bg-[#fcfbf9] text-[#0D463D] overflow-hidden">
      
 			<section className="relative min-h-[calc(100vh-140px)] flex items-center">
                 <div className="page-wrapper relative z-10  w-full">
@@ -31,7 +31,7 @@ export default function FailurePage() {
 							<div className="mt-8 flex flex-col sm:flex-row gap-4">
                                 <Link
 									href="/"
-									className="inline-flex items-center justify-center gap-2 rounded-full border border-[#113224] px-6 py-3.5 font-medium text-[#113224] transition-colors hover:bg-[#113224] hover:text-white"
+									className="inline-flex items-center justify-center gap-2 rounded-full border border-[#0D463D] px-6 py-3.5 font-medium text-[#0D463D] transition-colors hover:bg-[#0D463D] hover:text-white"
 								>
 									<House className="h-4 w-4" />
 									Back to home

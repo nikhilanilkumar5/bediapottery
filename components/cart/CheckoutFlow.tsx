@@ -64,35 +64,35 @@ export default function CheckoutFlow({ initialData,  }: CheckoutFlowProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#fcfbf9] font-sans text-[#113224]">
+    <div className="min-h-screen bg-white font-sans text-black">
       
       {/* Top Progress Indicator Bar */}
-      <div className="w-full bg-[#f3f0e8] py-8 mb-12 border-t border-b border-[#e5e1d8]">
+      <div className="w-full bg-secondary-dark py-8 mb-12 border-t border-b border-[#e5e1d8]">
         <div className="max-w-7xl mx-auto flex items-center justify-center px-4">
           
           <button onClick={() => step > 1 && setStep(1)} className={`flex items-center gap-3 ${step > 1 ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}`}>
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${step >= 1 ? 'bg-[#113224] text-white' : 'bg-white text-[#113224]'}`}>
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${step >= 1 ? 'bg-[#0D463D] text-white' : 'bg-white text-black'}`}>
               <ShoppingBag size={18} />
             </div>
-            <span className={`font-medium hidden sm:block ${step >= 1 ? 'text-[#113224]' : 'text-gray-500'}`}>Shopping Cart</span>
+            <span className={`font-medium hidden sm:block text-black`}>Shopping Cart</span>
           </button>
 
           <div className="w-12 sm:w-24 h-[1px] bg-[#d1cec7] mx-4 sm:mx-6"></div>
 
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${step >= 2 ? 'bg-[#113224] text-white' : 'bg-white text-[#113224]'}`}>
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${step >= 2 ? 'bg-[#0D463D] text-white' : 'bg-white text-black'}`}>
               <Wallet size={18} />
             </div>
-            <span className={`font-medium hidden sm:block ${step >= 2 ? 'text-[#113224]' : 'text-gray-400'}`}>Checkout</span>
+            <span className={`font-medium hidden sm:block text-black`}>Checkout</span>
           </div>
 
           <div className="w-12 sm:w-24 h-[1px] bg-[#d1cec7] mx-4 sm:mx-6"></div>
 
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${step >= 3 ? 'bg-[#113224] text-white' : 'bg-white text-[#113224]'}`}>
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${step >= 3 ? 'bg-[#0D463D] text-white' : 'bg-white text-black'}`}>
               <FileCheck2 size={18} />
             </div>
-            <span className={`font-medium hidden sm:block ${step >= 3 ? 'text-[#113224]' : 'text-gray-400'}`}>Order Complete</span>
+            <span className={`font-medium hidden sm:block text-black`}>Order Complete</span>
           </div>
 
         </div>
@@ -115,7 +115,7 @@ export default function CheckoutFlow({ initialData,  }: CheckoutFlowProps) {
                 <p className="text-sm text-gray-500 mb-6">
                   It looks like your cart has no items. Please go back to the cart page and add items before checking out.
                 </p>
-                <a href="/cart" className="inline-flex items-center justify-center px-6 py-3 bg-[#113224] text-white rounded-sm hover:bg-[#0d2b1f] transition">
+                <a href="/cart" className="inline-flex items-center justify-center px-6 py-3 bg-[#0D463D] text-white rounded-sm hover:bg-[#0d2b1f] transition">
                   Go to Cart
                 </a>
               </div>
@@ -127,11 +127,9 @@ export default function CheckoutFlow({ initialData,  }: CheckoutFlowProps) {
                 onDeleteItem={handleDeleteItem}
                 error={error}
               />
-            ) : step === 2 ? (
-              <CheckoutStep onNext={() => setStep(3)} onBack={() => setStep(1)} data={cartData} />
             ) : (
-              <OrderCompleteStep />
-            )}
+              <CheckoutStep onNext={() => setStep(3)} onBack={() => setStep(1)} data={cartData} />
+            ) }
           </motion.div>
         </AnimatePresence>
       </div>

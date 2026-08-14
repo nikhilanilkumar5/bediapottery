@@ -156,14 +156,14 @@ export default function SearchPill() {
                 Signed in as
               </p>
 
-              <p className="text-sm font-semibold text-[#113224]">
+              <p className="text-sm font-semibold text-[#0D463D]">
                 {user}
               </p>
             </div>
 
             {/* <Link
               href="/profile"
-              className="block px-5 py-4 text-sm font-medium text-[#113224] hover:bg-gray-50 transition-colors"
+              className="block px-5 py-4 text-sm font-medium text-[#0D463D] hover:bg-gray-50 transition-colors"
             >
               My Profile
             </Link> */}
@@ -184,7 +184,7 @@ export default function SearchPill() {
       setUserMenuOpen(false);
       router.push("/login");
     }}
-    className="w-full text-left px-5 py-4 text-sm font-medium text-[#113224] hover:bg-gray-50 transition-colors"
+    className="w-full text-left px-5 py-4 text-sm font-medium text-[#0D463D] hover:bg-gray-50 transition-colors"
   >
     Login
   </button>

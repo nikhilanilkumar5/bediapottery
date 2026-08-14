@@ -168,7 +168,7 @@ export const WorkshopQuantitySelector: React.FC<
         <div className="bg-gray-50 border border-gray-200 p-4 rounded-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex-1">
             <h4 className="font-semibold text-black text-sm md:text-base">
-              HandBuilding
+              Handbuilding
             </h4>
             <p className="text-xs text-gray-500">
               Mold clay with hands (Max {HAND_MAX})

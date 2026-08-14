@@ -77,19 +77,19 @@ const kidsBirthdayTimelineSteps = [
 const currentTimeline =
     type === "kids" ? kidsBirthdayTimelineSteps : timelineSteps;
   return (
-    <section className="pb-16 font-sans text-[#113224] bg-[#f5f1eb]">
+    <section className="pb-16 font-sans text-[#0D463D] bg-[#f5f1eb]">
       <div className="page-wrapper px-[17px]  space-y-16">
         
         {/* --- TIMELINE SECTION --- */}
        
  <div>
-          <h2 className="text-2xl font-neiko text-[#113224] mb-6 ">Venue Capacity Details</h2>
+          <h2 className="text-2xl font-neiko text-[#0D463D] mb-6 ">Venue Capacity Details</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Pottery on Wheel */}
                 <>
             <div className="bg-white p-8 lg:p-10 text-center shadow-sm flex flex-col items-center">
-              <div className="bg-[#e4ece8] text-[#113224] w-full py-4 text-[15px] mb-8">
+              <div className="bg-[#e4ece8] text-[#0D463D] w-full py-4 text-[15px] mb-8">
                 Pottery on Wheel: Clay on a spinning wheel with step-by-step guidance
               </div>
               <p className="text-[14px] text-black mb-2">Minimum Number Of Participants: 12</p>
@@ -97,7 +97,7 @@ const currentTimeline =
             </div>
 
             <div className="bg-white p-8 lg:p-10 text-center shadow-sm flex flex-col items-center">
-              <div className="bg-[#e4ece8] text-[#113224] w-full py-4 text-[15px] mb-8">
+              <div className="bg-[#e4ece8] text-[#0D463D] w-full py-4 text-[15px] mb-8">
                 Handbuilding: Mold clay with your hands with step-by-step guidance 
               </div>
               <p className="text-[14px] text-black mb-2">Minimum Number Of Participants: 12</p>
@@ -108,7 +108,7 @@ const currentTimeline =
         </div>
         {/* --- THE BEST PART --- */}
         {/* <div>
-          <h2 className="text-2xl font-neiko text-[#113224] mb-6">The Best Part:</h2>
+          <h2 className="text-2xl font-neiko text-[#0D463D] mb-6">The Best Part:</h2>
           <div className="bg-white p-8 lg:p-10 shadow-sm">
             <p className="text-[14px] text-black leading-relaxed mb-1">
               Air dry clay is soft and easy to mold, and it hardens on its own - no kiln or oven needed! It's perfect for little hands to shape and bring their ideas to life.
@@ -122,7 +122,7 @@ const currentTimeline =
           </div>
         </div> */}
         <div>
-          <h2 className="text-2xl font-neiko text-[#113224] mb-6">Package Includes</h2>
+          <h2 className="text-2xl font-neiko text-[#0D463D] mb-6">Package Includes</h2>
           <div className="bg-white p-8 lg:p-10 shadow-sm">
             {(() => {
 
@@ -139,7 +139,7 @@ const currentTimeline =
                   {columns.map((columnItems, index) => (
                     <ul
                       key={index}
-                      className="list-disc pl-5 space-y-2 text-[13px] text-black marker:text-[#113224]"
+                      className="list-disc pl-5 space-y-2 text-[13px] text-black marker:text-[#0D463D]"
                     >
                       {columnItems.map((item, itemIndex) => (
                         <li key={`${item}-${itemIndex}`}>{item}</li>
@@ -152,13 +152,13 @@ const currentTimeline =
           </div>
         </div>
  <div>
-          <h2 className="text-2xl font-neiko text-[#113224] mb-6">Birthday Party Event Timeline</h2>
+          <h2 className="text-2xl font-neiko text-[#0D463D] mb-6">Birthday Party Event Timeline</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             {currentTimeline.map((step, i) => (
               <div key={i} className="bg-white p-6 flex flex-col items-center text-center shadow-sm">
-                <span className="text-2xl text-[#113224] mb-3">{step.num}</span>
+                <span className="text-2xl text-[#0D463D] mb-3">{step.num}</span>
                 <h3 className="font-semibold text-[14px] text-black mb-4">{step.title}</h3>
-                <span className="bg-[#113224] text-white text-[11px] px-4 py-1.5 mb-4 tracking-wide">
+                <span className="bg-[#0D463D] text-white text-[11px] px-4 py-1.5 mb-4 tracking-wide">
                   {step.time}
                 </span>
                 <p className="text-[12px] text-gray-700 leading-relaxed max-w-[140px]">
@@ -170,9 +170,9 @@ const currentTimeline =
         </div>
 {type === "kids" && (
         <div>
-          <h2 className="text-2xl font-neiko text-[#113224] mb-6">Note For The Parents</h2>
+          <h2 className="text-2xl font-neiko text-[#0D463D] mb-6">Note For The Parents</h2>
           <div className="bg-white p-8 lg:p-10 shadow-sm">
-            <ul className="list-disc pl-5 space-y-1 text-[14px] text-black marker:text-[#113224]">
+            <ul className="list-disc pl-5 space-y-1 text-[14px] text-black marker:text-[#0D463D]">
               <li>Cake is allowed to be cut inside the studio</li>
               <li>Outside food and drink are allowed within the provided time, or else additional charges may incur per hour.</li>
               <li>Cutlery and other food-serving essentials should be brought from your end.</li>

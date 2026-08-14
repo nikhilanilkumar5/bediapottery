@@ -24,7 +24,7 @@ const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
         <div className="relative">
           <input
             ref={ref}
-            className={`w-full 2xl:p-6 p-4  bg-[#E5E0C933]  border-[0.6px]   border-transparent transition-colors duration-600 focus:outline-none focus:border-[#0D463D99] focus:bg-white 2xl:text-lg text-sm leading-none hover:border-[#0D463D99] ${
+            className={`w-full 2xl:p-6 p-4  bg-white  border-[0.5px] border-[#0000004D] border-solid transition-colors duration-600 focus:outline-none focus:border-[#0D463D99] focus:bg-white 2xl:text-lg text-sm leading-none hover:border-[#0D463D99] ${
               error ? 'border-red-500 bg-red-50' : 'hover:bg-white'
             } ${className}`}
             {...props}

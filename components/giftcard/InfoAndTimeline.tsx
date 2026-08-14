@@ -10,7 +10,7 @@ export default function InfoAndTimeline({ product }: GiftCardHeroProps) {
   const [activeTab, setActiveTab] = useState(product?.moreDetails?.[0]?._id);
 
   return (
-    <section className="bg-[#f2ece3] min-h-screen py-16 font-sans text-[#113224]">
+    <section className="bg-[#f2ece3] min-h-screen py-16 font-sans text-[#0D463D]">
       <div className="page-wrapper px-[17px]  space-y-24">
         {/* --- TABS SECTION --- */}
         <div className="bg-white p-6 sm:p-10 shadow-sm rounded-sm">
@@ -22,8 +22,8 @@ export default function InfoAndTimeline({ product }: GiftCardHeroProps) {
                 onClick={() => setActiveTab(tab._id)}
                 className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
                   activeTab === tab._id
-                    ? "bg-[#113224] text-white shadow-sm"
-                    : "bg-[#c5ccc8] text-[#113224] hover:bg-[#b5beb9]"
+                    ? "bg-[#0D463D] text-white shadow-sm"
+                    : "bg-[#c5ccc8] text-[#0D463D] hover:bg-[#b5beb9]"
                 }`}
               >
                 {tab.title}
@@ -54,7 +54,7 @@ export default function InfoAndTimeline({ product }: GiftCardHeroProps) {
           <div className="hidden lg:block relative w-[900px] h-[550px] mx-auto mt-32">
             {/* Dashed Semi-Circle Arc */}
             {/* 540px wide arc, centered */}
-            <div className="absolute top-[120px] left-1/2 -translate-x-1/2 w-[540px] h-[270px] border-t-[1px] border-l-[1px] border-r-[1px] border-dashed border-[#113224]/40 rounded-t-[300px]"></div>
+            <div className="absolute top-[120px] left-1/2 -translate-x-1/2 w-[540px] h-[270px] border-t-[1px] border-l-[1px] border-r-[1px] border-dashed border-[#0D463D]/40 rounded-t-[300px]"></div>
 
             {/* Central Video */}
             <div className="absolute top-[250px] left-1/2 -translate-x-1/2 w-[280px] h-[280px] z-0">
@@ -69,7 +69,7 @@ export default function InfoAndTimeline({ product }: GiftCardHeroProps) {
             </div>
 
             {/* Step 02 (Top Center) */}
-            <div className="absolute top-[120px] left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white rounded-full flex items-center justify-center font-bold text-2xl text-[#113224] shadow-sm z-10">
+            <div className="absolute top-[120px] left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white rounded-full flex items-center justify-center font-bold text-2xl text-[#0D463D] shadow-sm z-10">
               02
               {/* Anchored Text: Above */}
               <div className="absolute bottom-full mb-6 w-[360px] text-center left-1/2 -translate-x-1/2">
@@ -86,7 +86,7 @@ export default function InfoAndTimeline({ product }: GiftCardHeroProps) {
 
             {/* Step 01 (Bottom Left) */}
             {/* 180px from left edge precisely aligns with the 540px arc inside the 900px container */}
-            <div className="absolute top-[390px] left-[180px] -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white rounded-full flex items-center justify-center font-bold text-2xl text-[#113224] shadow-sm z-10">
+            <div className="absolute top-[390px] left-[180px] -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white rounded-full flex items-center justify-center font-bold text-2xl text-[#0D463D] shadow-sm z-10">
               01
               {/* Anchored Text: Left */}
               <div className="absolute right-full mr-8 w-[280px] top-1/2 -translate-y-1/2 text-right">
@@ -104,7 +104,7 @@ export default function InfoAndTimeline({ product }: GiftCardHeroProps) {
             </div>
 
             {/* Step 03 (Bottom Right) */}
-            <div className="absolute top-[390px] right-[180px] translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white rounded-full flex items-center justify-center font-bold text-2xl text-[#113224] shadow-sm z-10">
+            <div className="absolute top-[390px] right-[180px] translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white rounded-full flex items-center justify-center font-bold text-2xl text-[#0D463D] shadow-sm z-10">
               03
               {/* Anchored Text: Right */}
               <div className="absolute left-full ml-8 w-[280px] top-1/2 -translate-y-1/2 text-left">
@@ -157,7 +157,7 @@ export default function InfoAndTimeline({ product }: GiftCardHeroProps) {
                 key={step.num}
                 className="flex flex-col items-center text-center max-w-sm px-4"
               >
-                <div className="bg-white text-[#113224] w-16 h-16 rounded-full flex items-center justify-center font-bold text-2xl shadow-sm mb-4">
+                <div className="bg-white text-[#0D463D] w-16 h-16 rounded-full flex items-center justify-center font-bold text-2xl shadow-sm mb-4">
                   {step.num}
                 </div>
                 <h4 className="font-semibold text-lg text-black mb-2">

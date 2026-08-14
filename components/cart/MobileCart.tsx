@@ -1,7 +1,9 @@
 
+"use client"
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { CartData, deleteCart } from "@/services/cart.service";
+import { useEffect } from "react";
 
 export default function MobileCart({
   data,
@@ -16,11 +18,13 @@ export default function MobileCart({
   const cartItems = data?.[0]?.items || [];
   const cartTotal = data?.[0]?.totalAmount ?? 0;
   const currency = cartItems?.[0]?.currency || "AED";
-
+useEffect(() => {
+  console.log("MobileCart cartItems:", cartItems);
+}, [cartItems]);
 
   if (cartItems.length === 0) {
     return (
-      <main className="page-wrapper px-[17px] bg-[#fcfbf9] min-h-screen font-sans text-[#113224]">
+      <main className="page-wrapper px-[17px] bg-[#fcfbf9] min-h-screen font-sans text-[#0D463D]">
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4 py-20">
           <h1 className="text-2xl font-serif mb-4">Your cart is empty</h1>
           <p className="text-gray-500 max-w-md">
@@ -32,10 +36,10 @@ export default function MobileCart({
   }
 
   return (
-    <main className="page-wrapper px-[17px]  bg-[#fcfbf9] min-h-screen font-sans text-[#113224]">
+    <main className="page-wrapper px-[17px]  bg-[#fcfbf9] min-h-screen font-sans text-[#0D463D]">
       {/* Header */}
       <div className="flex justify-between items-end border-b border-gray-200 pb-4 mb-6 mt-4 sm:mt-8">
-        <h1 className="text-2xl font-serif">Your Cart</h1>
+        <h1 className="text-2xl font-serif text-black">Your Cart</h1>
         <span className="text-gray-500 font-medium">({cartItems.length})</span>
       </div>
 
@@ -61,7 +65,7 @@ export default function MobileCart({
               {/* Item Details */}
               <div className="flex-grow flex flex-col justify-center text-sm relative">
                 <button
-                  className="text-gray-400 absolute top-0 right-0 hover:text-[#113224] mb-3 border border-gray-300 rounded-full w-6 h-6 flex items-center justify-center text-xs transition-colors"
+                  className="text-gray-400 absolute top-0 right-0 hover:text-[#0D463D] mb-3 border border-gray-300 rounded-full w-6 h-6 flex items-center justify-center text-xs transition-colors"
                   onClick={async () => {
                     await deleteCart({
                       userId: data[0]?.userId || "",
@@ -74,8 +78,8 @@ export default function MobileCart({
                   ✕
                 </button>
 
-                <h3 className="font-semibold text-[15px] mb-2 leading-tight">
-                  {item.workshopId.title}
+                <h3 className="font-semibold text-[15px] text-black mb-2 leading-tight">
+                  {item.workshopId.title}-{item.workshopId.title}
                 </h3>
                 <div className="flex justify-between items-center text-gray-500">
                   {item.workshopId.title !== "Adult's Birthday Party" ? (
@@ -87,7 +91,7 @@ export default function MobileCart({
                           {item.currency} {item.price.toFixed(2)}
                         </span>
                       </p>
-                      <p className="font-medium text-[#113224]">
+                      <p className="font-medium text-black">
                         {item.currency} {item.subtotal.toFixed(2)}
                       </p>
                     </>
@@ -114,7 +118,7 @@ export default function MobileCart({
                         </p>
                         )}
                       </div>
-                      <p className="font-medium text-[#113224]">
+                      <p className="font-medium text-black">
                         {item.currency} {item.subtotal.toFixed(2)}
                       </p>
                     </>
@@ -129,8 +133,8 @@ export default function MobileCart({
       {/* Cart Totals & Checkout */}
       <div className="mt-8 space-y-6">
         <div className="flex justify-between items-center text-lg">
-          <span className="font-semibold text-gray-800">TOTAL</span>
-          <span className="font-bold">
+          <span className="font-semibold text-black">TOTAL</span>
+          <span className="font-bold text-black">
             {currency} {cartTotal.toFixed(2)}
           </span>
         </div>
@@ -141,7 +145,7 @@ export default function MobileCart({
         */}
         <button
           onClick={onCheckout}
-          className="w-full bg-[#113224] text-white py-4 font-medium text-[15px] hover:bg-[#0c251a] transition-colors rounded-sm shadow-sm"
+          className="w-full bg-[#0D463D] text-white py-4 font-medium text-[15px] hover:bg-[#0c251a] transition-colors rounded-sm shadow-sm"
         >
           Checkout
         </button>

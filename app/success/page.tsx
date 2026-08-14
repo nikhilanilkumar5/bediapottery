@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function SuccessPage() {
 	return (
-		<main className="min-h-screen bg-[#fcfbf9] text-[#113224] overflow-hidden">
+		<main className="min-h-screen bg-[#fcfbf9] text-[#0D463D] overflow-hidden">
 			<section className="relative min-h-[calc(100vh-140px)] flex items-center">
 				<div className="absolute inset-0 pointer-events-none">
 					<div className="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-[#d9e6dc] blur-3xl opacity-70" />
@@ -35,7 +35,7 @@ export default function SuccessPage() {
 							<div className="mt-8 flex flex-col sm:flex-row gap-4">
 								<Link
 									href="/"
-									className="inline-flex items-center justify-center gap-2 rounded-full border border-[#113224] px-6 py-3.5 font-medium text-[#113224] transition-colors hover:bg-[#113224] hover:text-white"
+									className="inline-flex items-center justify-center gap-2 rounded-full border border-[#0D463D] px-6 py-3.5 font-medium text-[#0D463D] transition-colors hover:bg-[#0D463D] hover:text-white"
 								>
 									<House className="h-4 w-4" />
 									Back to home
@@ -51,7 +51,7 @@ export default function SuccessPage() {
 										{/* <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Order summary</p> */}
 										<h2 className="mt-2 text-2xl font-semibold">Thank you</h2>
 									</div>
-									<div className="h-14 w-14 rounded-full bg-[#113224] text-white flex items-center justify-center">
+									<div className="h-14 w-14 rounded-full bg-[#0D463D] text-white flex items-center justify-center">
 										<CheckCircle2 className="h-7 w-7" />
 									</div>
 								</div>

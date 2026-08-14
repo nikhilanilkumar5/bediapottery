@@ -1,4 +1,6 @@
 'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
 import { CartData } from '@/services/cart.service';
 
@@ -11,6 +13,8 @@ interface CartStepProps {
 }
 
 export default function CartStep({ onNext, data, onDeleteItem, loading = false, error }: CartStepProps) {
+  const [isEditing, setIsEditing] = useState(false);
+
   if (loading) {
     return (
       <div className="w-full text-center py-24 text-gray-600">
@@ -37,7 +41,7 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
   if (cartCount === 0) {
     return (
       <div className="w-full text-center py-24 text-gray-700">
-        <h2 className="text-2xl font-semibold mb-3">Your cart is empty</h2>
+        <h2 className="text-2xl font-normal mb-3">Your cart is empty</h2>
         <p className="text-sm text-gray-500">Add items to your cart and return here to complete checkout.</p>
       </div>
     );
@@ -50,8 +54,22 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
         {/* Left Column: Cart Items */}
         <div className="w-full lg:w-2/3">
           <div className="flex justify-between items-end mb-8 border-b border-gray-200 pb-4">
-            <h2 className="text-2xl font-serif font-medium text-[#113224]">Your Cart</h2>
-            <span className="text-gray-500 font-medium">({cartCount})</span>
+            <span className="text-black ">Your Cart</span>
+            <span className="text-black ">({cartCount})</span>
+          </div>
+
+          {/* Edit Notification Banner */}
+          <div className="bg-[#ece9e2] p-4 rounded-sm flex items-center justify-between mb-8">
+            <p className="text-sm text-gray-700 font-normal">
+              If you’d like to add or change items, please use
+            </p>
+            <button
+              type="button"
+              onClick={() => setIsEditing((prev) => !prev)}
+              className="bg-[#0D463D] text-white text-sm px-6 py-2 rounded-sm hover:bg-[#0c251a] transition-colors font-medium"
+            >
+              {isEditing ? 'Done' : 'Edit'}
+            </button>
           </div>
 
           <div className="space-y-8">
@@ -68,27 +86,38 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
                   />
                 </div>
 
-                <div className="flex-grow flex flex-col">
+                <div className="flex-grow flex flex-col justify-between">
+                  <div>
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-normal text-black text-[15px]">{item.workshopId.title}</h3>
+                      
+                      {/* Conditional Remove Button */}
+                      {isEditing && (
+                        <button
+                          className="text-gray-500 hover:text-black border border-gray-400 rounded-full w-6 h-6 flex items-center justify-center text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                          onClick={() => onDeleteItem(index)}
+                          disabled={loading}
+                          type="button"
+                          aria-label="Remove item"
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
 
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h3 className="font-semibold text-[#113224] mb-2 text-[15px]">{item.workshopId.title}</h3>
-                        {item.workshopId.title !== "Adult's Birthday Party" ? (
-                    /* IF NOT "Adult's Birthday Party" -> Show standard price breakdown */
-                    <>
-                      <p>
+                    {item.workshopId.title !== "Adult's Birthday Party" ? (
+                      /* IF NOT "Adult's Birthday Party" -> Show standard price breakdown */
+                      <p className="text-sm text-gray-500">
                         x {item.people}{" "}
                         <span className="ml-1">
                           {item.currency} {item.price.toFixed(2)}
                         </span>
                       </p>
-                    </>
-                  ) : (
-                    /* ELSE ("Adult's Birthday Party") -> Show custom technique breakdown or logic */
-                    <>
-                      <div className="">
+                    ) : (
+                      /* ELSE ("Adult's Birthday Party") -> Show custom technique breakdown */
+                      <div className="text-sm text-gray-500 space-y-1">
                         {(item.wheelPottery ?? 0) > 0 && (
-                          <p className="mb-2">
+                          <p>
                             x {item.wheelPottery} Wheel Pottery
                             <span className="ml-1">
                               {item.currency}{" "}
@@ -96,33 +125,23 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
                             </span>
                           </p>
                         )}
-                         {(item.handBuild ?? 0) > 0 && (
-                        <p>
-                          x {item.handBuild}
-                          {" HandBuilding"}
-                          <span className="ml-1">
-                            {item.currency} {item.price.toFixed(2)}
-                          </span>
-                        </p>
+                        {(item.handBuild ?? 0) > 0 && (
+                          <p>
+                            x {item.handBuild} HandBuilding
+                            <span className="ml-1">
+                              {item.currency} {item.price.toFixed(2)}
+                            </span>
+                          </p>
                         )}
                       </div>
-                    </>
-                  )}
-                    </div>
-                    <div className="text-right flex flex-col items-end">
-                      <button
-                        className="text-gray-400 hover:text-[#113224] mb-3 border border-gray-300 rounded-full w-6 h-6 flex items-center justify-center text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50"
-                        onClick={() => onDeleteItem(index)}
-                        disabled={loading}
-                        type="button"
-                      >
-                        ✕
-                      </button>
-                      
-                      <p className="font-semibold text-[#113224]">{item.currency} {item.subtotal.toFixed(2)}</p>
-                    </div>
+                    )}
                   </div>
 
+                  <div className="text-right mt-4 sm:mt-0">
+                    <p className="font-semibold text-black">
+                      {item.currency} {item.subtotal.toFixed(2)}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -130,7 +149,7 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
         </div>
 
         {/* Right Column: Summary Sidebar */}
-        <div className="w-full lg:w-1/3 bg-[#ece9e2] p-8 rounded-sm h-fit sticky top-8 text-[#113224]">
+        <div className="w-full lg:w-1/3 bg-secondary-dark p-8 rounded-sm h-fit sticky top-8 text-black">
           <div className="space-y-4 mb-6 text-sm">
             <div className="flex justify-between font-medium">
               <span>Subtotal</span>
@@ -138,14 +157,13 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
             </div>
             <div className="flex justify-between text-gray-600">
               <span>VAT amount</span>
-              <span>AED { cartTax.toFixed(2)}</span>
+              <span>AED {cartTax.toFixed(2)}</span>
             </div>
           </div>
 
-
           <button 
             onClick={onNext} 
-            className="w-full bg-[#113224] text-white py-4 font-medium flex justify-center items-center gap-3 hover:bg-[#0c251a] transition-colors mb-6 rounded-sm shadow-sm"
+            className="w-full bg-[#0D463D] text-white py-4 font-medium flex justify-center items-center gap-3 hover:bg-[#0c251a] transition-colors mb-6 rounded-sm shadow-sm"
           >
             <span>Checkout</span>
             <span className="text-[#81998f]">|</span>
@@ -165,6 +183,7 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );

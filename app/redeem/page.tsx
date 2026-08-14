@@ -22,13 +22,13 @@ export default async function RedeemPage({ searchParams }: RedeemPageProps) {
       const gift = await validateGiftData(ref);
 
       return (
-        <main className="min-h-screen bg-[#fcfbf9] text-[#113224] overflow-hidden">
+        <main className="min-h-screen bg-[#fcfbf9] text-[#0D463D] overflow-hidden">
           <GiftCardHero bookingData={gift} />
         </main>
       );
     } catch (error) {
       return (
-        <main className="min-h-screen bg-[#fcfbf9] text-[#113224] overflow-hidden">
+        <main className="min-h-screen bg-[#fcfbf9] text-[#0D463D] overflow-hidden">
           <section className="relative min-h-[calc(100vh-140px)] flex items-center">
             <div className="page-wrapper relative z-10 w-full">
               <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-center">
@@ -51,7 +51,7 @@ export default async function RedeemPage({ searchParams }: RedeemPageProps) {
                   <div className="mt-8 flex flex-col sm:flex-row gap-4 w-full">
                     <Link
                       href="/"
-                      className="inline-flex items-center justify-center gap-2 rounded-full border border-[#113224] px-6 py-3.5 font-medium text-[#113224] transition-colors hover:bg-[#113224] hover:text-white"
+                      className="inline-flex items-center justify-center gap-2 rounded-full border border-[#0D463D] px-6 py-3.5 font-medium text-[#0D463D] transition-colors hover:bg-[#0D463D] hover:text-white"
                     >
                       <House className="h-4 w-4" />
                       Back to home

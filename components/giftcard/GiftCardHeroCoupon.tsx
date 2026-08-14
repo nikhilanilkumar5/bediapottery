@@ -237,7 +237,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
   };
 
   return (
-    <section className="bg-[#f2ece3] min-h-screen py-12 font-sans text-[#113224]">
+    <section className="bg-[#f2ece3] min-h-screen py-12 font-sans text-[#0D463D]">
       <div className="page-wrapper px-[17px] grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         {/* Left Column: Media Gallery */}
         <div className="space-y-4 h-auto lg:sticky lg:top-6">
@@ -274,10 +274,10 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
         {/* Right Column: Content & Integrated Controls */}
         <div className="flex flex-col space-y-6">
           <div>
-            <h1 className="text-5xl font-serif mb-4 text-[#113224]">
+            <h1 className="text-5xl font-serif mb-4 text-[#0D463D]">
               {workshop.title}
             </h1>
-            <p className="text-[#113224]/80 leading-relaxed text-[17px]">
+            <p className="text-[#0D463D]/80 leading-relaxed text-[17px]">
               Review your gift customization configurations and finalize your setup below by choosing a valid schedule availability.
             </p>
           </div>
@@ -288,7 +288,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
               <label className="block text-black text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1.5">
                 Occasion
               </label>
-              <div className="w-full bg-[#113224] text-white py-2 px-3 rounded text-sm font-medium text-center truncate">
+              <div className="w-full bg-[#0D463D] text-white py-2 px-3 rounded text-sm font-medium text-center truncate">
                 {occasion}
               </div>
             </div>
@@ -297,7 +297,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
               <label className="block text-black text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1.5">
                 Selected Material Option
               </label>
-              <div className="w-full bg-[#113224] text-white py-2 px-3 rounded text-sm font-medium text-center truncate">
+              <div className="w-full bg-[#0D463D] text-white py-2 px-3 rounded text-sm font-medium text-center truncate">
                 {bookingItem.optionTitle}
               </div>
             </div>
@@ -319,7 +319,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
-                  className="w-full p-2.5 border border-gray-200 rounded text-sm focus:outline-[#113224]"
+                  className="w-full p-2.5 border border-gray-200 rounded text-sm focus:outline-[#0D463D]"
                 />
                 {errors.find(e => e.field === "firstName") && (
                   <p className="text-xs text-red-500">{errors.find(e => e.field === "firstName")?.message}</p>
@@ -332,7 +332,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
-                  className="w-full p-2.5 border border-gray-200 rounded text-sm focus:outline-[#113224]"
+                  className="w-full p-2.5 border border-gray-200 rounded text-sm focus:outline-[#0D463D]"
                 />
                 {errors.find(e => e.field === "lastName") && (
                   <p className="text-xs text-red-500">{errors.find(e => e.field === "lastName")?.message}</p>
@@ -348,7 +348,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
                 placeholder="Street address, apartment, suite, unit etc."
                 value={formData.address}
                 onChange={handleChange}
-                className="w-full p-2.5 border border-gray-200 rounded text-sm focus:outline-[#113224]"
+                className="w-full p-2.5 border border-gray-200 rounded text-sm focus:outline-[#0D463D]"
               />
               {errors.find(e => e.field === "address") && (
                 <p className="text-xs text-red-500">{errors.find(e => e.field === "address")?.message}</p>
@@ -364,7 +364,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
                   placeholder="+971"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full p-2.5 border border-gray-200 rounded text-sm focus:outline-[#113224]"
+                  className="w-full p-2.5 border border-gray-200 rounded text-sm focus:outline-[#0D463D]"
                 />
                 {errors.find(e => e.field === "phone") && (
                   <p className="text-xs text-red-500">{errors.find(e => e.field === "phone")?.message}</p>
@@ -377,7 +377,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full p-2.5 border border-gray-200 rounded text-sm focus:outline-[#113224]"
+                  className="w-full p-2.5 border border-gray-200 rounded text-sm focus:outline-[#0D463D]"
                 />
                 {errors.find(e => e.field === "email") && (
                   <p className="text-xs text-red-500">{errors.find(e => e.field === "email")?.message}</p>
@@ -431,7 +431,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
             <button
               onClick={handleRedeem}
               disabled={isSubmitting}
-              className="w-full bg-[#113224] text-white py-3.5 px-4 font-medium hover:bg-[#0c251a] transition-colors text-center text-sm disabled:bg-gray-400 rounded-sm shadow-sm"
+              className="w-full bg-[#0D463D] text-white py-3.5 px-4 font-medium hover:bg-[#0c251a] transition-colors text-center text-sm disabled:bg-gray-400 rounded-sm shadow-sm"
             >
               {isSubmitting ? "Processing Redemption..." : "Confirm & Redeem Coupon"}
             </button>

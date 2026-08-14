@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+
 import FormInput from "@/components/form/FormInput";
 import { validateEmail } from "@/utils/validation";
 import { CartData } from "@/services/cart.service";
@@ -40,90 +43,121 @@ export default function CheckoutStep({
   onBack: () => void;
   data: CartData[];
 }) {
-  // -------------------------------------------------------------
-  // 1. Initialize State from sessionStorage (Lazy Initialization)
-  // -------------------------------------------------------------
   const [formData, setFormData] = useState<CheckoutFormData>(() => {
     if (typeof window !== "undefined") {
       const saved = sessionStorage.getItem("checkout_form_data");
+
       if (saved) {
         try {
           return JSON.parse(saved);
         } catch (e) {
-          console.error("Failed to parse cached checkout form data:", e);
+          console.error(
+            "Failed to parse cached checkout form data:",
+            e
+          );
         }
       }
     }
+
     return initialFormData;
   });
 
-  const [acceptedAddressDetails, setAcceptedAddressDetails] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return sessionStorage.getItem("checkout_accepted_address") === "true";
-    }
-    return false;
-  });
+  const [acceptedAddressDetails, setAcceptedAddressDetails] =
+    useState<boolean>(() => {
+      if (typeof window !== "undefined") {
+        return (
+          sessionStorage.getItem("checkout_accepted_address") ===
+          "true"
+        );
+      }
+
+      return false;
+    });
 
   const [acceptedTerms, setAcceptedTerms] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
-      return sessionStorage.getItem("checkout_accepted_terms") === "true";
+      return (
+        sessionStorage.getItem("checkout_accepted_terms") === "true"
+      );
     }
+
     return false;
   });
 
   const [acceptedRefund, setAcceptedRefund] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
-      return sessionStorage.getItem("checkout_accepted_refund") === "true";
+      return (
+        sessionStorage.getItem("checkout_accepted_refund") === "true"
+      );
     }
+
     return false;
   });
 
-  // -------------------------------------------------------------
-  // 2. Persist State Changes into sessionStorage
-  // -------------------------------------------------------------
   useEffect(() => {
-    sessionStorage.setItem("checkout_form_data", JSON.stringify(formData));
+    sessionStorage.setItem(
+      "checkout_form_data",
+      JSON.stringify(formData)
+    );
   }, [formData]);
 
   useEffect(() => {
-    sessionStorage.setItem("checkout_accepted_address", String(acceptedAddressDetails));
+    sessionStorage.setItem(
+      "checkout_accepted_address",
+      String(acceptedAddressDetails)
+    );
   }, [acceptedAddressDetails]);
 
   useEffect(() => {
-    sessionStorage.setItem("checkout_accepted_terms", String(acceptedTerms));
+    sessionStorage.setItem(
+      "checkout_accepted_terms",
+      String(acceptedTerms)
+    );
   }, [acceptedTerms]);
 
   useEffect(() => {
-    sessionStorage.setItem("checkout_accepted_refund", String(acceptedRefund));
+    sessionStorage.setItem(
+      "checkout_accepted_refund",
+      String(acceptedRefund)
+    );
   }, [acceptedRefund]);
 
-  // Standard component states
   const [errors, setErrors] = useState<ValidationError[]>([]);
   const [formError, setFormError] = useState<string>("");
-  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
+  const router = useRouter();
+
   const cartGrandTotal = data?.[0]?.grandTotal ?? 0;
+
   const bookingService = new BookingService();
-  const userId: string = useAuthStore.getState().user?.userId ?? "";
+
+  const userId: string =
+    useAuthStore.getState().user?.userId ?? "";
+
   const hasItems = data?.[0]?.items?.length > 0;
 
   if (!hasItems) {
     return (
       <div className="w-full text-center py-24 text-gray-700">
-        <h2 className="text-2xl font-semibold mb-3">Your cart is empty</h2>
+        <h2 className="text-2xl font-semibold mb-3">
+          Your cart is empty
+        </h2>
+
         <p className="text-sm text-gray-500 mb-6">
-          There are no items available for checkout. Please add items to your
-          cart and try again.
+          There are no items available for checkout. Please add
+          items to your cart and try again.
         </p>
+
         <div className="flex justify-center gap-3">
           <button
             type="button"
             onClick={onBack}
-            className="px-6 py-3 bg-[#113224] text-white rounded-sm hover:bg-[#0c251a] transition"
+            className="px-6 py-3 bg-[#0D463D] text-white rounded-sm hover:bg-[#0c251a] transition"
           >
             Back to Cart
           </button>
+
           <a
             href="/cart"
             className="px-6 py-3 border border-gray-300 rounded-sm text-gray-700 hover:bg-gray-100 transition"
@@ -135,21 +169,73 @@ export default function CheckoutStep({
     );
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => prev.filter((error) => error.field !== name));
-    if (formError) setFormError("");
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    setErrors((prev) =>
+      prev.filter((error) => error.field !== name)
+    );
+
+    if (formError) {
+      setFormError("");
+    }
   };
 
-  const validatePhone = (value: string): ValidationError | null => {
+const handlePhoneChange = (value?: string) => {
+    if (!value) {
+      setFormData((prev) => ({ ...prev, phone: "" }));
+      return;
+    }
+
+    // Preserve initial '+' and strip all non-digit characters (including spaces)
+    const hasPlus = value.startsWith("+");
+    const digitsOnly = value.replace(/\D/g, "");
+
+    // Enforce strict E.164 maximum of 15 numeric digits (country code + national number)
+    const max15Digits = digitsOnly.slice(0, 15);
+
+    const cleanedPhone = hasPlus ? `+${max15Digits}` : max15Digits;
+
+    setFormData((prev) => ({
+      ...prev,
+      phone: cleanedPhone,
+    }));
+
+    setErrors((prev) =>
+      prev.filter((error) => error.field !== "phone")
+    );
+
+    if (formError) {
+      setFormError("");
+    }
+  };
+  const validatePhone = (
+    value: string
+  ): ValidationError | null => {
     const trimmed = value.trim();
+
     if (!trimmed) {
-      return { field: "phone", message: "Phone number is required" };
+      return {
+        field: "phone",
+        message: "Phone number is required",
+      };
     }
-    if (!/^[0-9+\s-]{7,15}$/.test(trimmed)) {
-      return { field: "phone", message: "Enter a valid phone number" };
+
+    if (!isValidPhoneNumber(trimmed)) {
+      return {
+        field: "phone",
+        message:
+          "Please enter a valid international phone number.",
+      };
     }
+
     return null;
   };
 
@@ -178,11 +264,13 @@ export default function CheckoutStep({
     }
 
     const emailError = validateEmail(formData.email);
+
     if (emailError) {
       validationErrors.push(emailError);
     }
 
     const phoneError = validatePhone(formData.phone);
+
     if (phoneError) {
       validationErrors.push(phoneError);
     }
@@ -190,36 +278,48 @@ export default function CheckoutStep({
     if (!acceptedAddressDetails) {
       validationErrors.push({
         field: "acceptedAddressDetails",
-        message: "You must confirm your address details before checking out.",
+        message:
+          "You must confirm your address details before checking out.",
       });
     }
 
     if (!acceptedTerms) {
       validationErrors.push({
         field: "acceptedTerms",
-        message: "You must agree to the Terms & Conditions before checking out.",
+        message:
+          "You must agree to the Terms & Conditions before checking out.",
       });
     }
 
     if (!acceptedRefund) {
       validationErrors.push({
         field: "acceptedRefund",
-        message: "You must agree to the Refund & Reschedule Policy before checking out.",
+        message:
+          "You must agree to the Refund & Reschedule Policy before checking out.",
       });
     }
 
     setErrors(validationErrors);
+
     return validationErrors.length === 0;
   };
 
   const buildCheckoutPayload = (): CheckoutPayload => {
-    const workshopMap = new Map<string, CheckoutPayload["workshops"][0]>();
+    const workshopMap = new Map<
+      string,
+      CheckoutPayload["workshops"][0]
+    >();
 
     data.forEach((cart) => {
       cart.items.forEach((item) => {
         const key = `${item.workshopId._id}|${item.bookingDate}|${item.slotId}`;
+
         const existing = workshopMap.get(key);
-        const workshopItem = { optionId: item.optionId, people: item.people };
+
+        const workshopItem = {
+          optionId: item.optionId,
+          people: item.people,
+        };
 
         if (existing) {
           existing.items.push(workshopItem);
@@ -237,18 +337,23 @@ export default function CheckoutStep({
 
     return {
       workshops: Array.from(workshopMap.values()),
-      userId: userId,
+
+      userId,
+
       customer: {
         firstName: formData.firstName,
         lastName: formData.lastName,
         address: formData.address,
-        phone: formData.phone,
+
+        // react-phone-number-input already gives
+        // the complete international number.
+        phone: formData.phone.replace(/\s/g, ""),
+
         email: formData.email,
       },
     };
   };
 
-  // Helper to clear saved storage upon completion
   const clearCheckoutStorage = () => {
     sessionStorage.removeItem("checkout_form_data");
     sessionStorage.removeItem("checkout_accepted_address");
@@ -256,7 +361,9 @@ export default function CheckoutStep({
     sessionStorage.removeItem("checkout_accepted_refund");
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -272,14 +379,19 @@ export default function CheckoutStep({
       localStorage.setItem("checkoutCartStep", "1");
 
       const raw = await bookingService.bookNow(payload);
+
       if (raw.data.checkoutUrl) {
-        // Clear saved form data right before redirecting to payment gateway
         clearCheckoutStorage();
+
         window.location.href = raw.data.checkoutUrl;
       }
     } catch (error: any) {
       console.error(error);
-      setFormError(error?.message || "Unable to continue. Please try again.");
+
+      setFormError(
+        error?.message ||
+          "Unable to continue. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -288,10 +400,12 @@ export default function CheckoutStep({
   return (
     <>
       <div className="w-full lg:w-2/3 rounded-sm">
-        <h2 className="text-xl font-semibold mb-8 pb-4 border-b border-gray-300 flex justify-between">
+        <p className=" mb-8 pb-4 border-b border-gray-300 flex justify-between">
           Billing details{" "}
-          <span className="text-gray-500 text-base font-normal">(2)</span>
-        </h2>
+          <span className="text-black text-base font-normal">
+            (2)
+          </span>
+        </p>
 
         <form
           id="checkout-form"
@@ -305,23 +419,32 @@ export default function CheckoutStep({
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid sm:grid-cols-2 gap-6">
             <FormInput
               label="First Name"
               name="firstName"
               type="text"
               value={formData.firstName}
               onChange={handleChange}
-              error={errors.find((err) => err.field === "firstName")?.message}
+              error={
+                errors.find(
+                  (err) => err.field === "firstName"
+                )?.message
+              }
               required
             />
+
             <FormInput
               label="Last Name"
               name="lastName"
               type="text"
               value={formData.lastName}
               onChange={handleChange}
-              error={errors.find((err) => err.field === "lastName")?.message}
+              error={
+                errors.find(
+                  (err) => err.field === "lastName"
+                )?.message
+              }
               required
             />
           </div>
@@ -333,117 +456,188 @@ export default function CheckoutStep({
             placeholder="Address"
             value={formData.address}
             onChange={handleChange}
-            error={errors.find((err) => err.field === "address")?.message}
+            error={
+              errors.find(
+                (err) => err.field === "address"
+              )?.message
+            }
             required
           />
 
-          <div className="grid grid-cols-2 gap-6">
-            <FormInput
-              label="Phone"
-              name="phone"
-              type="tel"
-              value={formData.phone}
-              onChange={handleChange}
-              error={errors.find((err) => err.field === "phone")?.message}
-              required
-            />
+          <div className="grid sm:grid-cols-2 gap-6">
+{/* PHONE INPUT UI */}
+<div className="w-full">
+  <label className="block mb-2 text-sm font-medium text-gray-700">
+    Phone <span className="text-red-500">*</span>
+  </label>
+
+<PhoneInput
+  international
+  defaultCountry="AE"
+  value={formData.phone || undefined}
+  onChange={handlePhoneChange}
+  placeholder="Enter your phone number"
+  /* Add smartCaret={false} if cursor jumps during spacing removal */
+  smartCaret={false}
+  numberInputProps={{
+    maxLength: 18,
+    onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === " ") {
+        e.preventDefault();
+      }
+    },
+    onInput: (e: React.FormEvent<HTMLInputElement>) => {
+      const input = e.currentTarget;
+      input.value = input.value.replace(/\s+/g, "");
+    },
+  }}
+  className={`react-phone-input ${
+    errors.find((error) => error.field === "phone") ? "error" : ""
+  }`}
+/>
+
+  {errors.find((error) => error.field === "phone") && (
+    <p className="mt-2 text-sm font-medium text-red-500">
+      {errors.find((error) => error.field === "phone")?.message}
+    </p>
+  )}
+</div>
+            {/* EMAIL */}
             <FormInput
               label="Email Address"
               name="email"
               type="email"
               value={formData.email}
               onChange={handleChange}
-              error={errors.find((err) => err.field === "email")?.message}
+              error={
+                errors.find(
+                  (err) => err.field === "email"
+                )?.message
+              }
               required
             />
           </div>
         </form>
       </div>
 
-      {/* Summary Sidebar */}
-      <div className="w-full lg:w-1/3 bg-[#ece9e2] p-8 rounded-sm sticky top-8">
+      {/* SUMMARY SIDEBAR */}
+      <div className="w-full lg:w-1/3 bg-secondary-dark p-8 rounded-sm sticky top-8">
         <div className="space-y-4 my-6 text-sm">
+          {/* ADDRESS CONFIRMATION */}
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"
-              className="mt-1 accent-[#113224]"
+              className="mt-1 accent-[#0D463D]"
               checked={acceptedAddressDetails}
               onChange={(e) => {
-                setAcceptedAddressDetails(e.target.checked);
+                setAcceptedAddressDetails(
+                  e.target.checked
+                );
+
                 setErrors((prev) =>
-                  prev.filter((error) => error.field !== "acceptedAddressDetails")
+                  prev.filter(
+                    (error) =>
+                      error.field !==
+                      "acceptedAddressDetails"
+                  )
                 );
               }}
             />
+
             <span className="text-gray-700">
-              I confirm that the details entered are accurate and will be
-              used for my workshop booking, registration, and related
-              communications.
+              I confirm that the details entered are accurate
+              and will be used for my workshop booking,
+              registration, and related communications.
             </span>
           </label>
-          {errors.find((err) => err.field === "acceptedAddressDetails") && (
+
+          {errors.find(
+            (err) =>
+              err.field === "acceptedAddressDetails"
+          ) && (
             <p className="text-red-600 text-sm ml-8">
-              You must accept the address confirmation before continuing.
+              You must accept the address confirmation before
+              continuing.
             </p>
           )}
 
+          {/* TERMS */}
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"
-              className="mt-1 accent-[#113224]"
+              className="mt-1 accent-[#0D463D]"
               checked={acceptedTerms}
               onChange={(e) => {
                 setAcceptedTerms(e.target.checked);
+
                 setErrors((prev) =>
-                  prev.filter((error) => error.field !== "acceptedTerms")
+                  prev.filter(
+                    (error) =>
+                      error.field !== "acceptedTerms"
+                  )
                 );
               }}
             />
+
             <span className="text-gray-700">
               I have read, understood, and agree to the{" "}
               <Link
                 href="/terms"
                 rel="noopener noreferrer"
-                className="text-[#113224] underline"
+                className="text-[#0D463D] underline"
               >
                 Terms &amp; Conditions
               </Link>
               .
             </span>
           </label>
-          {errors.find((err) => err.field === "acceptedTerms") && (
+
+          {errors.find(
+            (err) => err.field === "acceptedTerms"
+          ) && (
             <p className="text-red-600 text-sm ml-8">
-              You must agree to the Terms &amp; Conditions before continuing.
+              You must agree to the Terms &amp; Conditions
+              before continuing.
             </p>
           )}
 
+          {/* REFUND */}
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"
-              className="mt-1 accent-[#113224]"
+              className="mt-1 accent-[#0D463D]"
               checked={acceptedRefund}
               onChange={(e) => {
                 setAcceptedRefund(e.target.checked);
+
                 setErrors((prev) =>
-                  prev.filter((error) => error.field !== "acceptedRefund")
+                  prev.filter(
+                    (error) =>
+                      error.field !== "acceptedRefund"
+                  )
                 );
               }}
             />
+
             <span className="text-gray-700">
               I have read, understood, and agree to the{" "}
               <Link
                 href="/cancellation"
                 rel="noopener noreferrer"
-                className="text-[#113224] underline"
+                className="text-[#0D463D] underline"
               >
                 Refund &amp; Reschedule Policy
               </Link>
               .
             </span>
           </label>
-          {errors.find((err) => err.field === "acceptedRefund") && (
+
+          {errors.find(
+            (err) => err.field === "acceptedRefund"
+          ) && (
             <p className="text-red-600 text-sm ml-8">
-              You must agree to the Refund &amp; Reschedule Policy before continuing.
+              You must agree to the Refund &amp; Reschedule
+              Policy before continuing.
             </p>
           )}
         </div>
@@ -452,11 +646,13 @@ export default function CheckoutStep({
           type="submit"
           form="checkout-form"
           disabled={isSubmitting}
-          className="w-full bg-[#113224] text-white py-4 font-medium flex justify-center items-center gap-2 hover:bg-[#0c251a] disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full bg-[#0D463D] text-white py-4 font-medium flex justify-center items-center gap-2 hover:bg-[#0c251a] disabled:opacity-60 disabled:cursor-not-allowed"
         >
           <span>Checkout</span>
           <span className="text-gray-400">|</span>
-          <span>AED {cartGrandTotal.toFixed(2)}</span>
+          <span>
+            AED {cartGrandTotal.toFixed(2)}
+          </span>
         </button>
       </div>
     </>

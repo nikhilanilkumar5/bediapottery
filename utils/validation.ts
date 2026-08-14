@@ -13,6 +13,54 @@ export interface ValidationResult {
   errors: ValidationError[]
 }
 
+export const COUNTRY_PHONE_CODES = [
+  { value: '+971', label: 'UAE (+971)', minDigits: 7, maxDigits: 9 },
+  { value: '+966', label: 'Saudi Arabia (+966)', minDigits: 7, maxDigits: 9 },
+  { value: '+965', label: 'Kuwait (+965)', minDigits: 7, maxDigits: 8 },
+  { value: '+974', label: 'Qatar (+974)', minDigits: 7, maxDigits: 8 },
+  { value: '+965', label: 'Bahrain (+973)', minDigits: 7, maxDigits: 8 },
+  { value: '+44', label: 'United Kingdom (+44)', minDigits: 7, maxDigits: 12 },
+  { value: '+1', label: 'United States (+1)', minDigits: 7, maxDigits: 10 },
+  { value: '+91', label: 'India (+91)', minDigits: 7, maxDigits: 12 },
+  { value: '+61', label: 'Australia (+61)', minDigits: 7, maxDigits: 12 },
+] as const
+
+export const getPhoneCountryConfig = (countryCode: string) => {
+  return (
+    COUNTRY_PHONE_CODES.find((option) => option.value === countryCode) ??
+    COUNTRY_PHONE_CODES[0]
+  )
+}
+
+export const validateInternationalPhone = (value: string, countryCode = '+971') => {
+  const trimmedValue = value.trim()
+
+  if (!trimmedValue) {
+    return { field: 'phone', message: 'Phone number is required' }
+  }
+
+  if (/[A-Za-z]/.test(trimmedValue)) {
+    return { field: 'phone', message: 'Phone number must contain digits only' }
+  }
+
+  const digits = trimmedValue.replace(/\D/g, '')
+
+  if (!digits) {
+    return { field: 'phone', message: 'Phone number must contain digits only' }
+  }
+
+  const countryConfig = getPhoneCountryConfig(countryCode)
+
+  if (digits.length < countryConfig.minDigits || digits.length > countryConfig.maxDigits) {
+    return {
+      field: 'phone',
+      message: `Phone number must be ${countryConfig.minDigits}-${countryConfig.maxDigits} digits for ${countryConfig.label.split(' (')[0]} after the country code.`,
+    }
+  }
+
+  return null
+}
+
 // Individual validators - SRP: each function does one thing
 export const validators = {
   /**

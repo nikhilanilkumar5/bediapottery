@@ -22,13 +22,13 @@ export default function OrderCompleteStep() {
           {/* ... mapping over remaining completed items ... */}
 
           <div className="flex justify-between items-center py-4 border-t border-gray-200 mt-8">
-             <span className="bg-[#ece9e2] text-[#113224] px-4 py-1 text-xs font-semibold tracking-wider rounded">Paid</span>
+             <span className="bg-secondary-dark text-[#0D463D] px-4 py-1 text-xs font-semibold tracking-wider rounded">Paid</span>
              <span className="font-medium text-lg">AED 2250</span>
           </div>
         </div>
       </div>
 
-      <div className="w-full lg:w-1/3 bg-[#ece9e2] p-8 rounded-sm sticky top-8 text-sm">
+      <div className="w-full lg:w-1/3 bg-secondary-dark p-8 rounded-sm sticky top-8 text-sm">
         <h3 className="font-semibold mb-6">Shipping</h3>
         <p className="mb-8 text-gray-700">New York, US<br/>Same-Day Dispatching</p>
         
@@ -56,7 +56,7 @@ export default function OrderCompleteStep() {
         </div>
 
         <p className="text-center text-gray-600 mb-4">New Order, Click button bellow</p>
-        <button className="w-full border border-[#113224] text-[#113224] py-4 font-medium hover:bg-[#113224] hover:text-white transition-colors">
+        <button className="w-full border border-[#0D463D] text-[#0D463D] py-4 font-medium hover:bg-[#0D463D] hover:text-white transition-colors">
           Shop Now
         </button>
       </div>
