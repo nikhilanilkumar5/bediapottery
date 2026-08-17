@@ -313,28 +313,11 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
               </Content>
             </div>
           </div>
-          {category === "corporate-events" && (
-            <div className="bg-white p-6 shadow-sm">
-              {/* Header Label */}
-              <div className="mb-4">
-                <div className="py-3 px-4 xl:text-base text-sm font-medium bg-primary w-full text-white inline-block">
-                  Package Includes
-                </div>
-              </div>
-
-              {/* Content Area */}
-              <div className="bg-[#fcfcfa] border border-[#e5e5e5] max-h-72 overflow-y-auto p-6 relative">
-                <ul className="list-disc pl-5 space-y-3 xl:text-base text-sm text-gray-700 pr-8">
-                  {product.includes?.map((item) => (
-                    <li key={item._id}>{item.title}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          )}
+      
           <div className="p-[18px] bg-white">
             {/* Material Selector */}
-            {product?.options && product.options.length > 0 && (
+      
+            {product?.options && slug!=="turkish-coffee-clay"  && product.options.length > 0 && (
               <MaterialSelector
                 materials={product?.options}
                 selectedMaterialId={selectedMaterialId}

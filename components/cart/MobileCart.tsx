@@ -79,7 +79,7 @@ useEffect(() => {
                 </button>
 
                 <h3 className="font-semibold text-[15px] text-black mb-2 leading-tight">
-                  {item.workshopId.title}-{item.workshopId.title}
+                  {item.workshopId.title}-{item.optionTitle}
                 </h3>
                 <div className="flex justify-between items-center text-gray-500">
                   {item.workshopId.title !== "Adult's Birthday Party" ? (

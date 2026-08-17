@@ -20,12 +20,6 @@ const MaterialDescription: React.FC<MaterialDescriptionProps> = ({
   className = '',
 }) => {
   const [isOpen, setIsOpen] = useState(false)
-const items = description.includes("•")
-  ? description
-      .split("•")
-      .map(item => item.trim())
-      .filter(Boolean)
-  : [description];
   return (
     <div className={` bg-[#EDE8E266] border border-[#0D463D33] ${className}`}>
       <button
@@ -52,13 +46,11 @@ const items = description.includes("•")
       </button>
     {isOpen && (
   <div className="px-4 pb-4 border-t border-gray-200 pt-4">
-    <ul className="list-disc pl-5 space-y-2">
-      {items.map((item, index) => (
-        <li key={index}>
-          <Content>{item}</Content>
-        </li>
-      ))}
-    </ul>
+     <span
+                dangerouslySetInnerHTML={{
+                  __html: description || "No description available.",
+                }}
+              />
   </div>
 )}
     </div>

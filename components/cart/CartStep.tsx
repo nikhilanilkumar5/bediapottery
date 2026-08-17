@@ -89,7 +89,7 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
                 <div className="flex-grow flex flex-col justify-between">
                   <div>
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-normal text-black text-[15px]">{item.workshopId.title}</h3>
+                      <h3 className="font-normal text-black text-[15px]">{item.workshopId.title}-{item.optionTitle}</h3>
                       
                       {/* Conditional Remove Button */}
                       {isEditing && (

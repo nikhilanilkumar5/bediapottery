@@ -5,6 +5,7 @@ import ClientLogosSlider from '@/components/testimonial/ClientLogosSlider';
 import { Title } from '@/components/ui';
 import FaqListSmall from '@/components/faq/FaqListSmall';
 import { getFaqData } from '@/services/faq.service';
+import InfoAndTimeline from '@/components/giftcard/InfoAndTimeline';
 
 interface PageProps {
   params: Promise<{
@@ -23,7 +24,10 @@ const faqData = await getFaqData(category, 1, 8)
     <main className="min-h-screen bg-secondary-dark">
       <ProductDetailClient product={data} category={category}  slug={slug}/>
          {category === 'corporate-events' && (
+          <>
+               <InfoAndTimeline product={data} hide={true}/>
           <ClientLogosSlider />
+          </>
          )}
       {faqData.length > 0 && (
         <section className="page-wrapper  py-12 lg:py-24">
@@ -33,6 +37,7 @@ const faqData = await getFaqData(category, 1, 8)
           <FaqListSmall items={faqData} />
         </section>
       )}
+    
     </main>
   )
 }

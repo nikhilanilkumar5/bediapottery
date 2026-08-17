@@ -11,6 +11,7 @@ export interface CartWorkshop {
   title: string;
   bannerImage: string;
   images: CartWorkshopImage[];
+ 
 }
 
 export interface CartItem {
@@ -19,6 +20,7 @@ export interface CartItem {
   bookingType: string;
   slotId: string;
   optionId: string;
+  optionTitle: string;
   people: number;
   price: number;
   subtotal: number;

@@ -4,13 +4,14 @@ import { useState } from "react";
 import { Content, Title } from "../ui";
 interface GiftCardHeroProps {
   product: WorkshopItem;
+  hide?: boolean; // Optional prop to control visibility
 }
 
-export default function InfoAndTimeline({ product }: GiftCardHeroProps) {
+export default function InfoAndTimeline({ product, hide }: GiftCardHeroProps) {
   const [activeTab, setActiveTab] = useState(product?.moreDetails?.[0]?._id);
 
   return (
-    <section className="bg-[#f2ece3] min-h-screen py-16 font-sans text-[#0D463D]">
+    <section className={"bg-[#f2ece3] " + (hide ? "" : "min-h-screen") + "  py-16 font-sans text-[#0D463D]"}>
       <div className="page-wrapper px-[17px]  space-y-24">
         {/* --- TABS SECTION --- */}
         <div className="bg-white p-6 sm:p-10 shadow-sm rounded-sm">
@@ -42,13 +43,12 @@ export default function InfoAndTimeline({ product }: GiftCardHeroProps) {
             />
           </Content>
         </div>
-
-        {/* --- TIMELINE SECTION --- */}
-        <div className="text-center">
-          <Title className="mb-2.5 font-normal">Gifting Made Easy</Title>
-          <Content className="">
-            Three simple steps to send a creative experience they'll love.
-          </Content>
+{!hide && (
+          <div className="text-center">
+            <Title className="mb-2.5 font-normal">Gifting Made Easy</Title>
+            <Content className="">
+              Three simple steps to send a creative experience they'll love.
+            </Content>
 
           {/* Desktop Arc Layout (Hidden on small screens) */}
           <div className="hidden lg:block relative w-[900px] h-[550px] mx-auto mt-32">
@@ -170,6 +170,7 @@ export default function InfoAndTimeline({ product }: GiftCardHeroProps) {
             ))}
           </div>
         </div>
+        )}
       </div>
     </section>
   );
