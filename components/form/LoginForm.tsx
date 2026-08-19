@@ -3,12 +3,13 @@
 import React, { useState } from "react";
 import FormInput from "./FormInput";
 import Button from "@/components/ui/PrimaryButton";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Content } from "../ui";
 import { validateEmail,validatePassword } from "@/utils/validation";
 
 import { loginUser } from "@/services/authService";
 import { useAuthStore } from "@/store/authStore";
+import { syncGuestCartToServer } from "@/utils/guestCart";
 import FormPasswordInput from "./FormPasswordInput";
 
 interface LoginFormData {
@@ -41,6 +42,8 @@ const LoginForm = () => {
     useState(false);
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams.get("returnUrl") || "/";
 
   // zustand
   const setUser = useAuthStore(
@@ -141,14 +144,29 @@ const LoginForm = () => {
         userId: response.result.user.userId,
       });
 
+      try {
+        await syncGuestCartToServer(response.result.user.userId);
+      } catch {
+        // Guest cart sync failed; user can still continue to checkout.
+      }
+
       setSubmitSuccess(true);
 
       // reset form
       setFormData(initialFormData);
 
+      const destination =
+        returnUrl.startsWith("/") && !returnUrl.startsWith("//")
+          ? returnUrl
+          : "/";
+
+      if (destination === "/checkout") {
+        localStorage.setItem("checkoutCartStep", "2");
+      }
+
       // redirect
       setTimeout(() => {
-        router.push("/");
+        router.push(destination);
       }, 1000);
     } catch (error: any) {
       setErrors([
@@ -256,7 +274,13 @@ const LoginForm = () => {
 
         <button
           type="button"
-          onClick={() => router.push("/signup")}
+          onClick={() =>
+            router.push(
+              returnUrl !== "/"
+                ? `/signup?returnUrl=${encodeURIComponent(returnUrl)}`
+                : "/signup"
+            )
+          }
           className="text-primary text-sm font-semibold hover:underline ml-1"
         >
           Sign up

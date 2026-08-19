@@ -53,7 +53,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
                   key={card._id ?? card.id}
                   className={`w-full overflow-hidden ${
                     index === 3
-                      ? "bg-primary flex flex-col justify-center p-4 lg:p-6 lg:min-h-0"
+                      ? "bg-primary flex flex-col justify-center lg:min-h-0"
                       : " lg:min-h-0 lg:h-full"
                   }`}
                 >

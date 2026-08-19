@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import SignupForm from "@/components/form/SignupForm";
 import Title from "@/components/ui/Title";
 import Subtitle from "@/components/ui/Subtitle";
@@ -30,7 +30,9 @@ export default function SignupPage() {
               </Content>
             </div>
 
-            <SignupForm  />
+            <Suspense fallback={<div className="text-sm text-gray-500">Loading...</div>}>
+              <SignupForm />
+            </Suspense>
           </div>
         </div>
       </div>

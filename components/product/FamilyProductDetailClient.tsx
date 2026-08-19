@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { format, isToday } from 'date-fns'
 import { useFilteredTimeSlots } from '@/hooks/useFilteredTimeSlots'
-import { BookingData, Availability } from '@/types'
+import { Availability } from '@/types'
 import { WorkshopItem } from '@/services/workshop.service'
 import ProductMedia from './ProductMedia'
 import PriceDisplay from './PriceDisplay'
@@ -19,6 +19,7 @@ import { getAvailabilityData, getPotteryCapacity, PotteryCapacityResult } from '
 import { Content, Title } from '../ui'
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
+import { addToCartOrGuest } from "@/utils/guestCart";
 
 interface ProductDetailClientProps {
   product: WorkshopItem
@@ -43,7 +44,6 @@ const FamilyProductDetailClient: React.FC<ProductDetailClientProps> = ({
   const [capacityInfo, setCapacityInfo] = useState<PotteryCapacityResult | null>(null)
   const [capacityLoading, setCapacityLoading] = useState(false)
   const [capacityError, setCapacityError] = useState<string>('')
-  const userId: string = useAuthStore.getState().user?.userId ?? ''
 const formattedDate = useMemo(() => {
   return selectedDate
     ? format(selectedDate, 'yyyy-MM-dd')
@@ -189,11 +189,6 @@ const handleDateSelect = (date: Date) => {
   }, [selectedDate, selectedSlotId, formattedDate, product.defaultSlots, product._id])
 
 const handleAddToCart = async () => {
- const token: string | null = useAuthStore.getState().user?.token || null
-  if (!token) {
-    router.push('/login');
-    return;
-  }
   const success = await handlecheck('cart')
   if (success) {
     router.push('/cart')
@@ -201,15 +196,16 @@ const handleAddToCart = async () => {
 }
 
 const handleBookNow = async () => {
- const token: string | null = useAuthStore.getState().user?.token || null
-  if (!token) {
-    router.push('/login');
-    return;
-  }
+  const token: string | null = useAuthStore.getState().user?.token || null
   const success = await handlecheck('checkout')
-  if (success) {
-    router.push('/checkout')
+  if (!success) {
+    return
   }
+  if (!token) {
+    router.push('/login?returnUrl=/checkout')
+    return
+  }
+  router.push('/checkout')
 }
 
 const handlecheck = async (destination: 'cart' | 'checkout') => {
@@ -219,9 +215,8 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
 
   setAvailabilityError('')
 
-  const bookingData: BookingData = {
-    userId: userId,
-     bookingType: "pottery",
+  const bookingPayload = {
+    bookingType: "pottery" as const,
     workshopId: product._id,
     optionId: selectedMaterialId,
     bookingDate: formattedDate,
@@ -255,7 +250,19 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
   setAvailabilityError('');
 
   try {
-    await bookingService.addToCart(bookingData);
+    await addToCartOrGuest(
+      bookingPayload,
+      {
+        workshopTitle: product.title,
+        optionTitle: selectedMaterial?.title ?? '',
+        price: selectedMaterial?.price ?? 0,
+        subtotal: totalPrice,
+        currency: selectedMaterial?.currency ?? 'AED',
+        bannerImage: product.bannerImage || '/images/product/1.png',
+        image: product.images?.[0]?.image,
+      },
+      bookingService,
+    );
     return true;
   } catch (error) {
     setAvailabilityError(

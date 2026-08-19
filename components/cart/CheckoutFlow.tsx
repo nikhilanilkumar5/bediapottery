@@ -15,8 +15,7 @@ export default function CheckoutFlow({ initialData,  }: CheckoutFlowProps) {
   // Step 1 = Detailed Cart Review
   // Step 2 = Billing / Checkout
   // Step 3 = Order Complete
-  const initialStep = Number(localStorage.getItem('checkoutCartStep')) || 1;
-  const [step, setStep] = useState(initialStep || 1);
+  const [step, setStep] = useState( 1);
   const [cartData, setCartData] = useState<CartData[]>(initialData ?? []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

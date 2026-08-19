@@ -11,6 +11,10 @@ export interface ReviewResponse {
   reviews: any[]; // Replace 'any' with your actual Review item type
   totalPages: number;
   currentPage: number;
+  ratingSummary: {
+    averageRating: number;
+    totalReviews: number;
+  };
 }
 
 export async function getReviewsData(page : number, limit: number): Promise<ReviewResponse> {
@@ -39,6 +43,7 @@ export async function getReviewsData(page : number, limit: number): Promise<Revi
   return {
     reviews: raw?.result?.googleReviews || [],
     totalPages: raw?.result?.totalPages || 1,
+    ratingSummary: raw?.result?.ratingSummary || 0,
     currentPage: raw?.result?.currentPage || page
   };
 }

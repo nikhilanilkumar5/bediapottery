@@ -12,8 +12,9 @@ import {
   getPotteryCapacity,
   PotteryCapacityResult,
 } from "@/services/avaliablity.service";
-import { BookingData, Availability } from "@/types";
+import { Availability } from "@/types";
 import { useAuthStore } from "@/store/authStore";
+import { addToCartOrGuest } from "@/utils/guestCart";
 import QuantitySelector from "../product/QuantitySelector";
 import BookingActions from "../product/BookingActions";
 import MaterialSelector from "../product/MaterialSelector";
@@ -53,7 +54,6 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
   const [capacityError, setCapacityError] = useState<string>("");
   const router = useRouter();
   const bookingService = new BookingService();
-  const userId: string = useAuthStore.getState().user?.userId ?? "";
 
   const [selectedMaterialId, setSelectedMaterialId] = useState(
     product.options?.[0]?._id || "",
@@ -187,9 +187,8 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
     const wheel = overrideCounts?.wheel ?? wheelCount;
     const peopleCount = overrideCounts?.people ?? (type === "kids" ? quantity : hand + wheel);
 
-    const bookingData: BookingData = {
-      userId,
-      bookingType: "events",
+    const bookingPayload = {
+      bookingType: "events" as const,
       workshopId: product._id,
       optionId: selectedMaterialId || product.options?.[0]?._id || "",
       bookingDate: formattedDate,
@@ -224,7 +223,24 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
     setAvailabilityError("");
 
     try {
-      await bookingService.addToCart(bookingData);
+      const unitPrice = selectedMaterial?.price ?? 0;
+      const currency = selectedMaterial?.currency ?? "AED";
+
+      await addToCartOrGuest(
+        bookingPayload,
+        {
+          workshopTitle: product.title,
+          optionTitle: selectedMaterial?.title ?? "",
+          price: unitPrice,
+          subtotal: unitPrice * peopleCount,
+          currency,
+          bannerImage: product.bannerImage || "/images/product/1.png",
+          image: product.images?.[0]?.image,
+          handBuild: hand,
+          wheelPottery: wheel,
+        },
+        bookingService,
+      );
       return true;
     } catch (error) {
       setAvailabilityError(
@@ -236,23 +252,21 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
   };
 
   const handleAddToCart = async (overrideCounts?: { people?: number; hand?: number; wheel?: number }) => {
-    const token: string | null = useAuthStore.getState().user?.token || null;
-    if (!token) {
-      router.push("/login");
-      return;
-    }
     const success = await handleCheck("cart", overrideCounts);
     if (success) router.push("/cart");
   };
 
   const handleBookNow = async () => {
     const token: string | null = useAuthStore.getState().user?.token || null;
-    if (!token) {
-      router.push("/login");
+    const success = await handleCheck("checkout");
+    if (!success) {
       return;
     }
-    const success = await handleCheck("checkout");
-    if (success) router.push("/checkout");
+    if (!token) {
+      router.push("/login?returnUrl=/checkout");
+      return;
+    }
+    router.push("/checkout");
   };
 
   // Enable check: Date and slot must be selected, and total people must meet bounds

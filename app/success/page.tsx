@@ -22,6 +22,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   const firstBooking = orderdata?.items?.[0]?.bookingId;
   const customerName = firstBooking?.customer.firstName + " " + firstBooking?.customer.lastName || "N/A";
   const customerEmail = firstBooking?.customer?.email  || "N/A";
+  const customerAddress = firstBooking?.customer?.address || "N/A";
   // const bookingDate = firstBooking?.bookingDate 
   // const timeSlot = firstBooking?.timeSlot || firstBooking?.slot || "N/A";
 
@@ -225,18 +226,23 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
       
 
             {/* 2-Column Summary Section */}
+            <div className=" border-b border-gray-200 py-6 "/>
             <div className=" border-b border-gray-200 py-6 mb-10">
-              <div className="grid grid-cols-1 gap-8 text-sm">
+              <div className="grid grid-cols-1 gap-8 ">
                 
                 {/* Left Side: Customer & Booking Info */}
                 <div className="space-y-4">
                   <div className="flex justify-between  md:gap-16">
-                    <span className="text-gray-500 w-24">Name</span>
+                    <span className="text-black font-medium">Name</span>
                     <span className="text-black font-medium">{customerName}</span>
                   </div>
                   <div className="flex justify-between  md:gap-16">
-                    <span className="text-gray-500 w-24">Email</span>
+            <span className="text-black font-medium">Email</span>
                     <span className="text-black font-medium">{customerEmail}</span>
+                  </div>
+                    <div className="flex justify-between  md:gap-16">
+            <span className="text-black font-medium">Address</span>
+                    <span className="text-black font-medium max-w-56">{customerAddress} swdsfgfdgtyhyutyutyutyuyutyutyuuyuuuuuuuuyuuyy</span>
                   </div>
                  
                 </div>

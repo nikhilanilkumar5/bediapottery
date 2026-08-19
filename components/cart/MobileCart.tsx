@@ -9,10 +9,14 @@ export default function MobileCart({
   data,
   refreshCart,
   onCheckout,
+  isGuest = false,
+  onRemoveGuestItem,
 }: {
   data: CartData[];
   refreshCart: () => void;
   onCheckout?: () => void;
+  isGuest?: boolean;
+  onRemoveGuestItem?: (index: number) => void;
 }) {
   const router = useRouter();
   const cartItems = data?.[0]?.items || [];
@@ -67,6 +71,12 @@ useEffect(() => {
                 <button
                   className="text-gray-400 absolute top-0 right-0 hover:text-[#0D463D] mb-3 border border-gray-300 rounded-full w-6 h-6 flex items-center justify-center text-xs transition-colors"
                   onClick={async () => {
+                    if (isGuest && onRemoveGuestItem) {
+                      onRemoveGuestItem(i);
+                      refreshCart();
+                      return;
+                    }
+
                     await deleteCart({
                       userId: data[0]?.userId || "",
                       itemIndex: i,

@@ -4,12 +4,22 @@ import { useEffect, useState } from 'react';
 import CheckoutFlow from '@/components/cart/CheckoutFlow';
 import { CartData, getCartData } from '@/services/cart.service';
 import { useAuthStore } from '@/store/authStore';
+import { useGuestCartStore } from '@/store/guestCartStore';
+import { useRouter } from 'next/navigation';
 
 export default function CheckoutPageClient() {
   const userId = useAuthStore(state => state.user?.userId);
+  const guestItemCount = useGuestCartStore(state => state.items.length);
+  const router = useRouter();
   const [data, setData] = useState<CartData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // useEffect(() => {
+  //   if (!userId && guestItemCount > 0) {
+  //     router.replace('/login?returnUrl=/checkout');
+  //   }
+  // }, [userId, guestItemCount, router]);
 
   useEffect(() => {
     let isMounted = true;
@@ -53,6 +63,14 @@ export default function CheckoutPageClient() {
       isMounted = false;
     };
   }, [userId]);
+
+  if (!userId && guestItemCount > 0) {
+    return (
+      <main className="min-h-screen flex items-center justify-center text-gray-600 px-4 text-center">
+        Redirecting to login...
+      </main>
+    );
+  }
 
   if (loading) {
     return (

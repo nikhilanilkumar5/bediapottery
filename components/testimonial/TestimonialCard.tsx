@@ -82,7 +82,7 @@ const getAvatarColor = (name: string) => {
 
 const TestimonialCard: React.FC<Props> = ({ testimonial }) => {
   return (
-    <div className="bg-[#E6DFD566] hover:shadow-sm  p-6 h-full flex flex-col justify-between  transition">
+    <div className="bg-[#E6DFD566] hover:shadow-sm  p-6 h-full flex flex-col   transition">
       {/* Header */}
       <div className=" flex flex-col justify-between transition">
         {/* Header */}
@@ -105,17 +105,7 @@ const TestimonialCard: React.FC<Props> = ({ testimonial }) => {
             </div>
           )}
 
-          <div></div>
-          <GoogleIcon />
-        </div>
-      </div>
-
-      {/* Text */}
-
-      <Content className="  leading-1.5 font-normal mb-5">
-        {testimonial.text}
-      </Content>
-      <div className="">
+          <div className="">
         <Content className=" leading-none font-medium mb-1">
           {testimonial.authorName}
         </Content>
@@ -124,6 +114,16 @@ const TestimonialCard: React.FC<Props> = ({ testimonial }) => {
         </p>
         <RatingStars rating={testimonial.rating} />
       </div>
+          <GoogleIcon />
+        </div>
+      </div>
+
+      {/* Text */}
+
+      <Content className="  leading-1.5 font-normal mb-5  text-justify">
+        {testimonial.text}
+      </Content>
+    
       {/* Stars */}
     </div>
   );

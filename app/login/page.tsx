@@ -3,6 +3,7 @@ import { Content } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
 import LoginForm from "@/components/form/LoginForm";
+import { Suspense } from "react";
 
 export default function LoginPage() {
   return (
@@ -28,7 +29,9 @@ export default function LoginPage() {
      </Content>
             </div>
 
-            <LoginForm  />
+            <Suspense fallback={<div className="text-sm text-gray-500">Loading...</div>}>
+              <LoginForm />
+            </Suspense>
           </div>
         </div>
       </div>

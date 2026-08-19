@@ -2,6 +2,7 @@
 
 import { getCartData } from '@/services/cart.service';
 import { useAuthStore } from '@/store/authStore';
+import { useGuestCartStore } from '@/store/guestCartStore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -14,13 +15,14 @@ export default function SearchPill() {
   const getToken = useAuthStore((state) => state.getToken);
   const userId = useAuthStore((state) => state.user?.userId);
   const user = useAuthStore((state) => state.user?.email || null);
+  const guestItemCount = useGuestCartStore(state => state.items.length);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const token = getToken();
 
   const refreshCartCount = async () => {
     if (!userId) {
-      setCartCount(0);
+      setCartCount(guestItemCount);
       return;
     }
 
@@ -46,7 +48,7 @@ export default function SearchPill() {
       window.removeEventListener('cart:updated', handleCartUpdated);
       window.removeEventListener('focus', handleCartUpdated);
     };
-  }, [userId]);
+  }, [userId, guestItemCount]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

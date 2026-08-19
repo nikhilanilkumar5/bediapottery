@@ -4,11 +4,10 @@ import { useMemo, useState, useEffect } from "react";
 import { Play, User2 } from "lucide-react";
 import QuantitySelector from "../product/QuantitySelector";
 import { WorkshopItem } from "@/services/workshop.service";
-import { BookingData } from "@/types";
-import { useAuthStore } from "@/store/authStore";
+import { BookingService } from "@/services/booking.service";
 import MaterialSelector from "../product/MaterialSelector";
 import { WorkshopOption } from "@/services/workshop.service";
-import { BookingService } from "@/services/booking.service";
+import { addToCartOrGuest } from "@/utils/guestCart";
 import OccasionSelector from "./OccasionSelector";
 import Link from "next/link";
 import ImageGrid from "../common/ImageGrid";
@@ -42,10 +41,6 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
   const [availabilityError, setAvailabilityError] = useState("");
   const [showCartToast, setShowCartToast] = useState(false);
 
-  // 1. Get auth state from your store
-  const user = useAuthStore((state) => state.user);
-  const userId = user?.userId ?? "";
-  const token: string | null = useAuthStore.getState().user?.token || null;
   const uniqueMaterials = useMemo(
     () => getUniqueMaterials(product?.options),
     [product?.options],
@@ -79,19 +74,10 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
     );
   }, [product?.options, selectedClay, recipient]);
   const handleCheck = async () => {
-    setAvailabilityError(""); // Clear previous errors
+    setAvailabilityError("");
 
-    // 2. Intercept check if user is not logged in
-    if (!token || token == null) {
-      setAvailabilityError(
-        "Your cart is tied to your account. Please log in to continue.",
-      );
-      return false;
-    }
-
-    const bookingData: BookingData = {
-      userId,
-      bookingType: "gift",
+    const bookingPayload = {
+      bookingType: "gift" as const,
       workshopId: product._id,
       optionId: selectedMaterial?._id || "",
       people: quantity,
@@ -107,8 +93,23 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
       }),
     };
 
+    const unitPrice = selectedMaterial?.price ?? 0;
+    const currency = selectedMaterial?.currency ?? "AED";
+
     try {
-      await bookingService.addToCart(bookingData);
+      await addToCartOrGuest(
+        bookingPayload,
+        {
+          workshopTitle: product.title,
+          optionTitle: selectedMaterial?.title ?? "",
+          price: unitPrice,
+          subtotal: unitPrice * quantity,
+          currency,
+          bannerImage: product.bannerImage || "/images/product/1.png",
+          image: product.images?.[0]?.image,
+        },
+        bookingService,
+      );
       setShowCartToast(true);
       setTimeout(() => setShowCartToast(false), 8000);
       return true;

@@ -73,7 +73,7 @@ const TestimonialsSlider = ({
         className="pb-14"
       >
         {testimonials.map((item: any) => (
-          <SwiperSlide key={item._id} className="!h-[480px]">
+          <SwiperSlide key={item._id} className="!h-[420px]">
             <div className="w-full h-full">
               {item.media?.videos.length > 0 ? (
                 <VideoTestimonialCard testimonial={item} />

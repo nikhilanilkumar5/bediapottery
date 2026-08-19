@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from "react";
 import TestimonialsHeader from "./TestimonialsHeader";
 import TestimonialsSlider from "./TestimonialsSlider";
+import GoogleReviewsHeader from "./GoogleReviewsHeader";
 import { getReviewsData } from "@/services/reviewService";
 
-export default function TestimonialsSection() {
+export default  function TestimonialsSection() {
   const [initialReviews, setInitialReviews] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -38,7 +39,13 @@ export default function TestimonialsSection() {
   //   <></>
     <section className="pb-16 pt-16 bg-white">
       <div className="page-wrapper px-[17px]">
+        {/* Google Reviews Header at Top */}
         <TestimonialsHeader />
+        <GoogleReviewsHeader
+          googleMapsUrl="https://www.google.com/maps/place/Bedia+Pottery+%7C+Adults+%26+Kids+Birthday+Party+Packages+%2B+Fun+Beginners+Workshop/@25.1396865,55.2286163,17z/data=!4m8!3m7!1s0x3e5f69be5e716b71:0x79d624863c4c5812!8m2!3d25.1396865!4d55.2286163!9m1!1b1!16s%2Fg%2F11vdldm6g6?hl=en&entry=ttu&g_ep=EgoyMDI2MDgxNi4wIKXMDSoASAFQAw%3D%3D"
+        />
+        
+
         <TestimonialsSlider 
           initialReviews={initialReviews} 
           totalPages={totalPages} 

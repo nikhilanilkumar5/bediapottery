@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { format, isToday } from "date-fns";
 import { useFilteredTimeSlots } from "@/hooks/useFilteredTimeSlots";
-import { BookingData, Availability } from "@/types";
+import { Availability } from "@/types";
 import { WorkshopItem } from "@/services/workshop.service";
 import ProductMedia from "./ProductMedia";
 import MaterialSelector from "./MaterialSelector";
@@ -22,6 +22,7 @@ import {
 import { Content, Title } from "../ui";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
+import { addToCartOrGuest } from "@/utils/guestCart";
 
 interface ProductDetailClientProps {
   product: WorkshopItem;
@@ -53,7 +54,6 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   const [handCount, setHandCount] = useState(0);
   const [dateError, setDateError] = useState<string>("");
   const [slotError, setSlotError] = useState<string>("");
-  const userId: string = useAuthStore.getState().user?.userId ?? "";
   const [availabilityError, setAvailabilityError] = useState<string>("");
   const [capacityInfo, setCapacityInfo] =
     useState<PotteryCapacityResult | null>(null);
@@ -177,11 +177,6 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
     hand?: number;
     wheel?: number;
   }) => {
-    const token: string | null = useAuthStore.getState().user?.token || null;
-    if (!token) {
-      router.push("/login");
-      return;
-    }
     const success = await handlecheck("cart", overrideCounts);
     if (success) {
       router.push("/cart");
@@ -190,14 +185,15 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
 
   const handleBookNow = async () => {
     const token: string | null = useAuthStore.getState().user?.token || null;
-    if (!token) {
-      router.push("/login");
+    const success = await handlecheck("checkout");
+    if (!success) {
       return;
     }
-    const success = await handlecheck("checkout");
-    if (success) {
-      router.push("/checkout");
+    if (!token) {
+      router.push("/login?returnUrl=/checkout");
+      return;
     }
+    router.push("/checkout");
   };
   // const [activeTab, setActiveTab] = useState(
   //   product.moreDetails?.[0]?._id || "",
@@ -214,8 +210,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
     const handPeople = overrideCounts?.hand ?? handCount;
     const wheelPeople = overrideCounts?.wheel ?? wheelCount;
 
-    const bookingData: BookingData = {
-      userId: userId,
+    const bookingPayload = {
       workshopId: product._id,
       optionId: selectedMaterialId,
       bookingDate: formattedDate,
@@ -257,8 +252,29 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
 
     setAvailabilityError("");
 
+    const unitPrice = selectedMaterial?.price ?? 0;
+    const currency = selectedMaterial?.currency ?? "AED";
+    const subtotal =
+      category === "corporate-events"
+        ? handPeople * unitPrice + wheelPeople * unitPrice
+        : unitPrice * peopleCount;
+
     try {
-      await bookingService.addToCart(bookingData);
+      await addToCartOrGuest(
+        bookingPayload,
+        {
+          workshopTitle: product.title,
+          optionTitle: selectedMaterial?.title ?? "",
+          price: unitPrice,
+          subtotal,
+          currency,
+          bannerImage: product.bannerImage || "/images/product/1.png",
+          image: product.images?.[0]?.image,
+          handBuild: handPeople,
+          wheelPottery: wheelPeople,
+        },
+        bookingService,
+      );
       return true;
     } catch (error) {
       setAvailabilityError(
