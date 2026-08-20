@@ -31,7 +31,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   return (
     <div className="min-h-screen bg-white font-sans text-black">
       {/* Top Progress Indicator Bar */}
-      <div className="w-full bg-secondary-dark py-8 mb-12 border-t border-b border-[#e5e1d8]">
+      <div className="w-full bg-secondary-dark py-8 lg:mb-12 mb-6 border-t border-b border-[#e5e1d8]">
         <div className="max-w-7xl mx-auto flex items-center justify-center px-4">
           <button className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full flex items-center justify-center transition-colors bg-[#0D463D] text-white">
@@ -243,7 +243,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
             </div>
 
             <div className="flex justify-between items-end py-2">
-              <span className="text-black font-medium">TaxAmount</span>
+              <span className="text-black font-medium">VAT (5%)</span>
 
               <span className=" text-black font-medium">
                 {orderdata.currency} {Number(orderdata.taxAmount).toFixed(2)}

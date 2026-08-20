@@ -288,9 +288,28 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   const isBookingDisabled = !selectedDate || !selectedSlotId || quantity < 1;
 
   return (
-    <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#0D463D]">
-      <div className="page-wrapper px-[17px] grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+    <section className="bg-secondary-dark min-h-screen lg:py-12 pt-8 pb-0 font-sans text-[#0D463D]">
+      <div className="page-wrapper px-[17px] grid grid-cols-1 lg:grid-cols-2 lg:gap-8 gap-4 items-stretch">
         <div className="flex flex-col gap-4 h-full">
+           <div className="flex flex-col h-full  lg:p-8 lg:pb-0 space-y-6 lg:hidden p-3">
+          <div>
+            <Title className="2xl:mb-7 text-2xl mb-5 font-normal">
+              {product?.title}
+            </Title>
+            <div>
+              {product?.description && (
+                <Content className=" leading-relaxed mb-1">
+                  {product?.description}
+                </Content>
+              )}
+              <Content className=" leading-relaxed !text-black  font-semibold">
+                {" "}
+                All-inclusive: Clay, tools, aprons, instructor &  {category === "corporate-events" ? "2-hour event." : "1.5-hour session."}
+                 
+              </Content>
+            </div>
+          </div>
+          </div>
           <ProductMedia
             imageUrl={product?.bannerImage || "/images/product/1.png"}
             alt={product?.title}
@@ -311,8 +330,8 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
           />
         </div>
 
-        <div className="flex flex-col h-full md:p-6 lg:p-8 lg:pb-0 space-y-6">
-          <div>
+        <div className="flex flex-col h-full md:p-0 lg:p-8 lg:pb-0 space-y-6">
+          <div className="lg:block hidden">
             <Title className="2xl:mb-7 text-2xl mb-5 font-normal">
               {product?.title}
             </Title>

@@ -12,6 +12,7 @@ import OccasionSelector from "./OccasionSelector";
 import Link from "next/link";
 import ImageGrid from "../common/ImageGrid";
 import ProductMedia from "../product/ProductMedia";
+import { Title } from "../ui";
 
 function getUniqueMaterials(options?: WorkshopOption[]) {
   return (
@@ -140,8 +141,14 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 -ml-">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8 gap-4 -ml-">
         {/* Left Section - Media */}
+         <div className="mb-6 lg:hidden block pt-8">
+           <Title className="2xl:mb-7 mb-5 font-normal">{product?.title}</Title>
+            <p className="xl:text-base text-sm  text-gray-800 leading-relaxed pr-4">
+          {product.description}
+            </p>
+          </div>
         <ProductMedia
           imageUrl={product?.bannerImage || "/images/product/1.png"}
           alt={product?.title}
@@ -164,7 +171,7 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
         {/* Right Column: Content & Form */}
         <div className="flex flex-col lg:sticky lg:top-24 h-fit self-start mt-14">
       
- <div className="mb-6">
+ <div className="mb-6 lg:block hidden">
             <h1 className="text-[2.5rem] leading-tight font-neiko text-[#0D463D] mb-1">
               {product.title}
             </h1>
@@ -229,7 +236,7 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
 
             </div>
           </div>
-            <div className="p-8 space-y-8">
+            <div className="lg:p-8 p-3 space-y-8">
               {/* Occasion Section */}
               <div>
                 <OccasionSelector

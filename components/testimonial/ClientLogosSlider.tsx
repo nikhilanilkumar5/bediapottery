@@ -48,14 +48,14 @@ const clientLogos = [
 
 const ClientLogosSlider = () => {
   return (
-    <div className=" bg-[#f2ece3] page-wrapper  !py-16">
+    <div className=" bg-secondary-dark page-wrapper  !lg:py-16 py-8">
       {/* Optional Top Heading Track */}
      
         <div className=" text-center ">
           <p className="text-sm font-semibold uppercase tracking-[0.32em] text-[#c08b3b]"></p>
           <h3 className=" text-2xl font-semibold text-[#2f2a24] md:text-3xl"></h3>
         </div>
-        <div className="text-center mb-[50px] flex flex-col items-center">
+        <div className="text-center lg:mb-[50px] mb-8 flex flex-col items-center">
           <Subtitle className="mb-[30px]"> Our Trusted Partners</Subtitle>
           <Title className="mb-2.5 font-normal">Companies We Work With</Title>
         </div>

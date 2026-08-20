@@ -27,7 +27,7 @@ export default function FeatureScroller() {
   const repeatedFeatures = [...features, ...features]
 
   return (
-    <section className="overflow-hidden pt-16">
+    <section className="overflow-hidden md:pt-16 pt-8">
       <div className="page-wrapper">
         <div className="relative overflow-hidden">
           <div className="feature-scroller flex items-center gap-6 min-w-max">

@@ -23,7 +23,7 @@ useEffect(() => {
 }, []);
   return (
     <footer className="bg-primary  text-secondary-off">
-      <div className="page-wrapper  md:pt-14 pt-10 md:pb-8 pb-5">
+      <div className="page-wrapper  md:pt-14 pt-6 md:pb-8 pb-5">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-16 gap-6 md:mb-0 mb-5">
           {/* Left Column - Logo and Description */}
           <div className="space-y-[30px] md:mt-0 mt-6">
@@ -106,7 +106,7 @@ useEffect(() => {
             <h3 className=" 2xl:text-2xl  xl:text-xl font-medium md:mb-10 mb-5">Contact Us</h3>
             <div className="mb-6 space-y-4">
               <a
-                href="mailto:info@bedia-pottery.com"
+                href="mailto:booking@bediapottery.ae"
                 className="flex items-center gap-3 text-secondary-off transition-colors duration-200 hover:border-white hover:text-white"
               >
                 <span className="flex h-11 w-11 items-center justify-center rounded-full border border-secondary-off/70">
@@ -116,7 +116,7 @@ useEffect(() => {
                   </svg>
                 </span>
                 <span>
-                    <p className="font-light">info@bedia-pottery.com</p>
+                    <p className="font-light">booking@bediapottery.ae</p>
                 </span>
               </a>
 

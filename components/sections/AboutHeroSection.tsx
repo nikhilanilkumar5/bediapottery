@@ -31,7 +31,7 @@ const AboutHeroSection: React.FC<AboutHeroProps> = ({
         </div>
 
         {/* RIGHT CONTENT */}
-        <div className="flex-1 px-[17px] lg:px-9 py-10 lg:py-16">
+        <div className="flex-1 px-[17px] lg:px-9 py-10 lg:lg:py-16 py-8">
           <Subtitle className=" mb-4">{subtitle}</Subtitle>
           <Title className=" mb-6 font-normal max-w-md !leading-[120%]">
             {title}

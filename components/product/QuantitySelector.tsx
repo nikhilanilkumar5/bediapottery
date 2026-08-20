@@ -76,7 +76,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
             <div className="flex flex-col md:flex-row flex-wrap items-center w-full gap-3 md:gap-4 mb-2 md:mb-0">
               {/* Adult Controls */}
               <div className="flex items-center flex-1 min-w-[140px] w-full md:mb-0 mb-6">
-                <Content className="leading-relaxed !text-black font-semibold mr-3 shrink-0">
+                <Content className="leading-relaxed !text-black font-semibold mr-3 shrink-0 lg:w-fit w-14">
                   Adults
                 </Content>
                 <div className="flex items-center flex-1 justify-between gap-2 border border-black/30 py-2 px-3  md:px-3">
@@ -132,7 +132,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
               <div
                 className={`flex items-center flex-1 min-w-[140px] ${child ? "w-full" : "md:mr-6"}`}
               >
-                <Content className="leading-relaxed !text-black font-semibold mr-3 shrink-0">
+                <Content className="leading-relaxed !text-black font-semibold mr-3 shrink-0 lg:w-fit w-14">
                   Child
                 </Content>
                 <div className="flex items-center flex-1 justify-between gap-2 border border-black/30 py-2 px-3  md:px-3">

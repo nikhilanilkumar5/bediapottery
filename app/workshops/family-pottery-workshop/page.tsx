@@ -13,9 +13,9 @@ export default async function ProductDetailPage() {
   return (
     <main className="min-h-screen bg-secondary-dark">
       <FamilyProductDetailClient product={data} />
-    <section className="page-wrapper  py-12 lg:py-24">
+    <section className="page-wrapper  md:py-12 lg:py-24 py-8">
                 <Title className="lg:mb-12 mb-8 text-center">
-                  General Frequently Asked Questions
+                Frequently Asked Questions
                 </Title>
           <FaqListSmall items={faqData} />
         </section>

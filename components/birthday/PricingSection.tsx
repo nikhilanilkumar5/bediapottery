@@ -94,7 +94,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({
   popularTierId,
 }) => {
   return (
-    <section className="py-16 lg:py-24 bg-white">
+    <section className="lg:py-16 py-8 lg:py-24 bg-white">
       <div className="page-wrapper px-[17px] ">
         <div className="mb-16 text-center">
           <p className="text-sm uppercase tracking-widest text-gray-500 mb-2">

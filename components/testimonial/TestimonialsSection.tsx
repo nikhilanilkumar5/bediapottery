@@ -37,7 +37,7 @@ export default  function TestimonialsSection() {
 
   return (
   //   <></>
-    <section className="pb-16 pt-16 bg-white">
+    <section className="md:pb-16  pb-8 md:pt-16 pt-8 bg-white">
       <div className="page-wrapper px-[17px]">
         {/* Google Reviews Header at Top */}
         <TestimonialsHeader />

@@ -31,7 +31,7 @@ const MakeTypeSelector: React.FC<MakeTypeSelectorProps> = ({
         <div className="text-sm font-semibold text-gray-900 mb-3">
           Choose Your Make Type
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid sm:grid-cols-2 gap-3">
           {(['wheel', 'handbuilding'] as MakeType[]).map((type) => {
             const active = selectedType === type
             return (

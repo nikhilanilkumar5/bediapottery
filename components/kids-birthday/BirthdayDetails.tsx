@@ -77,8 +77,8 @@ const kidsBirthdayTimelineSteps = [
 const currentTimeline =
     type === "kids" ? kidsBirthdayTimelineSteps : timelineSteps;
   return (
-    <section className="pb-16 font-sans text-[#0D463D] bg-[#f5f1eb]">
-      <div className="page-wrapper px-[17px]  space-y-16">
+    <section className="lg:pb-16 pb-8 font-sans text-[#0D463D] bg-secondary-dark">
+      <div className="page-wrapper px-[17px]  lg:space-y-16 space-y-8">
         
         {/* --- TIMELINE SECTION --- */}
        

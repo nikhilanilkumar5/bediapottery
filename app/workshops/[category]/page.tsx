@@ -25,7 +25,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <main className="min-h-screen bg-white page-wt">
-      <div className=" pt-16 ">
+      <div className=" md:pt-16 pt-8 ">
         {/* Header Section */}
         {/* <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 ">
           <div
@@ -39,7 +39,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <div className="absolute inset-0 blur-sm " />
           </div>
         </div> */}
-         <div className="flex flex-col page-wrapper  lg:flex-row lg:items-end lg:justify-between gap-6 md:mb-16 mb-8">
+         <div className="flex flex-col page-wrapper  lg:flex-row lg:items-end lg:justify-between md:gap-6 gap-4 md:mb-16 mb-8">
           <div className="flex-1">
             <Title className="mb-2.5 font-normal">{data.category.title}</Title>
 
@@ -91,7 +91,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               />
           </div>
         ) : (
-          <div className="text-center py-16">
+          <div className="text-center lg:py-16 py-8">
             <p className="text-gray-600 text-lg">
               No workshops available in this category.
             </p>

@@ -66,7 +66,7 @@ export default function CheckoutFlow({ initialData,  }: CheckoutFlowProps) {
     <div className="min-h-screen bg-white font-sans text-black">
       
       {/* Top Progress Indicator Bar */}
-      <div className="w-full bg-secondary-dark py-8 mb-12 border-t border-b border-[#e5e1d8]">
+      <div className="w-full bg-secondary-dark py-8 lg:mb-12 mb-6 border-t border-b border-[#e5e1d8]">
         <div className="max-w-7xl mx-auto flex items-center justify-center px-4">
           
           <button onClick={() => step > 1 && setStep(1)} className={`flex items-center gap-3 ${step > 1 ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}`}>

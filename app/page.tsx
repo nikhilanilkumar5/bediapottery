@@ -40,7 +40,7 @@ export default async function Home() {
     <main className="min-h-screen">
       <HeroSection slides={heroSlides} />
       <FeatureScroller />
-       <div className="py-16 space-y-9 page-wrapper">
+       <div className="lg:py-16 py-8 space-y-9 page-wrapper">
         {/* Mission Section */}
         <TwoColumnSection
           title={workshopPageData.handbuilding.title}

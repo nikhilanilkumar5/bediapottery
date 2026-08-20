@@ -20,6 +20,7 @@ export type WorkshopItem = {
   includes: any[];
   journeyImage: any[];
   moreDetails: any[];
+  options: any[];
   slug: string;
   price?: number;
   currency?: string;

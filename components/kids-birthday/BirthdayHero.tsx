@@ -21,6 +21,7 @@ import MaterialSelector from "../product/MaterialSelector";
 import MaterialDescription from "../product/MaterialDescription";
 import ProductMedia from "../product/ProductMedia";
 import WorkshopQuantitySelector from "../product/WorkshopQuantitySelector";
+import { Title } from "../ui";
 
 interface BirthdayProps {
   product: WorkshopItem;
@@ -277,9 +278,18 @@ const isBookingDisabled =
   currentTotalPeople > quantityLimit;
 
   return (
-    <section className="bg-[#f5f1eb] min-h-screen py-12 font-sans text-[#0D463D]">
-      <div className="page-wrapper px-[17px] grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+    <section className="bg-secondary-dark min-h-screen lg:py-12  pt-8 pb-0 font-sans text-[#0D463D]">
+      <div className="page-wrapper px-[17px] grid grid-cols-1 lg:grid-cols-2 lg:gap-8 gap-4 items-stretch">
         <div className="flex flex-col gap-4 h-full">
+          <div className="mb-6 lg:hidden block p-3">
+             <Title className="2xl:mb-7 mb-5 font-normal">{product?.title}</Title>
+            {/* <h2 className="text-[2rem] font-neiko text-[#0D463D] mb-4">
+              {type === "kids" ? "(3 - 13 Years)" : "(14 years & above)"}
+            </h2> */}
+            <p className="xl:text-base text-sm text-gray-800 leading-relaxed pr-4">
+              {product.description}
+            </p>
+          </div>
           <ProductMedia
             imageUrl={product?.bannerImage || "/images/product/1.png"}
             alt={product?.title}
@@ -300,7 +310,7 @@ const isBookingDisabled =
         </div>
 
         <div className="flex flex-col h-full">
-          <div className="mb-6">
+          <div className="mb-6 lg:block hidden">
             <h1 className="text-[2.5rem] leading-tight font-neiko text-[#0D463D] mb-1">
               {product.title}
             </h1>

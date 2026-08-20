@@ -18,6 +18,8 @@ export interface CartItem {
   workshopId: CartWorkshop;
   bookingDate: string;
   bookingType: string;
+  startTime: string;
+  endTime: string;
   slotId: string;
   optionId: string;
   optionTitle: string;
@@ -81,7 +83,7 @@ export async function getCartData(): Promise<CartData[]> {
   });
 
   const raw = await res.json().catch(() => null);
-
+console.log("Raw response from getCartData:", raw);
   if (!res.ok) {
     throw new Error(
       raw?.message || `Cart data failed: ${res.status}`

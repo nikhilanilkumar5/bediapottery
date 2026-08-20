@@ -163,7 +163,7 @@ export default function OccasionSelector({
                         ${
                           isSelected
                             ? "bg-primary text-white font-medium"
-                            : "text-gray-700 hover:bg-[#f2ece3]"
+                            : "text-gray-700 hover:bg-secondary-dark"
                         }
                       `}
                     >

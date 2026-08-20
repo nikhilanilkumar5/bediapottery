@@ -56,9 +56,9 @@ export default function GoogleReviewsHeader({
   return (
     <div
       className="
-        bg-[#E6DFD566]
+        bg-secondary-dark
         p-6
-        mb-12
+        lg:mb-12 mb-6
         flex
         flex-col
         w-full

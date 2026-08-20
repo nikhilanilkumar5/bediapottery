@@ -12,7 +12,7 @@ const LocationSection: React.FC = () => {
         {/* Responsive Split Container Layout inspired by image_fd6f9b.jpg */}
         <div className="grid grid-cols-1 lg:grid-cols-[30%_70%] lg:items-stretch border border-gray-200 overflow-hidden shadow-sm bg-white">
           {/* Left Column: Storefront Presentation Image */}
-          <div className="relative w-full aspect-[3/4] lg:aspect-[4/5] xl:aspect-[3/4] lg:block hidden">
+          <div className="relative w-full aspect-[3/4] lg:aspect-[4/5] xl:aspect-[3/4] ">
             <Image
               src="/images/banner/storefront.png"
               alt="Bedia Pottery Studio Entrance"

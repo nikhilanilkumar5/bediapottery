@@ -11,10 +11,10 @@ export default function InfoAndTimeline({ product, hide }: GiftCardHeroProps) {
   const [activeTab, setActiveTab] = useState(product?.moreDetails?.[0]?._id);
 
   return (
-    <section className={"bg-[#f2ece3] " + (hide ? "" : "min-h-screen") + "  py-16 font-sans text-[#0D463D]"}>
+    <section className={"bg-secondary-dark " + (hide ? "" : "min-h-screen") + "  lg:py-16 py-8 font-sans text-[#0D463D]"}>
       <div className="page-wrapper px-[17px]  space-y-24">
         {/* --- TABS SECTION --- */}
-        <div className="bg-white p-6 sm:p-10 shadow-sm rounded-sm">
+        <div className="bg-white lg:p-6 p-3 sm:p-10 shadow-sm rounded-sm">
           {/* Tab Headers */}
           <div className="bg-[#e2e6e3] p-2 flex flex-wrap lg:flex-nowrap gap-2 mb-8">
             {product?.moreDetails?.map((tab) => (

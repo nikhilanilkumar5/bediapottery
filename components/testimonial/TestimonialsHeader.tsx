@@ -2,7 +2,7 @@ import { Content, Subtitle, Title } from "../ui";
 
 const TestimonialsHeader = () => {
   return (
-    <div className="text-center mb-[50px] flex flex-col items-center">
+    <div className="text-center lg:mb-[50px] mb-8 flex flex-col items-center">
       <Subtitle className="mb-[30px]">Testimonials</Subtitle>
       <Title className="mb-2.5 font-normal">
         What Our Community Says

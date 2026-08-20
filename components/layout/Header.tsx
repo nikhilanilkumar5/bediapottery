@@ -90,12 +90,12 @@ const Header: React.FC = () => {
             </div>
 
             {/* Mobile Burger Trigger Button */}
-            <div className="flex xl:hidden items-center md:gap-[3rem] gap-5">
+            <div className="flex xl:hidden items-center md:gap-[3rem] gap-2">
               <SearchPill />
               <button
                 aria-label="Open menu"
                 onClick={() => setMobileOpen(true)}
-                className="p-1 text-gray-700 hover:text-primary transition-colors duration-200"
+                className="p-1 pr-3 text-gray-700 hover:text-primary transition-colors duration-200"
               >
                 <Menu className="w-6 h-6" />
               </button>

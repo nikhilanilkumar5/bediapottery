@@ -82,7 +82,7 @@ const getAvatarColor = (name: string) => {
 
 const TestimonialCard: React.FC<Props> = ({ testimonial }) => {
   return (
-    <div className="bg-[#E6DFD566] hover:shadow-sm  p-6 h-full flex flex-col   transition">
+    <div className="bg-secondary-dark hover:shadow-sm  p-6 h-full flex flex-col   transition">
       {/* Header */}
       <div className=" flex flex-col justify-between transition">
         {/* Header */}

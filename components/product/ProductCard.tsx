@@ -47,7 +47,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           {/* Overlay Title (Matches "Couple's Workshop" style) */}
           <div className="absolute top-6 left-0 right-0 px-4 text-center">
-            <Content className="text-white text-center   2xl:!text-2xl  xl:!text-xl">
+            <Content className="text-white text-center   text-xl">
               {product.title}
             </Content>
           </div>

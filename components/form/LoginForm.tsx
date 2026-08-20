@@ -250,7 +250,7 @@ const LoginForm = () => {
           className="w-full pt-5"
         >
           <Content className="text-right">
-            Forget Password ?
+            Forgot Password ?
           </Content>
         </button>
       </div>

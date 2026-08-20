@@ -54,9 +54,9 @@ const EventTimelineSection: React.FC<EventTimelineSectionProps> = ({
   subtitle = 'Here\'s how your celebration will unfold',
 }) => {
   return (
-    <section className="py-16 lg:py-24 bg-white">
+    <section className="lg:py-16 py-8 lg:py-24 bg-white">
       <div className="page-wrapper px-[17px] ">
-        <div className="mb-12 text-center">
+        <div className="lg:mb-12 mb-6 text-center">
           <p className="text-sm uppercase tracking-widest text-gray-500 mb-2">
             Event Schedule
           </p>

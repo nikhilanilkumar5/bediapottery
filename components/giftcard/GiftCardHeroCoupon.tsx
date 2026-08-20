@@ -12,6 +12,7 @@ import { getAvailabilityData } from "@/services/avaliablity.service";
 import { Availability } from "@/types";
 import { useAuthStore } from "@/store/authStore";
 import { confirmGiftRedeem } from "@/services/gift.service";
+import { Title } from "../ui";
 
 interface PresetBookingPayload {
   bookingId: string;
@@ -241,9 +242,15 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
   };
 
   return (
-    <section className="bg-[#f2ece3] min-h-screen py-12 font-sans text-[#0D463D]">
+    <section className="bg-secondary-dark min-h-screen md:py-12 py-8 font-sans text-[#0D463D]">
       <div className="page-wrapper px-[17px] grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         {/* Left Column: Media Gallery */}
+         <div className="lg:hidden block p-3 pt-8">
+            <Title className="2xl:mb-7 mb-5 font-normal">{workshop?.title}</Title>
+            <p className="text-[#0D463D]/80 leading-relaxed text-[17px]">
+              Review your gift customization configurations and finalize your setup below by choosing a valid schedule availability.
+            </p>
+          </div>
         <div className="space-y-4 h-auto lg:sticky lg:top-6">
           <div className="relative w-full aspect-video bg-gray-200 overflow-hidden rounded shadow-sm">
             <img
@@ -277,7 +284,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
 
         {/* Right Column: Content & Integrated Controls */}
         <div className="flex flex-col space-y-6">
-          <div>
+           <div className="lg:block hidden">
             <h1 className="text-5xl font-serif mb-4 text-[#0D463D]">
               {workshop.title}
             </h1>

@@ -22,6 +22,14 @@ export default function MobileCart({
   const cartItems = data?.[0]?.items || [];
   const cartTotal = data?.[0]?.totalAmount ?? 0;
   const currency = cartItems?.[0]?.currency || "AED";
+  const formatDate = (dateString: string) => {
+  if (!dateString) return "";
+  return new Date(dateString).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short", // Use 'long' for "August" or '2-digit' for "08"
+    year: "numeric"
+  });
+};
 useEffect(() => {
   console.log("MobileCart cartItems:", cartItems);
 }, [cartItems]);
@@ -88,8 +96,17 @@ useEffect(() => {
                   ✕
                 </button>
 
-                <h3 className="font-semibold text-[15px] text-black mb-2 leading-tight">
+                <h3 className="font-semibold text-[15px] text-black mb-2 leading-tight md:block hidden">
                   {item.workshopId.title}-{item.optionTitle}
+                </h3>
+                <h3 className="font-semibold text-[15px] text-black mb-2 leading-tight md:hidden block">
+                  {item.workshopId.title}
+                </h3>
+                <h3 className="font-semibold text-[15px] text-black mb-2 leading-tight md:hidden block">
+                  {item.optionTitle}
+                </h3>
+                <h3 className="font-semibold text-[15px] text-black mb-2 leading-tight">
+                  {formatDate(item.bookingDate)}
                 </h3>
                 <div className="flex justify-between items-center text-gray-500">
                   {item.workshopId.title !== "Adult's Birthday Party" ? (
