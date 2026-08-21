@@ -31,7 +31,14 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
       </div>
     );
   }
-
+  const formatDate = (dateString: string) => {
+  if (!dateString) return "";
+  return new Date(dateString).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short", // Use 'long' for "August" or '2-digit' for "08"
+    year: "numeric"
+  });
+}
   const cartItems = data?.[0]?.items || [];
   const cartTotal = data?.[0]?.totalAmount ?? 0;
   const cartGrandTotal = data?.[0]?.grandTotal ?? 0;
@@ -90,7 +97,7 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
                   <div>
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="font-normal text-black text-[15px]">{item.workshopId.title}-{item.optionTitle}</h3>
-                      
+                  
                       {/* Conditional Remove Button */}
                       {isEditing && (
                         <button
@@ -104,7 +111,9 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
                         </button>
                       )}
                     </div>
-
+     <h3 className="font-normal text-[15px] text-black mb-2 leading-tight">
+                  {formatDate(item.bookingDate)}<label className="ml-2 text-gray-600 text-[13px] ">{item.startTime} - {item.endTime}</label>
+                </h3>
                     {item.workshopId.title !== "Adult's Birthday Party" ? (
                       /* IF NOT "Adult's Birthday Party" -> Show standard price breakdown */
                       <p className="text-sm text-gray-500">

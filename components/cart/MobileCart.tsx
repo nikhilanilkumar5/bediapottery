@@ -48,8 +48,9 @@ useEffect(() => {
   }
 
   return (
-    <main className="page-wrapper px-[17px]  bg-[#fcfbf9] min-h-screen font-sans text-[#0D463D]">
+    <main className="page-wrapper   bg-[#fcfbf9] min-h-screen font-sans text-[#0D463D]">
       {/* Header */}
+      <div className="md:px-0 px-3">
       <div className="flex justify-between items-end border-b border-gray-200 pb-4 mb-6 mt-4 sm:mt-8">
         <h1 className="text-2xl font-serif text-black">Your Cart</h1>
         <span className="text-gray-500 font-medium">({cartItems.length})</span>
@@ -60,7 +61,7 @@ useEffect(() => {
           <div className="border-b border-gray-200 pb-6" key={i}>
             <div className="flex gap-4">
               {/* Thumbnail */}
-              <div className="w-24 h-24 sm:w-28 sm:h-28 bg-gray-200 rounded-sm shrink-0 overflow-hidden">
+              <div className="w-24 h-auto sm:w-28 md:h-28 bg-gray-200 rounded-sm shrink-0 overflow-hidden">
                 <Image
                   src={
                     item.workshopId.images?.[0]?.image ||
@@ -105,9 +106,12 @@ useEffect(() => {
                 <h3 className="font-semibold text-[15px] text-black mb-2 leading-tight md:hidden block">
                   {item.optionTitle}
                 </h3>
-                <h3 className="font-semibold text-[15px] text-black mb-2 leading-tight">
-                  {formatDate(item.bookingDate)}
-                </h3>
+                <h3 className="font-normal text-[15px] text-black mb-2 leading-tight">
+  {formatDate(item.bookingDate)}
+  <label className="ml-2 max-md:block max-md:ml-0 max-md:mt-2  text-gray-600 font-normal text-[15px]">
+    {item.startTime} - {item.endTime}
+  </label>
+</h3>
                 <div className="flex justify-between items-center text-gray-500">
                   {item.workshopId.title !== "Adult's Birthday Party" ? (
                     /* IF NOT "Adult's Birthday Party" -> Show standard price breakdown */
@@ -192,6 +196,7 @@ useEffect(() => {
             />
           </div>
         </div>
+      </div>
       </div>
     </main>
   );
