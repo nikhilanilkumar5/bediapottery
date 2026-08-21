@@ -18,8 +18,8 @@ export interface CartItem {
   workshopId: CartWorkshop;
   bookingDate: string;
   bookingType: string;
-  startTime: string;
-  endTime: string;
+  startTime?: string;
+  endTime?: string;
   slotId: string;
   optionId: string;
   optionTitle: string;
