@@ -143,8 +143,8 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8 gap-4 -ml-">
         {/* Left Section - Media */}
-         <div className="mb-6 lg:hidden block pt-8">
-           <Title className="2xl:mb-7 mb-5 font-normal">{product?.title}</Title>
+         <div className="mb-4 lg:hidden block pt-8">
+           <Title className="mb-1 font-normal">{product?.title}</Title>
             <p className="xl:text-base text-sm  text-gray-800 leading-relaxed pr-4">
           {product.description}
             </p>
@@ -169,7 +169,7 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
         />
 
         {/* Right Column: Content & Form */}
-        <div className="flex flex-col lg:sticky lg:top-24 h-fit self-start mt-14">
+        <div className="flex flex-col lg:sticky lg:top-24 h-fit self-start lg:mt-14 mt-4">
       
  <div className="mb-6 lg:block hidden">
             <h1 className="text-[2.5rem] leading-tight font-neiko text-[#0D463D] mb-1">

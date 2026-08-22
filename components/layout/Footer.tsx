@@ -22,11 +22,11 @@ useEffect(() => {
   loadOpeningHours();
 }, []);
   return (
-    <footer className="bg-primary  text-secondary-off">
+    <footer className="w-full overflow-x-hidden bg-primary text-secondary-off">
       <div className="page-wrapper  md:pt-14 pt-6 md:pb-8 pb-5">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-16 gap-6 md:mb-0 mb-5">
           {/* Left Column - Logo and Description */}
-          <div className="space-y-[30px] md:mt-0 mt-6">
+          <div className="min-w-0 space-y-[30px] md:mt-0 mt-6">
             <Link href="/">
               <Image
                 src="/logo-white.svg"
@@ -70,7 +70,7 @@ useEffect(() => {
           </div>
 
           {/* Middle-Left Column - Links */}
-          <div className="md:mt-0 mt-6 md:ml-10 ml-0">
+          <div className="min-w-0 md:mt-0 mt-6 lg:ml-10 ml-0">
             <h3 className=" 2xl:text-2xl  xl:text-xl font-medium md:mb-10 mb-5">Links</h3>
             <ul className="space-y-4">
               {footerLinks.map((link) => (
@@ -87,7 +87,7 @@ useEffect(() => {
           </div>
 
           {/* Middle-Right Column - Opening Hours */}
-          <div className="md:mt-0 mt-6">
+          <div className="min-w-0 md:mt-0 mt-6">
             <h3 className="font-semibold md:mb-10 mb-5 2xl:text-2xl  xl:text-xl">Opening Hours</h3>
             <ul className="space-y-4  2xl:text-[22px]  xl:text-lg">
               <li>
@@ -102,7 +102,7 @@ useEffect(() => {
           </div>
 
           {/* Right Column - Newsletter & Social Media */}
-          <div className="md:mt-0 mt-6">
+          <div className="min-w-0 md:mt-0 mt-6">
             <h3 className=" 2xl:text-2xl  xl:text-xl font-medium md:mb-10 mb-5">Contact Us</h3>
             <div className="mb-6 space-y-4">
               <a
@@ -115,7 +115,7 @@ useEffect(() => {
                     <path d="m4 8 8 6 8-6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </span>
-                <span>
+                <span className="min-w-0 break-all">
                     <p className="font-light">booking@bediapottery.ae</p>
                 </span>
               </a>

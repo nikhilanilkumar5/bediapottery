@@ -22,7 +22,7 @@ export default function ClayDesc({ product, hide }: ClayDescProps) {
       className={
         "bg-secondary-dark" +
         (hide ? "" : "") +
-        " pt-16 font-sans text-[#0D463D]"
+        " lg:pt-16 pt-8 font-sans text-[#0D463D]"
       }
     >
       <div className="page-wrapper space-y-24">

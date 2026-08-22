@@ -12,7 +12,7 @@ export default function InfoAndTimeline({ product, hide }: GiftCardHeroProps) {
 
   return (
     <section className={"bg-secondary-dark " + (hide ? "" : "min-h-screen") + "  lg:py-16 py-8 font-sans text-[#0D463D]"}>
-      <div className="page-wrapper px-[17px]  space-y-24">
+      <div className="page-wrapper px-[17px]  lg:space-y-24 space-y-8">
         {/* --- TABS SECTION --- */}
         <div className="bg-white lg:p-6 p-3 sm:p-10 shadow-sm rounded-sm">
           {/* Tab Headers */}
