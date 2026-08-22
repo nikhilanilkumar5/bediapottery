@@ -37,7 +37,7 @@ useEffect(() => {
   if (cartItems.length === 0) {
     return (
       <main className="page-wrapper px-[17px] bg-[#fcfbf9] min-h-screen font-sans text-[#0D463D]">
-        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4 py-20">
+        <div className="flex flex-col items-center justify-center min-h-[60dvh] text-center px-4 py-20">
           <h1 className="text-2xl font-serif mb-4">Your cart is empty</h1>
           <p className="text-gray-500 max-w-md">
             Add items to your cart and return here to complete checkout.

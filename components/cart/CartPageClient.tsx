@@ -60,7 +60,7 @@ export default function CartPageClient() {
 
   return (
     <main className="bg-[#fcfbf9] flex lg:flex-row font-sans">
-      <div className="hidden lg:block w-1/2 h-[calc(100vh-76.4px)] sticky top-[62px] bg-gray-200 z-0">
+      <div className="hidden lg:block w-1/2 h-[calc(100dvh-76.4px)] sticky top-[62px] bg-gray-200 z-0">
         <img
           src={bannerImage}
           alt="Pottery making"

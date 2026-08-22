@@ -157,11 +157,11 @@ const thumbnails = useMemo(() => {
 
           {/* Video Player Box - bound to handle the custom aspect ratio safely */}
           <div 
-            className="relative w-full max-w-4xl max-h-[90vh] flex items-center justify-center"
+            className="relative w-full max-w-4xl max-h-[90dvh] flex items-center justify-center"
             onClick={(e) => e.stopPropagation()} // Prevents closing when clicking inside the player area
           >
             <video
-              className="w-auto max-w-full h-[85vh] object-contain rounded-md shadow-2xl"
+              className="w-auto max-w-full h-[85dvh] object-contain rounded-md shadow-2xl"
               controls
               autoPlay
               src={activeVideoUrl}
@@ -187,8 +187,8 @@ const thumbnails = useMemo(() => {
             </svg>
           </button>
 
-          <div className="relative w-full max-w-4xl max-h-[90vh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
-            <Image src={activeImageUrl} alt="Full view" width={1600} height={900} className="object-contain max-h-[85vh] rounded-md" />
+          <div className="relative w-full max-w-4xl max-h-[90dvh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+            <Image src={activeImageUrl} alt="Full view" width={1600} height={900} className="object-contain max-h-[85dvh] rounded-md" />
           </div>
         </div>
       )}

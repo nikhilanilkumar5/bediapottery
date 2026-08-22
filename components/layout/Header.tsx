@@ -106,7 +106,7 @@ const Header: React.FC = () => {
 
       {/* FULL-SCREEN RESPONSIVE MOBILE OVERLAY DRAWER */}
       <div 
-        className={`fixed inset-0 h-[100dvh] w-screen bg-white text-primary z-[100] xl:hidden flex flex-col justify-between p-6 transition-all duration-300
+        className={`fixed inset-0 h-[100ddvh] w-screen bg-white text-primary z-[100] xl:hidden flex flex-col justify-between p-6 transition-all duration-300
           ${mobileOpen ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}`}
       >
         {/* Fixed Top Header */}

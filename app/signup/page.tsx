@@ -11,7 +11,7 @@ export default function SignupPage() {
     <div className=" bg-white">
       <div className="grid grid-cols-1 lg:grid-cols-2  p-5">
         {/* Left */}
-         <div className="hidden lg:block bg-primary h-[calc(100vh-120px)] p-[50px] w-full bg-cover bg-center"
+         <div className="hidden lg:block bg-primary h-[calc(100dvh-120px)] p-[50px] w-full bg-cover bg-center"
                 style={{ backgroundImage: `url(/images/banner/signup-banner.png)` }}
               >
   <Link href="/">

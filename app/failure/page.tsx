@@ -10,7 +10,7 @@ export default function FailurePage() {
   return (
     <main className="min-h-screen bg-[#fcfbf9] text-[#0D463D] overflow-hidden">
      
-			<section className="relative min-h-[calc(100vh-140px)] flex items-center">
+			<section className="relative min-h-[calc(100dvh-140px)] flex items-center">
                 <div className="page-wrapper relative z-10  w-full">
 					<div className="max-w-6xl mx-auto grid lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-center">
 						<div>

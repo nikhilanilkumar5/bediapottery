@@ -7,8 +7,8 @@ import { Suspense } from "react";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-[calc(100vh_-_80px)] bg-white">
-      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[calc(100vh_-_80px)] p-5 sticky top-0">
+    <div className="min-h-[calc(100dvh_-_80px)] bg-white">
+      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[calc(100dvh_-_80px)] p-5 sticky top-0">
         {/* Left */}
         <div className="hidden lg:block  bg-primary  p-[50px] w-full  bg-cover bg-center"
                          style={{ backgroundImage: `url(/images/banner/login-banner.png)` }}

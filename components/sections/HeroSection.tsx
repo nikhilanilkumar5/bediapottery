@@ -118,7 +118,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
 
   return (
     <section className="relative overflow-hidden bg-[#EDE7D9]">
-      <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-var(--header-h))] lg:gap-[15px]">
+      <div className="flex flex-col lg:flex-row lg:h-[calc(100dvh-var(--header-h))] lg:gap-[15px]">
         {/* ================= LEFT SECTION ================= */}
         <div className="relative w-full lg:w-1/2 h-[55vw] min-h-[300px] lg:h-full overflow-hidden">
           <div

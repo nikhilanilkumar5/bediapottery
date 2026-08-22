@@ -7,7 +7,7 @@ import ForgotPasswordForm from "@/components/form/ForgetForm";
 
 export default function ForgetPasswordPage() {
   return (
-    <div className="min-h-[calc(100vh_-_80px)] bg-white">
+    <div className="min-h-[calc(100dvh_-_80px)] bg-white">
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[calc(100vh_-_80px)] p-5 sticky top-0">
 
         {/* Left */}
