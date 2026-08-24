@@ -215,6 +215,10 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
       optionId: selectedMaterialId,
       bookingDate: formattedDate,
       slotId: selectedSlotId!,
+      startTime:
+        product.defaultSlots.find((slot) => slot._id === selectedSlotId)?.startTime || "",
+      endTime:
+        product.defaultSlots.find((slot) => slot._id === selectedSlotId)?.endTime || "",
       people: peopleCount,
       ...(category === "corporate-events"
         ? {
@@ -271,6 +275,8 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
           bannerImage: product.bannerImage || "/images/product/1.png",
           image: product.images?.[0]?.image,
           handBuild: handPeople,
+          startTime: product.defaultSlots.find((s) => s._id === selectedSlotId)?.startTime || "",
+          endTime: product.defaultSlots.find((s) => s._id === selectedSlotId)?.endTime || "",
           wheelPottery: wheelPeople,
         },
         bookingService,

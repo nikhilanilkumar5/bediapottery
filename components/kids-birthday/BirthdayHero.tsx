@@ -194,6 +194,10 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
       optionId: selectedMaterialId || product.options?.[0]?._id || "",
       bookingDate: formattedDate,
       slotId: selectedSlotId!,
+      startTime:
+        product.defaultSlots.find((slot) => slot._id === selectedSlotId)?.startTime || "",
+      endTime:
+        product.defaultSlots.find((slot) => slot._id === selectedSlotId)?.endTime || "",
       people: peopleCount,
       handBuild: hand,
       wheelPottery: wheel,

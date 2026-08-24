@@ -11,6 +11,8 @@ export interface GuestCartDisplayInfo {
   bannerImage: string
   image?: string
   handBuild?: number
+  startTime?: string
+  endTime?: string
   wheelPottery?: number
 }
 

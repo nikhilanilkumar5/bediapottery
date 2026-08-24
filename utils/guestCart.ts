@@ -72,7 +72,16 @@ export async function addToCartOrGuest(
     return
   }
 
-  await bookingService.addToCart({ ...bookingData, userId: user.userId })
+  // Safely extract startTime and endTime without breaking BookingData type inference
+  const { startTime, endTime, ...cleanedBookingData } = bookingData as Omit<
+    BookingData,
+    'userId'
+  > & { startTime?: unknown; endTime?: unknown }
+
+  await bookingService.addToCart({
+    ...cleanedBookingData,
+    userId: user.userId,
+  } as BookingData)
 }
 
 export async function syncGuestCartToServer(userId: string): Promise<void> {
@@ -85,7 +94,16 @@ export async function syncGuestCartToServer(userId: string): Promise<void> {
   const bookingService = new BookingService()
 
   for (const item of items) {
-    await bookingService.addToCart({ ...item.bookingData, userId })
+    // Safely extract startTime and endTime before syncing guest items to server
+    const { startTime, endTime, ...cleanedBookingData } = item.bookingData as Omit<
+      BookingData,
+      'userId'
+    > & { startTime?: unknown; endTime?: unknown }
+
+    await bookingService.addToCart({
+      ...cleanedBookingData,
+      userId,
+    } as BookingData)
   }
 
   clearCart()

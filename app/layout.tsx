@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import localFont from 'next/font/local'
 import './globals.css'
@@ -82,21 +82,32 @@ export const metadata: Metadata = {
     template: '%s | Bedia Pottery',
   },
   description: 'A Premium Ceramic Studio Offers A Unique Fusion Of Art, Mental Health & Fun!',
-    icons: {
+  icons: {
     icon: '/logo-fav.svg',
     shortcut: '/logo-fav.svg',
     apple: '/logo-fav.svg',
   },
-
 }
+
+// Fixes iPhone Safari zooming shifts, horizontal scroll, and dynamic viewport heights
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: 'cover',
+}
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning className={` ${inter.variable} ${neiko.variable} ${sunriseHimalaya.variable} ${euclid.variable} font-sans`}>
+    <html lang="en" suppressHydrationWarning className="w-full overflow-x-hidden">
+      <body 
+        suppressHydrationWarning 
+        className={`${inter.variable} ${neiko.variable} ${sunriseHimalaya.variable} ${euclid.variable} font-sans w-full min-h-dvh overflow-x-hidden relative`}
+      >
         <ScrollToTop />
         <Header />
         {children}
@@ -105,5 +116,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-

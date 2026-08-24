@@ -221,6 +221,10 @@ const handlecheck = async (destination: 'cart' | 'checkout') => {
     optionId: selectedMaterialId,
     bookingDate: formattedDate,
     slotId: selectedSlotId!,
+    startTime:
+      product.defaultSlots.find((slot) => slot._id === selectedSlotId)?.startTime || "",
+    endTime:
+      product.defaultSlots.find((slot) => slot._id === selectedSlotId)?.endTime || "",
     people: quantity + childCount,
     adult: quantity,
     child: childCount,

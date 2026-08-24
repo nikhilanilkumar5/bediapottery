@@ -220,6 +220,10 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
         voucherCode: couponCode.trim(),
         bookingDate: formattedDate,
         slotId: selectedSlotId!,
+        startTime:
+          workshop.defaultSlots.find((slot) => slot._id === selectedSlotId)?.startTime || "",
+        endTime:
+          workshop.defaultSlots.find((slot) => slot._id === selectedSlotId)?.endTime || "",
         recipientName: `${formData.firstName.trim()} ${formData.lastName.trim()}`,
         recipientPhone: formData.phone.trim(),
         recipientEmail: formData.email.trim(),

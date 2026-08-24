@@ -154,6 +154,8 @@ export interface BookingData {
   };
   bookingType: string;
   slotId?: string;
+  startTime?: string;
+  endTime?: string;
   optionId: string;
   people: number;
   adult?: number;
