@@ -8,7 +8,7 @@ export const metadata = {
 export default function CancellationPage() {
   return (
     <main className="min-h-screen bg-secondary-dark">
-      <div className="page-wrapper px-[17px] py-24">
+      <div className="page-wrapper px-[17px] lg:py-24 md:py-12 py-8">
         <Title className="mb-4">Cancellation, Rescheduling, Refund &amp; No-Show Policy</Title>
         <Content className="mb-6">
           At Bedia Pottery LLC, each workshop booking reserves a dedicated seat, instructor time, studio resources, and materials prepared specifically for your session. As workshop capacities are limited, we kindly ask all participants to carefully review the following policy before making a reservation.

@@ -12,7 +12,7 @@ export default async function TermsPage() {
   const termsData = await getTermsData();
   return (
     <main className="min-h-screen bg-secondary-dark">
-      <div className="page-wrapper px-[17px]  py-24">
+      <div className="page-wrapper px-[17px] lg:py-24 md:py-12 py-8">
         <Title className="mb-4">Terms and Conditions</Title>
         <Content>Please read these Terms and Conditions carefully before booking a workshop with Bedia Pottery ("us", "we", or "our").</Content>
         <div className="mt-[40px] bg-white p-5 lg:p-10 ">
