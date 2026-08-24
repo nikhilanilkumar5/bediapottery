@@ -12,11 +12,17 @@ interface HeroSectionProps {
 interface HeroCardProps {
   card: any;
   index: number;
+  isActive: boolean;
+  onIntersect: () => void;
 }
 
-const HeroCard: React.FC<HeroCardProps> = ({ card, index }) => {
+const HeroCard: React.FC<HeroCardProps> = ({
+  card,
+  index,
+  isActive,
+  onIntersect,
+}) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [isInView, setIsInView] = useState(false);
 
   const cardHref = card.category?.slug
     ? `/workshops/${card.category.slug}`
@@ -25,10 +31,15 @@ const HeroCard: React.FC<HeroCardProps> = ({ card, index }) => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Triggers when 30% of the card is visible on screen
-        setIsInView(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          onIntersect();
+        }
       },
-      { threshold: 0.3 }
+      {
+        // Creates a tight focus zone in the middle of the mobile screen
+        rootMargin: "-30% 0px -30% 0px",
+        threshold: 0.1,
+      }
     );
 
     if (cardRef.current) {
@@ -36,7 +47,7 @@ const HeroCard: React.FC<HeroCardProps> = ({ card, index }) => {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [onIntersect]);
 
   return (
     <div
@@ -52,28 +63,28 @@ const HeroCard: React.FC<HeroCardProps> = ({ card, index }) => {
           {/* Background Image */}
           <div
             className={`absolute inset-0 bg-cover bg-center transition-transform duration-700 ${
-              isInView ? "scale-105" : "scale-100"
-            } lg:scale-100 lg:group-hover:scale-105`}
+              isActive ? "scale-105 lg:scale-100" : "scale-100"
+            } lg:group-hover:scale-105`}
             style={{
               backgroundImage: `url(${card.category?.image})`,
             }}
           />
 
-          {/* Dark Overlay (Active on scroll for mobile, active on hover for desktop) */}
+          {/* Dark Overlay (Only 1 active at a time on mobile; standard hover on desktop) */}
           <div
             className={`absolute inset-0 bg-black transition-opacity duration-500 ${
-              isInView ? "opacity-70" : "opacity-0"
-            } lg:opacity-0 lg:group-hover:opacity-70`}
+              isActive ? "opacity-70 lg:opacity-0" : "opacity-0"
+            } lg:group-hover:opacity-70`}
           />
 
           {/* Card Content Wrapper */}
           <div className="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-3 lg:px-6 pb-5">
             <div
               className={`transition-all duration-500 ${
-                isInView
-                  ? "opacity-100 translate-y-0"
+                isActive
+                  ? "opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4"
                   : "opacity-0 translate-y-4"
-              } lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0`}
+              } lg:group-hover:opacity-100 lg:group-hover:translate-y-0`}
             >
               <Subtitle className="!text-secondary-off mb-1 lg:mb-2">
                 {card.category?.title}
@@ -114,7 +125,8 @@ const HeroCard: React.FC<HeroCardProps> = ({ card, index }) => {
 };
 
 const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
-  const slide = slides?.[0]; // Use API hero slide if available
+  const slide = slides?.[0];
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
     <section className="relative overflow-hidden bg-[#EDE7D9]">
@@ -150,6 +162,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
                 key={card._id ?? card.id}
                 card={card}
                 index={index}
+                isActive={activeIndex === index}
+                onIntersect={() => setActiveIndex(index)}
               />
             ))}
           </div>
