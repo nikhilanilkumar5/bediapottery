@@ -43,6 +43,11 @@ export default function CheckoutStep({
   onBack: () => void;
   data: CartData[];
 }) {
+  // Ensure Step 2 is saved to localStorage as soon as this component mounts
+  useEffect(() => {
+    localStorage.setItem("checkoutCartStep", "2");
+  }, []);
+
   const [formData, setFormData] = useState<CheckoutFormData>(() => {
     if (typeof window !== "undefined") {
       const saved = sessionStorage.getItem("checkout_form_data");
@@ -188,19 +193,15 @@ export default function CheckoutStep({
     }
   };
 
-const handlePhoneChange = (value?: string) => {
+  const handlePhoneChange = (value?: string) => {
     if (!value) {
       setFormData((prev) => ({ ...prev, phone: "" }));
       return;
     }
 
-    // Preserve initial '+' and strip all non-digit characters (including spaces)
     const hasPlus = value.startsWith("+");
     const digitsOnly = value.replace(/\D/g, "");
-
-    // Enforce strict E.164 maximum of 15 numeric digits (country code + national number)
     const max15Digits = digitsOnly.slice(0, 15);
-
     const cleanedPhone = hasPlus ? `+${max15Digits}` : max15Digits;
 
     setFormData((prev) => ({
@@ -216,6 +217,7 @@ const handlePhoneChange = (value?: string) => {
       setFormError("");
     }
   };
+
   const validatePhone = (
     value: string
   ): ValidationError | null => {
@@ -337,18 +339,12 @@ const handlePhoneChange = (value?: string) => {
 
     return {
       workshops: Array.from(workshopMap.values()),
-
       userId,
-
       customer: {
         firstName: formData.firstName,
         lastName: formData.lastName,
         address: formData.address,
-
-        // react-phone-number-input already gives
-        // the complete international number.
         phone: formData.phone.replace(/\s/g, ""),
-
         email: formData.email,
       },
     };
@@ -382,7 +378,6 @@ const handlePhoneChange = (value?: string) => {
 
       if (raw.data.checkoutUrl) {
         clearCheckoutStorage();
-
         window.location.href = raw.data.checkoutUrl;
       }
     } catch (error: any) {
@@ -465,43 +460,43 @@ const handlePhoneChange = (value?: string) => {
           />
 
           <div className="grid sm:grid-cols-2 gap-6">
-{/* PHONE INPUT UI */}
-<div className="w-full">
-  <label className="block mb-2 text-sm font-medium text-gray-700">
-    Phone <span className="text-red-500">*</span>
-  </label>
+            {/* PHONE INPUT UI */}
+            <div className="w-full">
+              <label className="block mb-2 text-sm font-medium text-gray-700">
+                Phone <span className="text-red-500">*</span>
+              </label>
 
-<PhoneInput
-  international
-  defaultCountry="AE"
-  value={formData.phone || undefined}
-  onChange={handlePhoneChange}
-  placeholder="Enter your phone number"
-  /* Add smartCaret={false} if cursor jumps during spacing removal */
-  smartCaret={false}
-  numberInputProps={{
-    maxLength: 18,
-    onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === " ") {
-        e.preventDefault();
-      }
-    },
-    onInput: (e: React.FormEvent<HTMLInputElement>) => {
-      const input = e.currentTarget;
-      input.value = input.value.replace(/\s+/g, "");
-    },
-  }}
-  className={`react-phone-input ${
-    errors.find((error) => error.field === "phone") ? "error" : ""
-  }`}
-/>
+              <PhoneInput
+                international
+                defaultCountry="AE"
+                value={formData.phone || undefined}
+                onChange={handlePhoneChange}
+                placeholder="Enter your phone number"
+                smartCaret={false}
+                numberInputProps={{
+                  maxLength: 18,
+                  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === " ") {
+                      e.preventDefault();
+                    }
+                  },
+                  onInput: (e: React.FormEvent<HTMLInputElement>) => {
+                    const input = e.currentTarget;
+                    input.value = input.value.replace(/\s+/g, "");
+                  },
+                }}
+                className={`react-phone-input ${
+                  errors.find((error) => error.field === "phone") ? "error" : ""
+                }`}
+              />
 
-  {errors.find((error) => error.field === "phone") && (
-    <p className="mt-2 text-sm font-medium text-red-500">
-      {errors.find((error) => error.field === "phone")?.message}
-    </p>
-  )}
-</div>
+              {errors.find((error) => error.field === "phone") && (
+                <p className="mt-2 text-sm font-medium text-red-500">
+                  {errors.find((error) => error.field === "phone")?.message}
+                </p>
+              )}
+            </div>
+
             {/* EMAIL */}
             <FormInput
               label="Email Address"
@@ -561,7 +556,7 @@ const handlePhoneChange = (value?: string) => {
             </p>
           )}
 
-          {/* TERMS */}
+          {/* TERMS LINK (Opens in new tab) */}
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"
@@ -583,7 +578,9 @@ const handlePhoneChange = (value?: string) => {
               I have read, understood, and agree to the{" "}
               <Link
                 href="/terms"
+                // target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => localStorage.setItem("checkoutCartStep", "2")}
                 className="text-[#0D463D] underline"
               >
                 Terms &amp; Conditions
@@ -601,7 +598,7 @@ const handlePhoneChange = (value?: string) => {
             </p>
           )}
 
-          {/* REFUND */}
+          {/* REFUND LINK (Opens in new tab) */}
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"
@@ -623,7 +620,9 @@ const handlePhoneChange = (value?: string) => {
               I have read, understood, and agree to the{" "}
               <Link
                 href="/cancellation"
+                // target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => localStorage.setItem("checkoutCartStep", "2")}
                 className="text-[#0D463D] underline"
               >
                 Refund &amp; Reschedule Policy

@@ -70,7 +70,7 @@ useEffect(() => {
           </div>
 
           {/* Middle-Left Column - Links */}
-          <div className="min-w-0 md:mt-0 mt-6 lg:ml-10 ml-0">
+          <div className="min-w-0 md:mt-0 mt-6 lg:ml-10 ml-0 md:block hidden">
             <h3 className=" 2xl:text-2xl  xl:text-xl font-medium md:mb-10 mb-5">Links</h3>
             <ul className="space-y-4">
               {footerLinks.map((link) => (

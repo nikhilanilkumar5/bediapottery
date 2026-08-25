@@ -50,7 +50,7 @@ export default function CartPageClient() {
       return;
     }
 
-    localStorage.setItem('checkoutCartStep', '2');
+    localStorage.setItem('checkoutCartStep', '1');
     router.push('/checkout');
   };
 

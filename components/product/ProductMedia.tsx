@@ -85,7 +85,7 @@ const thumbnails = useMemo(() => {
 
       {/* Bottom thumbnails row - 35% height on desktop */}
       {thumbnails.length > 0 && (
-        <div className="w-full grid grid-cols-3 gap-2 h-full transition-all duration-300 min-h-40">
+        <div className="w-full grid grid-cols-3 gap-2 h-full transition-all duration-300 min-h-52 lg:min-h-40">
           {thumbnails.map((item) => {
             if (item.type === 'video') {
               return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, ChangeEvent } from "react";
+import { useMemo, useRef, useState, ChangeEvent, useEffect } from "react";
 import { format, isToday } from "date-fns";
 import { useFilteredTimeSlots } from "@/hooks/useFilteredTimeSlots";
 import { Play } from "lucide-react";
@@ -13,6 +13,7 @@ import { Availability } from "@/types";
 import { useAuthStore } from "@/store/authStore";
 import { confirmGiftRedeem } from "@/services/gift.service";
 import { Title } from "../ui";
+import MobileQuantityBar from "../common/MobileQuantityBar";
 
 interface PresetBookingPayload {
   bookingId: string;
@@ -81,6 +82,8 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
   });
   const [errors, setErrors] = useState<ValidationError[]>([]);
   const [formError, setFormError] = useState("");
+  const [isRedeemReached, setIsRedeemReached] = useState(false);
+  const redeemSectionRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
 
@@ -98,6 +101,22 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
     defaultSlots: [],
   };
   const occasion = bookingData?.occasion || "General";
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const redeemRect = redeemSectionRef.current?.getBoundingClientRect();
+      if (!redeemRect) return;
+      setIsRedeemReached(redeemRect.top <= window.innerHeight * 0.85);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToRedeem = () => {
+    redeemSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const formattedDate = useMemo(() => {
     return selectedDate ? format(selectedDate, "yyyy-MM-dd") : "";
@@ -423,7 +442,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
           )}
 
           {/* Coupon Redemption Field */}
-          <div className="bg-white p-4 border border-gray-100 rounded shadow-sm space-y-4">
+          <div ref={redeemSectionRef} className="bg-white p-4 border border-gray-100 rounded shadow-sm space-y-4 scroll-mt-6">
             <div>
               <label className="block text-black text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Voucher Code Verification</label>
               <div className="flex border border-gray-200 rounded overflow-hidden">
@@ -453,6 +472,14 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
           </div>
         </div>
       </div>
+      <MobileQuantityBar
+        materialTitle={bookingItem.optionTitle}
+        currency={bookingData?.currency || "AED"}
+        totalPrice={bookingData?.grandTotal ?? bookingItem.subtotal}
+        isVisible={!isRedeemReached}
+        onScrollToQuantity={scrollToRedeem}
+        actionLabel="Redeem Gift"
+      />
     </section>
   );
 }

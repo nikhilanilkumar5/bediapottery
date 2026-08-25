@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { format, isToday } from "date-fns";
 import { useFilteredTimeSlots } from "@/hooks/useFilteredTimeSlots";
 import { Availability } from "@/types";
@@ -23,6 +23,7 @@ import { Content, Title } from "../ui";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 import { addToCartOrGuest } from "@/utils/guestCart";
+import MobileQuantityBar from "../common/MobileQuantityBar";
 
 interface ProductDetailClientProps {
   product: WorkshopItem;
@@ -59,6 +60,10 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
     useState<PotteryCapacityResult | null>(null);
   const [capacityLoading, setCapacityLoading] = useState(false);
   const [capacityError, setCapacityError] = useState<string>("");
+  const [isMaterialPassed, setIsMaterialPassed] = useState(false);
+  const [isQuantityReached, setIsQuantityReached] = useState(false);
+  const materialSectionRef = useRef<HTMLDivElement>(null);
+  const quantitySectionRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   // Derived state - computed values
   const selectedMaterial = useMemo(
@@ -70,6 +75,31 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
     maxQuantity,
     capacityInfo?.remainingCapacity ?? maxQuantity,
   );
+  const totalPrice = useMemo(() => {
+    const unitPrice = selectedMaterial?.price ?? 0;
+    return category === "corporate-events"
+      ? (handCount + wheelCount) * unitPrice
+      : quantity * unitPrice;
+  }, [category, handCount, quantity, selectedMaterial?.price, wheelCount]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const materialRect = materialSectionRef.current?.getBoundingClientRect();
+      const quantityRect = quantitySectionRef.current?.getBoundingClientRect();
+      if (!materialRect || !quantityRect) return;
+
+      setIsMaterialPassed(materialRect.top <= window.innerHeight * 0.6);
+      setIsQuantityReached(quantityRect.top <= window.innerHeight * 0.85);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToQuantity = () => {
+    quantitySectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   useEffect(() => {
     if (capacityInfo && quantity > capacityInfo.remainingCapacity) {
       setQuantity(Math.max(minQuantity, capacityInfo.remainingCapacity));
@@ -355,7 +385,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
             </div>
           </div>
       
-          <div className="p-[18px] bg-white">
+          <div ref={materialSectionRef} className="p-[18px] bg-white">
             {/* Material Selector */}
       
             {product?.options && slug!=="turkish-coffee-clay"  && product.options.length > 0 && (
@@ -375,7 +405,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
             )}
           </div>
           {/* Date Selector */}
-          <div className="p-[18px] bg-white">
+          <div ref={quantitySectionRef} className="p-[18px] bg-white scroll-mt-6">
             <DateSelector
               onDateSelect={handleDateSelect}
               selectedDate={selectedDate}
@@ -497,6 +527,13 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
           />
         </div>
       </div>
+      <MobileQuantityBar
+        materialTitle={selectedMaterial?.title}
+        currency={selectedMaterial?.currency || "AED"}
+        totalPrice={totalPrice}
+        isVisible={isMaterialPassed && !isQuantityReached}
+        onScrollToQuantity={scrollToQuantity}
+      />
     </section>
   );
 };

@@ -29,24 +29,25 @@ const HeroCard: React.FC<HeroCardProps> = ({
     : "#";
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          onIntersect();
-        }
-      },
-      {
-        // Creates a tight focus zone in the middle of the mobile screen
-        rootMargin: "-30% 0px -30% 0px",
-        threshold: 0.1,
+    const handleScroll = () => {
+      if (!cardRef.current) return;
+
+      const rect = cardRef.current.getBoundingClientRect();
+      const cardCenter = rect.top + rect.height / 2;
+      const viewportCenter = window.innerHeight / 2;
+
+      // Active zone: card center is within 25% of the viewport height from screen center
+      const isNearCenter = Math.abs(cardCenter - viewportCenter) < window.innerHeight * 0.25;
+
+      if (isNearCenter) {
+        onIntersect();
       }
-    );
+    };
 
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Initial check on mount
 
-    return () => observer.disconnect();
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [onIntersect]);
 
   return (

@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Wallet, FileCheck2 } from 'lucide-react';
 import { CartData, deleteCart, getCartData } from '@/services/cart.service';
@@ -15,10 +15,25 @@ export default function CheckoutFlow({ initialData,  }: CheckoutFlowProps) {
   // Step 1 = Detailed Cart Review
   // Step 2 = Billing / Checkout
   // Step 3 = Order Complete
-  const [step, setStep] = useState( 1);
+  const [step, setStep] = useState(1);
+  const hasHydratedStep = useRef(false);
   const [cartData, setCartData] = useState<CartData[]>(initialData ?? []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const changeStep = (nextStep: number) => {
+    setStep(nextStep);
+    localStorage.setItem('checkoutCartStep', String(nextStep));
+  };
+
+  useEffect(() => {
+    const savedStep = Number(localStorage.getItem('checkoutCartStep'));
+    if (savedStep >= 1 && savedStep <= 3) {
+      setStep(savedStep);
+    }
+  
+  }, []);
+
 
   const hasCartItems = cartData?.[0]?.items?.length > 0;
   const isCartEmpty = !hasCartItems;
@@ -69,7 +84,7 @@ export default function CheckoutFlow({ initialData,  }: CheckoutFlowProps) {
       <div className="w-full bg-secondary-dark py-8 lg:mb-12 mb-6 border-t border-b border-[#e5e1d8]">
         <div className="max-w-7xl mx-auto flex items-center justify-center px-4">
           
-          <button onClick={() => step > 1 && setStep(1)} className={`flex items-center gap-3 ${step > 1 ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}`}>
+          <button onClick={() => step > 1 && changeStep(1)} className={`flex items-center gap-3 ${step > 1 ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}`}>
             <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${step >= 1 ? 'bg-[#0D463D] text-white' : 'bg-white text-black'}`}>
               <ShoppingBag size={18} />
             </div>
@@ -120,14 +135,14 @@ export default function CheckoutFlow({ initialData,  }: CheckoutFlowProps) {
               </div>
             ) : step === 1 ? (
               <CartStep
-                onNext={() => setStep(2)}
+                onNext={() => changeStep(2)}
                 data={cartData}
                 loading={loading}
                 onDeleteItem={handleDeleteItem}
                 error={error}
               />
             ) : (
-              <CheckoutStep onNext={() => setStep(3)} onBack={() => setStep(1)} data={cartData} />
+              <CheckoutStep onNext={() => changeStep(3)} onBack={() => changeStep(1)} data={cartData} />
             ) }
           </motion.div>
         </AnimatePresence>

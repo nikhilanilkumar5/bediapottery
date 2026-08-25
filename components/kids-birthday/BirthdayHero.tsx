@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { format, isToday } from "date-fns";
 import { useFilteredTimeSlots } from "@/hooks/useFilteredTimeSlots";
 import DateSelector from "../product/DateSelector";
@@ -22,6 +22,7 @@ import MaterialDescription from "../product/MaterialDescription";
 import ProductMedia from "../product/ProductMedia";
 import WorkshopQuantitySelector from "../product/WorkshopQuantitySelector";
 import { Title } from "../ui";
+import MobileQuantityBar from "../common/MobileQuantityBar";
 
 interface BirthdayProps {
   product: WorkshopItem;
@@ -53,6 +54,10 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
     useState<PotteryCapacityResult | null>(null);
   const [capacityLoading, setCapacityLoading] = useState(false);
   const [capacityError, setCapacityError] = useState<string>("");
+  const [isMaterialPassed, setIsMaterialPassed] = useState(false);
+  const [isQuantityReached, setIsQuantityReached] = useState(false);
+  const materialSectionRef = useRef<HTMLDivElement>(null);
+  const quantitySectionRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const bookingService = new BookingService();
 
@@ -76,6 +81,26 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
     maxQuantity,
     capacityInfo?.remainingCapacity ?? maxQuantity,
   );
+  const totalPrice = (selectedMaterial?.price ?? 0) * currentTotalPeople;
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const materialRect = materialSectionRef.current?.getBoundingClientRect();
+      const quantityRect = quantitySectionRef.current?.getBoundingClientRect();
+      if (!materialRect || !quantityRect) return;
+
+      setIsMaterialPassed(materialRect.top <= window.innerHeight * 0.6);
+      setIsQuantityReached(quantityRect.top <= window.innerHeight * 0.85);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToQuantity = () => {
+    quantitySectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   useEffect(() => {
     if (
@@ -326,7 +351,7 @@ const isBookingDisabled =
             </p>
           </div>
 
-          <div className="space-y-6">
+          <div ref={materialSectionRef} className="space-y-6">
             {type === "adults" && (
               <div className="p-[18px] bg-white">
                 {product?.options && product.options.length > 0 && (
@@ -345,7 +370,7 @@ const isBookingDisabled =
               </div>
             )}
 
-            <div className="p-[18px] bg-white">
+            <div ref={quantitySectionRef} className="p-[18px] bg-white scroll-mt-6">
               <DateSelector
                 onDateSelect={handleDateSelect}
                 selectedDate={selectedDate}
@@ -445,6 +470,13 @@ const isBookingDisabled =
           </div>
         </div>
       </div>
+      <MobileQuantityBar
+        materialTitle={selectedMaterial?.title}
+        currency={selectedMaterial?.currency || "AED"}
+        totalPrice={totalPrice}
+        isVisible={isMaterialPassed && !isQuantityReached}
+        onScrollToQuantity={scrollToQuantity}
+      />
     </section>
   );
 };

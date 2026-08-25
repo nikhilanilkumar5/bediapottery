@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { Play, User2 } from "lucide-react";
 import QuantitySelector from "../product/QuantitySelector";
 import { WorkshopItem } from "@/services/workshop.service";
@@ -13,6 +13,7 @@ import Link from "next/link";
 import ImageGrid from "../common/ImageGrid";
 import ProductMedia from "../product/ProductMedia";
 import { Title } from "../ui";
+import MobileQuantityBar from "../common/MobileQuantityBar";
 
 function getUniqueMaterials(options?: WorkshopOption[]) {
   return (
@@ -41,6 +42,24 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
   const [message, setMessage] = useState("");
   const [availabilityError, setAvailabilityError] = useState("");
   const [showCartToast, setShowCartToast] = useState(false);
+  const [isQuantityReached, setIsQuantityReached] = useState(false);
+  const quantitySectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const quantityRect = quantitySectionRef.current?.getBoundingClientRect();
+      if (!quantityRect) return;
+      setIsQuantityReached(quantityRect.top <= window.innerHeight * 0.85);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToQuantity = () => {
+    quantitySectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const uniqueMaterials = useMemo(
     () => getUniqueMaterials(product?.options),
@@ -306,7 +325,8 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
               </div>
 
               {/* Quantity Handler */}
-              <QuantitySelector
+              <div ref={quantitySectionRef} className="scroll-mt-6">
+                <QuantitySelector
                 quantity={quantity}
                 onIncrease={() => setQuantity((prev) => prev + 1)}
                 onDecrease={() => setQuantity((prev) => Math.max(1, prev - 1))}
@@ -315,7 +335,8 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
                 currency={selectedMaterial?.currency ?? "AED"}
                 onCart={handleCheck}
                 buttonlabel={"Add to cart"}
-              />
+                />
+              </div>
               {availabilityError && (
                 <p className="text-sm text-red-600">
                   {availabilityError}{" "}
@@ -331,6 +352,13 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
           </div>
         </div>
       </div>
+      <MobileQuantityBar
+        materialTitle={selectedMaterial?.title || product.title}
+        currency={selectedMaterial?.currency ?? "AED"}
+        totalPrice={(selectedMaterial?.price ?? 0) * quantity}
+        isVisible={!isQuantityReached}
+        onScrollToQuantity={scrollToQuantity}
+      />
     </section>
   );
 }
