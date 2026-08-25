@@ -5,6 +5,7 @@ export interface NavigationItem {
   href: string;
   target?: string;
   children?: { label: string; href: string }[];
+  showInMobileMenu?: boolean;
 }
 
 export interface HeroSlideCard {

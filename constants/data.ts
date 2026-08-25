@@ -30,7 +30,12 @@ export const navigationItems: NavigationItem[] = [
   label: "Luxury Private Experience", 
   href: "https://bediaprive.com", 
   target: "_blank" 
-}
+},
+{ label: "About Us", href: "/about" ,showInMobileMenu: true },
+  { label: "Faq", href: "/faq", showInMobileMenu: true },
+  { label: "Terms & Conditions", href: "/terms", showInMobileMenu: true },
+  { label: "Privacy Policy", href: "/privacy", showInMobileMenu: true },
+  { label: "Refund Policy", href: "/cancellation", showInMobileMenu: true },
 ];
 
 export const contentCards: ContentCard[] = [

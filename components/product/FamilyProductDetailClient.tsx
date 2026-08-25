@@ -321,7 +321,7 @@ const FamilyProductDetailClient: React.FC<ProductDetailClientProps> = ({
 
   return (
     <div className="page-wrapper relative">
-      <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8 gap-4 lg:pb-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8 gap-0 lg:pb-4">
         {/* Left Section - Media */}
         <div className="md:hidden block p-3 mt-8">
           <Title className="2xl:mb-7 mb-5 font-normal">{product?.title}</Title>

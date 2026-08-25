@@ -325,7 +325,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
 
   return (
     <section className="bg-secondary-dark min-h-screen lg:py-12 pt-8 pb-0 font-sans text-[#0D463D]">
-      <div className="page-wrapper px-[17px] grid grid-cols-1 lg:grid-cols-2 lg:gap-8 gap-4 items-stretch">
+      <div className="page-wrapper px-[17px] grid grid-cols-1 lg:grid-cols-2 lg:gap-8  items-stretch">
         <div className="flex flex-col gap-4 h-full">
            <div className="flex flex-col h-full  lg:p-8 lg:pb-0 space-y-6 lg:hidden p-3">
           <div>
