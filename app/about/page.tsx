@@ -20,7 +20,7 @@ export default function AboutPage() {
         description={aboutPageData.hero.description}
         imageUrl={aboutPageData.hero.imageUrl}
       />
-      <div className="py-32 space-y-9 page-wrapper">
+      <div className="lg:py-32 md:py-16 py-8 space-y-6 lg:space-y-9 page-wrapper">
         {/* Mission Section */}
         <TwoColumnSection
           title={aboutPageData.mission.title}
@@ -38,11 +38,11 @@ export default function AboutPage() {
         />
       </div>
       {/* Full Width Hero Section */}
-      <FullWidthHeroSection
+      {/* <FullWidthHeroSection
         title={aboutPageData.fullWidth.title}
         subtitle={aboutPageData.fullWidth.subtitle}
         backgroundImageUrl={aboutPageData.fullWidth.backgroundImageUrl}
-      />
+      /> */}
     </main>
   );
 }
