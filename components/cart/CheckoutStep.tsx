@@ -137,8 +137,7 @@ export default function CheckoutStep({
 
   const bookingService = new BookingService();
 
-  const userId: string =
-    useAuthStore.getState().user?.userId ?? "";
+  const userId = useAuthStore.getState().user?.userId;
 
   const hasItems = data?.[0]?.items?.length > 0;
 

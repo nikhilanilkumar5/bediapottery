@@ -72,7 +72,7 @@ const token : string | null = useAuthStore.getState().user?.token || null
     const token : string | null = useAuthStore.getState().user?.token || null
 
     const res = await fetch(
-      `${API_BASE_URL}/workshop/cart/checkout`,
+      `${API_BASE_URL}/workshop/pottery-booking`,
       {
         method: 'POST',
         headers: {

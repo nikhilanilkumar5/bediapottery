@@ -42,7 +42,7 @@ const Header: React.FC = () => {
     <>
       {/* Standard Desktop/Mobile Header Topbar */}
       <header className="sticky top-0 z-50 bg-white border-b border-gray-200 w-full">
-        <nav className="page-wrapper py-[7px] px-[17px] relative bg-white z-50">
+        <nav className="page-wrapper py-[12px] px-[17px] relative bg-white z-50">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" onClick={() => setMobileOpen(false)}>

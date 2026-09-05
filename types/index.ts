@@ -188,7 +188,7 @@ export interface CheckoutCustomerPayload {
 
 export interface CheckoutPayload {
   bookingType?: string;
-  userId: string;
+  userId?: string;
   workshops: CheckoutWorkshopPayload[];
 
   customer: CheckoutCustomerPayload;

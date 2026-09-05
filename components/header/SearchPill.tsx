@@ -12,26 +12,17 @@ export default function SearchPill() {
   const [cartCount, setCartCount] = useState(0);
   const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
-  const getToken = useAuthStore((state) => state.getToken);
   const userId = useAuthStore((state) => state.user?.userId);
   const user = useAuthStore((state) => state.user?.email || null);
+  const token = useAuthStore((state) => state.user?.token || null);
   const guestItemCount = useGuestCartStore(state => state.items.length);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const token = getToken();
 
   const refreshCartCount = async () => {
-    if (!userId) {
       setCartCount(guestItemCount);
       return;
-    }
 
-    try {
-      const data = await getCartData();
-      setCartCount(data?.[0]?.items?.length ?? 0);
-    } catch {
-      setCartCount(0);
-    }
   };
 
   useEffect(() => {
@@ -48,7 +39,7 @@ export default function SearchPill() {
       window.removeEventListener('cart:updated', handleCartUpdated);
       window.removeEventListener('focus', handleCartUpdated);
     };
-  }, [userId, guestItemCount]);
+  }, [ guestItemCount]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -74,16 +65,16 @@ export default function SearchPill() {
   }, []);
 
   return (
-    <div className="flex items-center justify-center gap-3 !md:gap-8 xl:gap-4 2xl:gap-8 bg-primary rounded-full px-3 py-2 lg:px-[20px] lg:py-[12px]">
+    <div className="flex items-center justify-center   ">
       
       {/* Cart Icon */}
       <Link
         href="/cart"
-        className="relative text-secondary-off shrink-0 hover:text-white transition-colors duration-200"
+        className="relative text-primary shrink-0 hover:text-primary-dark transition-colors duration-200"
         aria-label="Shopping cart"
       >
         {cartCount > 0 && (
-          <span className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-secondary-off  px-1 text-[10px] font-semibold text-black">
+          <span className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary  px-1 text-[10px] font-semibold text-white">
             {cartCount}
           </span>
         )}
@@ -119,10 +110,12 @@ export default function SearchPill() {
       </Link>
 
       {/* Profile Dropdown */}
-      <div className="relative flex items-center justify-center" ref={dropdownRef}>
+      {/* <div className="relative flex items-center justify-center" ref={dropdownRef}>
         <button
           onClick={() => {
-            user ? setUserMenuOpen((prev) => !prev) : router.push('/login');
+            if (user) {
+              setUserMenuOpen((prev) => !prev);
+            }
           }}
           className="text-secondary-off shrink-0 hover:text-white transition-colors duration-200"
           aria-label="User account"
@@ -163,13 +156,7 @@ export default function SearchPill() {
               </p>
             </div>
 
-            {/* <Link
-              href="/profile"
-              className="block px-5 py-4 text-sm font-medium text-[#0D463D] hover:bg-gray-50 transition-colors"
-            >
-              My Profile
-            </Link> */}
-{token ? (
+          
   <button
     onClick={() => {
       logout();
@@ -180,20 +167,9 @@ export default function SearchPill() {
   >
     Logout
   </button>
-) : (
-  <button
-    onClick={() => {
-      setUserMenuOpen(false);
-      router.push("/login");
-    }}
-    className="w-full text-left px-5 py-4 text-sm font-medium text-[#0D463D] hover:bg-gray-50 transition-colors"
-  >
-    Login
-  </button>
-)}
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }

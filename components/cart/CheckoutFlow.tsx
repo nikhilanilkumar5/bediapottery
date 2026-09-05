@@ -6,6 +6,8 @@ import { CartData, deleteCart, getCartData } from '@/services/cart.service';
 import CartStep from './CartStep';
 import CheckoutStep from './CheckoutStep';
 import OrderCompleteStep from './OrderCompleteStep';
+import { useGuestCartStore } from '@/store/guestCartStore';
+import { guestCartToCartData } from '@/utils/guestCart';
 
 interface CheckoutFlowProps {
   initialData: CartData[];
@@ -20,6 +22,9 @@ export default function CheckoutFlow({ initialData,  }: CheckoutFlowProps) {
   const [cartData, setCartData] = useState<CartData[]>(initialData ?? []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const guestItems = useGuestCartStore(state => state.items);
+  const removeGuestItem = useGuestCartStore(state => state.removeItem);
+  const isGuest = cartData[0]?.userId === 'guest';
 
   const changeStep = (nextStep: number) => {
     setStep(nextStep);
@@ -39,6 +44,11 @@ export default function CheckoutFlow({ initialData,  }: CheckoutFlowProps) {
   const isCartEmpty = !hasCartItems;
 
   const refreshCart = async () => {
+    if (isGuest) {
+      setCartData(guestCartToCartData(guestItems));
+      return;
+    }
+
     setLoading(true);
     try {
       const latest = await getCartData();
@@ -51,6 +61,12 @@ export default function CheckoutFlow({ initialData,  }: CheckoutFlowProps) {
   };
 
   const handleDeleteItem = async (itemIndex: number) => {
+    if (isGuest) {
+      removeGuestItem(itemIndex);
+      setCartData(guestCartToCartData(useGuestCartStore.getState().items));
+      return;
+    }
+
     if (!cartData?.[0]?.userId) {
       setError('Unable to determine cart user.');
       return;

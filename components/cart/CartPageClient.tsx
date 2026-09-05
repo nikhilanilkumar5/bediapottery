@@ -45,11 +45,6 @@ export default function CartPageClient() {
   }, [loadCart]);
 
   const onCheckout = () => {
-    if (isGuest) {
-      router.push('/login?returnUrl=/checkout');
-      return;
-    }
-
     localStorage.setItem('checkoutCartStep', '1');
     router.push('/checkout');
   };

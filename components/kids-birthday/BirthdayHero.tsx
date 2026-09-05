@@ -287,13 +287,8 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
   };
 
   const handleBookNow = async () => {
-    const token: string | null = useAuthStore.getState().user?.token || null;
     const success = await handleCheck("checkout");
     if (!success) {
-      return;
-    }
-    if (!token) {
-      router.push("/login?returnUrl=/checkout");
       return;
     }
     router.push("/checkout");

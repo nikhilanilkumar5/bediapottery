@@ -214,13 +214,8 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
   };
 
   const handleBookNow = async () => {
-    const token: string | null = useAuthStore.getState().user?.token || null;
     const success = await handlecheck("checkout");
     if (!success) {
-      return;
-    }
-    if (!token) {
-      router.push("/login?returnUrl=/checkout");
       return;
     }
     router.push("/checkout");
