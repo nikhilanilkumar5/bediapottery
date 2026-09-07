@@ -78,6 +78,10 @@ function isSameBooking(
   item: CartItem,
   bookingData: Omit<BookingData, 'userId'>
 ) {
+  if (item.bookingType === 'gift' || bookingData.bookingType === 'gift') {
+    return false
+  }
+
   if (
     normalizeWorkshopId(item.workshopId) !==
     normalizeWorkshopId(bookingData.workshopId) ||
@@ -314,7 +318,10 @@ export async function syncGuestCartToServer(
     /**
      * Already synced from guest cart
      */
-    if (syncedKeys.has(bookingKey)) {
+    if (
+      item.bookingData.bookingType !== 'gift' &&
+      syncedKeys.has(bookingKey)
+    ) {
       continue
     }
 

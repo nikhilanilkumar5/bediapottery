@@ -340,12 +340,7 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
               {availabilityError && (
                 <p className="text-sm text-red-600">
                   {availabilityError}{" "}
-                  <Link
-                    href="/login"
-                    className="inline-flex items-center justify-center gap-2  border border-primary px-6 py-1 font-medium text-primary transition-colors hover:bg-primary hover:text-white"
-                  >
-                    go to login
-                  </Link>
+               
                 </p>
               )}
             </div>

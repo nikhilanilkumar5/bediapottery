@@ -80,6 +80,10 @@ function getDuplicateKey(
     endTime?: string
   }
 ) {
+  if (bookingData.bookingType === 'gift') {
+    return crypto.randomUUID()
+  }
+
   const workshopId = normalizeWorkshopId(bookingData.workshopId)
   const date = normalizeDate(bookingData.bookingDate)
   const startTime = normalizeTime(bookingData.startTime)

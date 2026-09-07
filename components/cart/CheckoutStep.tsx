@@ -310,10 +310,14 @@ export default function CheckoutStep({
       string,
       CheckoutPayload["workshops"][0]
     >();
+    let giftIndex = 0;
 
     data.forEach((cart) => {
       cart.items.forEach((item) => {
-        const key = `${item.workshopId._id}|${item.bookingDate}|${item.slotId}`;
+        const isGift = item.bookingType === "gift";
+        const key = isGift
+          ? `gift-${giftIndex++}`
+          : `${item.workshopId._id}|${item.bookingDate}|${item.slotId}`;
 
         const existing = workshopMap.get(key);
 
@@ -325,13 +329,18 @@ export default function CheckoutStep({
         if (existing) {
           existing.items.push(workshopItem);
         } else {
-          workshopMap.set(key, {
+          const workshopPayload: CheckoutPayload["workshops"][0] = {
             workshopId: item.workshopId._id,
-            bookingDate: item.bookingDate,
-            slotId: item.slotId,
             bookingType: item.bookingType,
             items: [workshopItem],
-          });
+          };
+
+          if (!isGift) {
+            workshopPayload.bookingDate = item.bookingDate;
+            workshopPayload.slotId = item.slotId;
+          }
+
+          workshopMap.set(key, workshopPayload);
         }
       });
     });
