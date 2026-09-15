@@ -51,7 +51,7 @@ const Header: React.FC = () => {
                 alt="Bedia Pottery Logo" 
                 width={290} 
                 height={31} 
-                className="w-[180px] h-auto md:w-[290px] md:h-[31px]" 
+                className="w-[180px] h-auto md:w-[290px] md:h-[31px] -ml-1.5" 
               />
             </Link>
 

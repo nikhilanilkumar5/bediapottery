@@ -54,13 +54,13 @@ const HeroCard: React.FC<HeroCardProps> = ({
     <div
       ref={cardRef}
       className={`w-full overflow-hidden ${
-        index === 3
+        index === 4
           ? "bg-primary flex flex-col justify-center lg:min-h-0"
           : "lg:min-h-0 lg:h-full"
       }`}
     >
-      {index < 3 ? (
-        <div className="relative w-full h-full min-h-[420px] md:min-h-[40vw] lg:min-h-0 overflow-hidden group">
+      {index < 4 ? (
+        <div  className="relative w-full h-full min-h-[420px]  cursor-pointer md:min-h-[40vw] lg:min-h-0 overflow-hidden group" onClick={() => window.location.href = cardHref}>
           {/* Background Image */}
           <div
             className={`absolute inset-0 bg-cover bg-center transition-transform duration-700 ${
@@ -142,12 +142,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
           {/* TEXT */}
           <div className="absolute bottom-[80px] lg:bottom-[120px] w-full flex justify-center text-center z-30 px-4">
             <div className="max-w-xl">
-              <Subtitle className="!text-white mb-1 lg:mb-2">
+              <Title className="!text-white mb-2 lg:mb-4 font-normal text-2xl lg:!text-3xl">
                 {slide?.title}
-              </Subtitle>
-              <Title className="!text-white mb-2 lg:mb-4 font-normal text-lg !md:text-2xl lg:!text-3xl">
-                {slide?.shortDescription}
               </Title>
+              <Subtitle className="!text-white mb-1 lg:mb-2 LEADING-[1.2] !text-base !md:text-lg">
+                {slide?.shortDescription}
+              </Subtitle>
               <Content className="!text-white">
                 {slide?.description}
               </Content>

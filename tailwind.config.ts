@@ -34,7 +34,7 @@ const config: Config = {
   				'sans-serif'
   			],
   			sunrise: [
-  				'var(--font-sunrise)',
+  				// 'var(--font-sunrise)',
   				'sans-serif'
   			],
   			script: [

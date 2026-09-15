@@ -10,7 +10,7 @@ export default function Subtitle({
  
 
   return (
-    <p className={`text-primary font-sunrise  2xl:text-2xl text-xl leading-none  ${className}`}>
+    <p className={`text-primary   2xl:text-2xl text-xl leading-none  ${className}`}>
       {children}
     </p>
   )

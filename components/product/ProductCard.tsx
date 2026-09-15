@@ -56,7 +56,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Bottom Booking Bar */}
         <div className="mt-3 mb-1 flex items-center justify-between bg-[#0D463D] text-white  py-1.5 px-2.5  transition-all duration-300 ease-in-out group-hover:bg-[#0D463D]">
           <span className="font-medium text-sm md:text-base pl-3">
-            {product.price} {product.currency}
+            {product.price} {product.currency} <span className="text-xs">( + 5% VAT )</span>
           </span>
           <div className="flex items-center gap-2 md:gap-3">
             {" "}

@@ -131,7 +131,7 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
         bookingService,
       );
       setShowCartToast(true);
-      setTimeout(() => setShowCartToast(false), 8000);
+      setTimeout(() => setShowCartToast(false), 5000);
       return true;
     } catch (error) {
       setAvailabilityError(
@@ -145,7 +145,7 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
   return (
     <section className="page-wrapper ">
       {showCartToast && (
-        <div className="fixed top-20 left-0 right-0 w-full bg-[#68bc60] text-white py-3.5 px-6 z-[9999] shadow-sm animate-in fade-in slide-in-from-top duration-300">
+        <div className="absolute top-15 left-0 right-0 w-full bg-[#0000008c] text-white py-3.5 px-6 z-[9999] shadow-sm animate-in fade-in slide-in-from-top duration-300">
           <div className="page-wrapper flex justify-end items-center text-sm font-medium">
             <div>
               Your item has been added to bag.{" "}
@@ -158,7 +158,7 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
             </div>
           </div>
         </div>
-      )}
+       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8 gap-4 -ml-">
         {/* Left Section - Media */}

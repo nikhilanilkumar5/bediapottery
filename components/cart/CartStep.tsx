@@ -41,8 +41,8 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
 }
   const cartItems = data?.[0]?.items || [];
   const cartTotal = data?.[0]?.totalAmount ?? 0;
-  const cartGrandTotal = data?.[0]?.grandTotal ?? 0;
-  const cartTax = data?.[0]?.taxAmount ?? 0;
+  const cartTax = cartTotal * 0.05 ; // Assuming 5% tax rate
+  const cartGrandTotal = cartTotal + cartTax;
   const cartCount = cartItems.length;
 
   if (cartCount === 0) {
