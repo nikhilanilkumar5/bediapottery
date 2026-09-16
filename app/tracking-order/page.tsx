@@ -103,7 +103,7 @@ export default async function TerracottaTrackingPage({ searchParams }: TrackingP
               <div className="space-y-1">
                <h3 className="font-normal text-base text-black mb-2 leading-tight ">
                            {trackingData.workshopTitle} </h3>
-                <p className="text-base font-normal !mb-2 text-gray-500">2 × AED 249.00</p>
+                <p className="text-base font-normal !mb-2 text-gray-500">{trackingData.totalPeople} × {trackingData.currency} {trackingData.totalAmount}</p>
                 <span className="inline-block mt-1 px-3 py-0.5 text-xs font-normal capitalize text-amber-800 bg-[#f5eee6]  border border-[#f5eee6]">
                   {trackingData.clayCategory || 'Terracotta'}
                 </span>
@@ -207,6 +207,15 @@ export default async function TerracottaTrackingPage({ searchParams }: TrackingP
                   </span>
                   <span className="font-normal text-slate-900">
                     {new Date(trackingData.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center text-slate-600">
+                  <span className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                    painting
+                  </span>
+                  <span className="font-normal text-slate-900">
+                    {new Date(trackingData.paintingWindowEnd).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </span>
                 </div>
 

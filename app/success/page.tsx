@@ -1,4 +1,5 @@
 import { getOrderById } from "@/services/order.service";
+import { ClearCartOnSuccess } from "./ClearCartOnSuccess";
 import { FileCheck2, ShoppingBag, Wallet } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -70,9 +71,10 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
       <div className="max-w-7xl mx-auto px-4 pb-24 relative min-h-[600px]">
         {orderdata && (
           <>
+            <ClearCartOnSuccess />
             {/* Header / Status */}
             <div className="flex justify-between items-end mb-8 border-b border-gray-200 pb-7">
-              <span className="text-black font-medium">Your Cart</span>
+              <span className="text-black font-medium">Your Order</span>
               <span className="inline-flex items-center gap-2 text-[#0D463D] font-medium">
                 <svg
                   width="25"

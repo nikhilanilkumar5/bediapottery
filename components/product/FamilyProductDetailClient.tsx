@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/store/authStore"
 import { addToCartOrGuest } from "@/utils/guestCart"
 import MobileQuantityBar from '../common/MobileQuantityBar'
+import CartToast from '../common/CartToast'
 
 interface ProductDetailClientProps {
   product: WorkshopItem
@@ -48,6 +49,7 @@ const FamilyProductDetailClient: React.FC<ProductDetailClientProps> = ({
   // Control visibility of mobile floating bar
   const [isClayPassed, setIsClayPassed] = useState(false)
   const [isQuantityReached, setIsQuantityReached] = useState(false)
+  const [showCartToast, setShowCartToast] = useState(false)
 
   const claySectionRef = useRef<HTMLDivElement>(null)
   const quantitySectionRef = useRef<HTMLDivElement>(null)
@@ -222,7 +224,9 @@ const FamilyProductDetailClient: React.FC<ProductDetailClientProps> = ({
   const handleAddToCart = async () => {
     const success = await handlecheck('cart')
     if (success) {
-      router.push('/cart')
+      setShowCartToast(true)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      setTimeout(() => setShowCartToast(false), 5000)
     }
   }
 
@@ -316,6 +320,7 @@ const FamilyProductDetailClient: React.FC<ProductDetailClientProps> = ({
 
   return (
     <div className="page-wrapper relative">
+      {showCartToast && <CartToast />}
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8 gap-0 lg:pb-4">
         {/* Left Section - Media */}
         <div className="md:hidden block p-3 mt-8">

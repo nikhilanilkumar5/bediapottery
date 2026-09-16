@@ -42,6 +42,9 @@ export interface WorkshopTracking {
     address: string;
     mapUrl: string;
   };
+  totalPeople: number;
+  totalAmount: number;
+  currency: string;
 }
 
 export interface TrackingResponse {

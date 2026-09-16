@@ -9,12 +9,11 @@ import MaterialSelector from "../product/MaterialSelector";
 import { WorkshopOption } from "@/services/workshop.service";
 import { addToCartOrGuest } from "@/utils/guestCart";
 import OccasionSelector from "./OccasionSelector";
-import Link from "next/link";
 import ImageGrid from "../common/ImageGrid";
 import ProductMedia from "../product/ProductMedia";
 import { Title } from "../ui";
 import MobileQuantityBar from "../common/MobileQuantityBar";
-
+import CartToast from "../common/CartToast";
 function getUniqueMaterials(options?: WorkshopOption[]) {
   return (
     options
@@ -131,6 +130,7 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
         bookingService,
       );
       setShowCartToast(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
       setTimeout(() => setShowCartToast(false), 5000);
       return true;
     } catch (error) {
@@ -145,19 +145,7 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
   return (
     <section className="page-wrapper ">
       {showCartToast && (
-        <div className="absolute top-15 left-0 right-0 w-full bg-[#0000008c] text-white py-3.5 px-6 z-[9999] shadow-sm animate-in fade-in slide-in-from-top duration-300">
-          <div className="page-wrapper flex justify-end items-center text-sm font-medium">
-            <div>
-              Your item has been added to bag.{" "}
-              <Link
-                href="/cart"
-                className="underline underline-offset-2 font-bold hover:opacity-90 ml-1"
-              >
-                Checkout now
-              </Link>
-            </div>
-          </div>
-        </div>
+        <CartToast />
        )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8 gap-4 -ml-">

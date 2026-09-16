@@ -23,6 +23,7 @@ import ProductMedia from "../product/ProductMedia";
 import WorkshopQuantitySelector from "../product/WorkshopQuantitySelector";
 import { Title } from "../ui";
 import MobileQuantityBar from "../common/MobileQuantityBar";
+import CartToast from "../common/CartToast";
 
 interface BirthdayProps {
   product: WorkshopItem;
@@ -56,6 +57,7 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
   const [capacityError, setCapacityError] = useState<string>("");
   const [isMaterialPassed, setIsMaterialPassed] = useState(false);
   const [isQuantityReached, setIsQuantityReached] = useState(false);
+  const [showCartToast, setShowCartToast] = useState(false);
   const materialSectionRef = useRef<HTMLDivElement>(null);
   const quantitySectionRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -283,7 +285,11 @@ const BirthdayHero: React.FC<BirthdayProps> = ({ product, type }) => {
 
   const handleAddToCart = async (overrideCounts?: { people?: number; hand?: number; wheel?: number }) => {
     const success = await handleCheck("cart", overrideCounts);
-    if (success) router.push("/cart");
+    if (success) {
+      setShowCartToast(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setTimeout(() => setShowCartToast(false), 5000);
+    }
   };
 
   const handleBookNow = async () => {
@@ -303,6 +309,7 @@ const isBookingDisabled =
 
   return (
     <section className="bg-secondary-dark min-h-screen lg:py-12  pt-8 pb-0 font-sans text-[#0D463D]">
+      {showCartToast && <CartToast />}
       <div className="page-wrapper px-[17px] grid grid-cols-1 lg:grid-cols-2 lg:gap-8 gap-0 items-stretch">
         <div className="flex flex-col gap-4 h-full">
           <div className=" lg:hidden block p-3">
