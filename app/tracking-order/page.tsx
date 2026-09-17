@@ -209,7 +209,7 @@ export default async function TerracottaTrackingPage({ searchParams }: TrackingP
                     {new Date(trackingData.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </span>
                 </div>
-                {trackingData.clayCategory == 'ceramic' && (
+                {/* {trackingData.clayCategory == 'ceramic' && (
                 <div className="flex justify-between items-center text-slate-600">
                   <span className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
@@ -219,7 +219,7 @@ export default async function TerracottaTrackingPage({ searchParams }: TrackingP
                     {new Date(trackingData.paintingWindowEnd).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </span>
                 </div>
-                )}
+                )} */}
 
                 <div className="flex justify-between items-center text-slate-600">
                   <span className="flex items-center gap-2">

@@ -57,6 +57,7 @@ const formatDate = (isoString?: string | null) => {
 
 export function TrackingTimeline({ steps , status}: TrackingTimelineProps) {
   const trackingColumns = Math.max(steps.length, 1);
+  const normalizedStatus = status.trim().toLowerCase().replace(/[-\s]+/g, '_');
 
   return (
     <div className="relative px-2 py-4">
@@ -67,8 +68,10 @@ export function TrackingTimeline({ steps , status}: TrackingTimelineProps) {
         } as React.CSSProperties}
       >
         {steps.map((step, idx) => {
-          const isCompleted = step.state === 'completed';
-          const isCurrent = step.state === 'current' || step.state === 'in_progress';
+          const normalizedStepStatus = step.status.trim().toLowerCase().replace(/[-\s]+/g, '_');
+          const isTerminalCollectedStep = normalizedStatus === 'collected' && normalizedStepStatus === 'collected';
+          const isCompleted = step.state === 'completed' || isTerminalCollectedStep;
+          const isCurrent = !isCompleted && (step.state === 'current' || step.state === 'in_progress');
           const isDelayed = status=== 'delay';
           // Completed steps display Check icon; active/upcoming steps show their specific status icon
           const StepIcon = isCompleted ? Check : getStepIcon(step.status);
