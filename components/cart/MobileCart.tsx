@@ -166,7 +166,7 @@ useEffect(() => {
         <div className="flex justify-between items-center text-lg">
           <span className="font-semibold text-black">TOTAL</span>
           <span className="font-bold text-black">
-            {currency} {cartTotal.toFixed(2)}
+            {currency} {cartTotal.toFixed(2)}<span className="text-xs"> ( + 5% VAT )</span>
           </span>
         </div>
 

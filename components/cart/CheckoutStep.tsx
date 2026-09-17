@@ -133,7 +133,9 @@ export default function CheckoutStep({
 
   const router = useRouter();
 
-  const cartGrandTotal = data?.[0]?.grandTotal ?? 0;
+  const cartTotal = data?.[0]?.totalAmount ?? 0;
+  const cartTax = cartTotal * 0.05 ; // Assuming 5% tax rate
+  const cartGrandTotal = cartTotal + cartTax;
 
   const bookingService = new BookingService();
 
@@ -658,7 +660,7 @@ export default function CheckoutStep({
           <span>Checkout</span>
           <span className="text-gray-400">|</span>
           <span>
-            AED {cartGrandTotal.toFixed(2)}
+             <span>AED {cartGrandTotal.toFixed(2)}</span>
           </span>
         </button>
       </div>

@@ -241,7 +241,7 @@ export const WorkshopQuantitySelector: React.FC<
         <div className="flex items-center justify-between bg-[#0f4a3c] text-white w-full py-3 pl-4 pr-3 md:py-[9px] md:pl-7 mt-2">
           <div className="flex flex-col">
             <Content className="font-medium !text-white whitespace-nowrap text-base md:text-lg">
-              {totalPrice} {currency}
+              {totalPrice} {currency} <span className="text-xs">( + 5% VAT )</span>
             </Content>
             <span className="text-[11px] text-gray-300">
               Total Participants: {totalPersons} / {TOTAL_MAX}

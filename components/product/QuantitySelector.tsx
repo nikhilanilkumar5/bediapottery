@@ -189,7 +189,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
             <div className="flex items-center justify-between bg-[#0f4a3c] text-white w-full py-3 pl-4 pr-3 md:py-[9px] md:pl-7">
               {/* Price */}
               <Content className="font-medium !text-white whitespace-nowrap">
-                {totalPrice} {currency}
+                {totalPrice} {currency} <span className="text-xs">( + 5% VAT )</span>
               </Content>
 
               {/* Add to Cart */}
@@ -335,7 +335,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
             <div className="flex items-center justify-between bg-[#0f4a3c] text-white w-full py-3 pl-4 pr-3 md:py-[9px] md:pl-7">
               {/* Price */}
               <Content className="font-medium !text-white whitespace-nowrap">
-                {totalPrice} {currency}
+                {totalPrice} {currency}<span className="text-xs">( + 5% VAT )</span>
               </Content>
 
               {/* Add to Cart */}

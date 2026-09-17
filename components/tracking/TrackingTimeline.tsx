@@ -10,6 +10,7 @@ export interface TrackingStep {
 
 interface TrackingTimelineProps {
   steps: TrackingStep[];
+  status: string;
 }
 
 // Icon mapper for step status
@@ -54,7 +55,7 @@ const formatDate = (isoString?: string | null) => {
   }
 };
 
-export function TrackingTimeline({ steps }: TrackingTimelineProps) {
+export function TrackingTimeline({ steps , status}: TrackingTimelineProps) {
   const trackingColumns = Math.max(steps.length, 1);
 
   return (
@@ -68,7 +69,7 @@ export function TrackingTimeline({ steps }: TrackingTimelineProps) {
         {steps.map((step, idx) => {
           const isCompleted = step.state === 'completed';
           const isCurrent = step.state === 'current' || step.state === 'in_progress';
-          
+          const isDelayed = status=== 'delay';
           // Completed steps display Check icon; active/upcoming steps show their specific status icon
           const StepIcon = isCompleted ? Check : getStepIcon(step.status);
           const dateObj = formatDate(step.date);
@@ -91,8 +92,11 @@ export function TrackingTimeline({ steps }: TrackingTimelineProps) {
                 className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
                   isCompleted
                     ? 'bg-emerald-600 text-white shadow-sm'
-                    : isCurrent
+                    : isCurrent&&isDelayed
+                    ? 'bg-amber-200 text-amber-600 ring-8 ring-amber-100 shadow-sm'
+                    : isCurrent&&!isDelayed
                     ? 'bg-emerald-600 text-white ring-8 ring-emerald-100 shadow-sm'
+                   
                     : 'bg-white border border-slate-200 text-slate-400'
                 }`}
               >
@@ -110,8 +114,9 @@ export function TrackingTimeline({ steps }: TrackingTimelineProps) {
                   <div className="text-xs text-emerald-600 font-normal leading-tight">
                     {dateObj ? (
                       <>
-                        <p>{dateObj.formattedDate}</p>
-                        <p className="text-xs text-slate-400 font-normal">{dateObj.formattedTime}</p>
+                        <p className="text-slate-700 font-normal mb-1">{dateObj.formattedDate}</p>
+                        <p>Completed</p>
+                        {/* <p className="text-xs text-slate-400 font-normal">{dateObj.formattedTime}</p> */}
                       </>
                     ) : (
                       <p>Completed</p>

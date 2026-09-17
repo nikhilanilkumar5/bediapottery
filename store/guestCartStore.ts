@@ -86,6 +86,7 @@ function getDuplicateKey(
 
   const workshopId = normalizeWorkshopId(bookingData.workshopId)
   const date = normalizeDate(bookingData.bookingDate)
+  const clayType = bookingData.optionId || 'default'
   const startTime = normalizeTime(bookingData.startTime)
   const endTime = normalizeTime(bookingData.endTime)
 
@@ -93,6 +94,7 @@ function getDuplicateKey(
     workshopId,
     date,
     startTime,
+    clayType,
     endTime,
   ].join('|')
 }

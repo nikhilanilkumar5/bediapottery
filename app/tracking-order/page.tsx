@@ -113,7 +113,7 @@ export default async function TerracottaTrackingPage({ searchParams }: TrackingP
             {/* Order Details */}
             <div className="pt-4 md:pt-0 pl-0 md:pl-6 pr-0 md:pr-4 space-y-2.5">
               <div className="flex items-center gap-2">
-                <span className="font-normal text-slate-900 text-base">Order #{trackingData.itemCodes}</span>
+                <span className="font-normal text-slate-900 text-base">Item code: {trackingData.itemCodes}</span>
                
               </div>
               <div className="space-y-1.5 text-sm font-normal text-slate-500">
@@ -158,12 +158,12 @@ export default async function TerracottaTrackingPage({ searchParams }: TrackingP
           <h2 className="text-xl font-normal text-slate-900">Your Pottery Journey</h2>
 
           {/* Stepper Timeline */}
-          <TrackingTimeline steps={steps} />
+          <TrackingTimeline steps={steps} status={trackingData.status} />
 
           {/* Current Status Box */}
-          <div className="bg-[#f2f8f4] border border-emerald-100/80 rounded-xl p-4 md:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="bg-[#fef8ec] border border-[#facc70] rounded-md p-4 md:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex items-center gap-3.5">
-              <div className="p-2.5 bg-emerald-100/70 rounded-full text-emerald-800">
+              <div className="p-2.5 bg-[#fef8ec] rounded-full text-[#bf8d29]">
                 <Sun className="w-5 h-5" />
               </div>
               <div>
@@ -174,7 +174,7 @@ export default async function TerracottaTrackingPage({ searchParams }: TrackingP
               </div>
             </div>
 
-            <div className="flex items-center gap-3 bg-white/90 border border-emerald-200/50 rounded-lg px-4 py-2.5 shadow-xs w-full md:w-auto flex-shrink-0">
+            <div className="flex items-center gap-3 bg-white/90 border border-[#facc70] rounded-md px-4 py-2.5 shadow-xs w-full md:w-auto flex-shrink-0">
               <Calendar className="w-5 h-5 text-slate-700" />
               <div>
                 <p className="text-xs uppercase tracking-wider text-slate-400 font-normal">
@@ -203,26 +203,28 @@ export default async function TerracottaTrackingPage({ searchParams }: TrackingP
                 <div className="flex justify-between items-center text-slate-600">
                   <span className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-                    Created
+                   Created Date:
                   </span>
                   <span className="font-normal text-slate-900">
                     {new Date(trackingData.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </span>
                 </div>
+                {trackingData.clayCategory == 'ceramic' && (
                 <div className="flex justify-between items-center text-slate-600">
                   <span className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-                    painting
+                    Painting
                   </span>
                   <span className="font-normal text-slate-900">
                     {new Date(trackingData.paintingWindowEnd).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </span>
                 </div>
+                )}
 
                 <div className="flex justify-between items-center text-slate-600">
                   <span className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-                    Estimated Ready
+                   Estimated Collection Date:
                   </span>
                   <span className="font-normal text-slate-900">
                     {new Date(trackingData.estimatedReadyFrom).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })} – {new Date(trackingData.estimatedReadyTo).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
