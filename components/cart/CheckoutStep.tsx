@@ -526,7 +526,7 @@ export default function CheckoutStep({
       </div>
 
       {/* SUMMARY SIDEBAR */}
-      <div className="w-full lg:w-1/3 bg-secondary-dark p-8 rounded-sm sticky top-8">
+      <div className="w-full lg:w-1/3 bg-secondary-dark p-8 lg:mt-10 rounded-sm sticky top-8">
         <div className="space-y-4 my-6 text-sm">
           {/* ADDRESS CONFIRMATION */}
           <label className="flex items-start gap-3 cursor-pointer">

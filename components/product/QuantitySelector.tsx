@@ -58,9 +58,9 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
           <Content className=" leading-relaxed !text-black  font-semibold">
             Select Participants & Reserve Your Spot
           </Content>
-          <Content className=" leading-relaxed">
+          {/* <Content className=" leading-relaxed">
           {content || "Choose the number of participants and add the workshop to your cart to confirm your booking."}
-          </Content>
+          </Content> */}
         </div>
       ) : (
         <div>

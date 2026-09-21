@@ -158,7 +158,7 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
         </div>
 
         {/* Right Column: Summary Sidebar */}
-        <div className="w-full lg:w-1/3 bg-secondary-dark p-8 rounded-sm h-fit sticky top-8 text-black">
+        <div className="w-full lg:w-1/3 bg-secondary-dark p-8 lg:mt-10 pb-5 rounded-sm h-fit sticky top-8 text-black">
           <div className="space-y-4 mb-6 text-sm">
             <div className="flex justify-between font-medium">
               <span>Subtotal</span>

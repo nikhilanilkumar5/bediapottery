@@ -388,7 +388,7 @@ const ProductDetailClient: React.FC<ProductDetailClientProps> = ({
           <div ref={materialSectionRef} className="p-[18px] bg-white">
             {/* Material Selector */}
       
-            {product?.options && slug!=="turkish-coffee-clay"  && product.options.length > 0 && (
+            {product?.options && slug!=="turkish-coffee-clay" &&product?.options && slug!=="home-pottery"  && product.options.length > 0 && (
               <MaterialSelector
                 materials={product?.options}
                 selectedMaterialId={selectedMaterialId}
