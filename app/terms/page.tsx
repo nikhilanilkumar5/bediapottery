@@ -1,13 +1,10 @@
 import { termsData } from "@/constants/termsData";
 import { Content, Title } from "@/components/ui";
 import { getTermsData } from "@/services/terms.service";
+import { constructMetadata } from "@/constants/seoData";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Terms and Conditions | Bedia Pottery",
-  description:
-    "Read the terms and conditions for booking workshops with Bedia Pottery.",
-};
-
+export const metadata: Metadata = constructMetadata('terms');
 export default async function TermsPage() {
   const termsData = await getTermsData();
   return (

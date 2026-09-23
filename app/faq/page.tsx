@@ -3,11 +3,10 @@ import { Title } from "@/components/ui"
 import { FaqSearch } from "@/components/faq/FaqSearch"
 import { getFaqData } from "@/services/faq.service"
 
-export const metadata = {
-  title: "FAQ | Bedia Pottery",
-  description: "Frequently asked questions about Bedia Pottery workshops."
-}
+import { constructMetadata } from "@/constants/seoData";
+import { Metadata } from "next";
 
+export const metadata: Metadata = constructMetadata('faq');
 export default async function FAQPage() {
   const faqData = await getFaqData("general", 1, 100,)
 

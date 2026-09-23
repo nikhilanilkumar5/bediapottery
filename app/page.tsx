@@ -4,7 +4,33 @@ import TestimonialsSection from '@/components/testimonial/TestimonialsSection'
 import { getHeroSlides } from '@/services/hero.service'
 import LocationSection from '@/components/common/LocationSection'
 import TwoColumnSection from '@/components/sections/TwoColumnSection'
-import { aboutPageData } from '@/constants/aboutData'
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Pottery Classes & Workshops in Dubai | Bedia Pottery',
+  description:
+    'Discover pottery classes and creative workshops in Dubai at Bedia Pottery. Enjoy pottery wheel, handbuilding, family, kids, adult and private pottery experiences.',
+  keywords: [
+    // Primary Keywords
+    'pottery classes Dubai',
+    'pottery workshop Dubai',
+    'pottery studio Dubai',
+    'pottery making Dubai',
+    'ceramic workshop Dubai',
+    // Secondary Keywords
+    'pottery wheel Dubai',
+    'handbuilding pottery Dubai',
+    'things to do in Dubai',
+    'creative workshops Dubai',
+    'art workshops Dubai',
+  ],
+  openGraph: {
+    title: 'Pottery Classes & Workshops in Dubai | Bedia Pottery',
+    description:
+      'Discover pottery classes and creative workshops in Dubai at Bedia Pottery. Enjoy pottery wheel, handbuilding, family, kids, adult and private pottery experiences.',
+    type: 'website',
+  },
+};
 export interface WorkshopSection {
   title: string;
   description: string;

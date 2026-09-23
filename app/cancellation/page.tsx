@@ -1,10 +1,9 @@
 import { Content, Title } from "@/components/ui";
 
-export const metadata = {
-  title: "Cancellation, Rescheduling, Refund & No-Show Policy | Bedia Pottery",
-  description: "Read the cancellation, rescheduling, refund, and no-show policy for Bedia Pottery.",
-};
+import { constructMetadata } from "@/constants/seoData";
+import { Metadata } from "next";
 
+export const metadata: Metadata = constructMetadata('cancellationPolicy');
 export default function CancellationPage() {
   return (
     <main className="min-h-screen bg-secondary-dark">

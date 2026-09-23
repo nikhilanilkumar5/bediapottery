@@ -2,12 +2,10 @@ import { aboutPageData } from "@/constants/aboutData";
 import AboutHeroSection from "@/components/sections/AboutHeroSection";
 import TwoColumnSection from "@/components/sections/TwoColumnSection";
 import FullWidthHeroSection from "@/components/sections/FullWidthHeroSection";
+import { constructMetadata } from "@/constants/seoData";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "About Us | Bedia Pottery",
-  description:
-    "Learn about Bedia Pottery, our mission, vision, and our commitment to fostering creativity and community.",
-};
+export const metadata: Metadata = constructMetadata('about');
 
 export default function AboutPage() {
   return (

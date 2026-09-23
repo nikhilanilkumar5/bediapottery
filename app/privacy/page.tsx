@@ -1,9 +1,9 @@
 import { Content, Title } from "@/components/ui";
 
-export const metadata = {
-  title: "Privacy Policy | Bedia Pottery",
-  description: "Read the privacy policy for Bedia Pottery.",
-};
+import { constructMetadata } from "@/constants/seoData";
+import { Metadata } from "next";
+
+export const metadata: Metadata = constructMetadata('privacyPolicy');
 
 export default function PrivacyPage() {
   return (
