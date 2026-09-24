@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { CartData } from '@/services/cart.service';
+import { getCartTotals } from '@/utils/cartTotals';
 
 interface CartStepProps {
   onNext: () => void;
@@ -40,9 +41,11 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
   });
 }
   const cartItems = data?.[0]?.items || [];
-  const cartTotal = data?.[0]?.totalAmount ?? 0;
-  const cartTax = cartTotal * 0.05 ; // Assuming 5% tax rate
-  const cartGrandTotal = cartTotal + cartTax;
+  const {
+    subtotal: cartTotal,
+    taxAmount: cartTax,
+    grandTotal: cartGrandTotal,
+  } = getCartTotals(data?.[0]);
   const cartCount = cartItems.length;
 
   if (cartCount === 0) {

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { Content } from '../ui'
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
 
 /**
  * MaterialDescription Component
@@ -48,7 +49,7 @@ const MaterialDescription: React.FC<MaterialDescriptionProps> = ({
   <div className="px-4 pb-4 border-t border-gray-200 pt-4">
      <span
                 dangerouslySetInnerHTML={{
-                  __html: description || "No description available.",
+                  __html: sanitizeHtml(description) || "No description available.",
                 }}
               />
   </div>

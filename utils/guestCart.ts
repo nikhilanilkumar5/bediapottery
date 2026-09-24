@@ -8,6 +8,7 @@ import {
   GuestCartItem,
   useGuestCartStore,
 } from '@/store/guestCartStore'
+import { DEFAULT_VAT_RATE } from '@/utils/cartTotals'
 
 const inFlightBookingKeys = new Set<string>()
 
@@ -183,9 +184,9 @@ export function guestCartToCartData(
       items: cartItems,
       totalPeople,
       totalAmount,
-      taxPercent: 0,
-      taxAmount: 0,
-      grandTotal: totalAmount,
+      taxPercent: DEFAULT_VAT_RATE * 100,
+      taxAmount: totalAmount * DEFAULT_VAT_RATE,
+      grandTotal: totalAmount + totalAmount * DEFAULT_VAT_RATE,
       __v: 0,
     },
   ]

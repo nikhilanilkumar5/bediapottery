@@ -4,6 +4,7 @@ import React from "react"
 import Image from "next/image"
 import { Content } from "../ui"
 import { motion, AnimatePresence } from "framer-motion"
+import { sanitizeHtml } from "@/utils/sanitizeHtml";
 
 interface FaqItemProps {
   question: string
@@ -63,7 +64,7 @@ const FaqItemSmall: React.FC<FaqItemProps> = ({
               <Content className="!text-sm">
                 <span
                   dangerouslySetInnerHTML={{
-                    __html: answer,
+                    __html: sanitizeHtml(answer),
                   }}
                 />
               </Content>

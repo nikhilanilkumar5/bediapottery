@@ -2,6 +2,7 @@
 import { WorkshopItem } from "@/services/category.service";
 import { useState } from "react";
 import { Content, Title } from "../ui";
+import { sanitizeHtml } from "@/utils/sanitizeHtml";
 interface GiftCardHeroProps {
   product: WorkshopItem;
   hide?: boolean; // Optional prop to control visibility
@@ -37,8 +38,10 @@ export default function InfoAndTimeline({ product, hide }: GiftCardHeroProps) {
             <span
               dangerouslySetInnerHTML={{
                 __html:
-                  product?.moreDetails?.find((t) => t._id === activeTab)
-                    ?.description || "Select a tab to see more details.",
+                  sanitizeHtml(
+                    product?.moreDetails?.find((t) => t._id === activeTab)
+                      ?.description
+                  ) || "Select a tab to see more details.",
               }}
             />
           </Content>

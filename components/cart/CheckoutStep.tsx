@@ -12,6 +12,7 @@ import { CheckoutPayload } from "@/types";
 import { BookingService } from "@/services/booking.service";
 import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
+import { getCartTotals } from "@/utils/cartTotals";
 
 interface CheckoutFormData {
   firstName: string;
@@ -133,9 +134,11 @@ export default function CheckoutStep({
 
   const router = useRouter();
 
-  const cartTotal = data?.[0]?.totalAmount ?? 0;
-  const cartTax = cartTotal * 0.05 ; // Assuming 5% tax rate
-  const cartGrandTotal = cartTotal + cartTax;
+  const {
+    subtotal: cartTotal,
+    taxAmount: cartTax,
+    grandTotal: cartGrandTotal,
+  } = getCartTotals(data?.[0]);
 
   const bookingService = new BookingService();
 
@@ -386,9 +389,12 @@ export default function CheckoutStep({
 
       const raw = await bookingService.bookNow(payload);
 
-      if (raw.data.checkoutUrl) {
+      const checkoutUrl =
+        raw?.data?.checkoutUrl ?? raw?.checkoutUrl;
+
+      if (checkoutUrl) {
         clearCheckoutStorage();
-        window.location.href = raw.data.checkoutUrl;
+        window.location.href = checkoutUrl;
       }
     } catch (error: any) {
       console.error(error);

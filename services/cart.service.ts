@@ -48,7 +48,7 @@ export interface deleteCartData  {
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
- const userId: string = useAuthStore.getState().user?.userId ?? '';
+
 function assertApiBaseUrl() {
   if (!API_BASE_URL) {
     throw new Error("NEXT_PUBLIC_API_BASE_URL is not set in environment variables");
@@ -83,7 +83,6 @@ export async function getCartData(): Promise<CartData[]> {
   });
 
   const raw = await res.json().catch(() => null);
-console.log("Raw response from getCartData:", raw);
   if (!res.ok) {
     throw new Error(
       raw?.message || `Cart data failed: ${res.status}`

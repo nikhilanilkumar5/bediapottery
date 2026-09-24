@@ -6,10 +6,12 @@ import { CartData, getCartData } from '@/services/cart.service';
 import { useAuthStore } from '@/store/authStore';
 import { useGuestCartStore } from '@/store/guestCartStore';
 import { guestCartToCartData } from '@/utils/guestCart';
+import { useGuestCartHydrated } from '@/hooks/useGuestCartHydrated';
 
 export default function CheckoutPageClient() {
   const userId = useAuthStore(state => state.user?.userId);
   const guestItems = useGuestCartStore(state => state.items);
+  const guestCartHydrated = useGuestCartHydrated();
   const [data, setData] = useState<CartData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -20,6 +22,13 @@ export default function CheckoutPageClient() {
     const loadCart = async () => {
       if (!userId) {
         if (!isMounted) {
+          return;
+        }
+
+        // Wait for the persisted guest cart before rendering anything, so a
+        // guest never sees "your cart is empty" while it is still loading.
+        if (!guestCartHydrated) {
+          setLoading(true);
           return;
         }
 
@@ -55,7 +64,7 @@ export default function CheckoutPageClient() {
     return () => {
       isMounted = false;
     };
-  }, [userId, guestItems]);
+  }, [userId, guestItems, guestCartHydrated]);
 
   if (loading) {
     return (

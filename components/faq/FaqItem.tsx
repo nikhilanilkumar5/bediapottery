@@ -9,6 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Content } from "../ui"
+import { sanitizeHtml } from "@/utils/sanitizeHtml";
 
 interface FaqItemProps {
   question: string
@@ -72,7 +73,7 @@ const FaqItem: React.FC<FaqItemProps> = ({
             <Content>
               <span
                 dangerouslySetInnerHTML={{
-                  __html: answer,
+                  __html: sanitizeHtml(answer),
                 }}
               />
             </Content>

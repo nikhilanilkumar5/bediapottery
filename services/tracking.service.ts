@@ -73,7 +73,6 @@ export async function getWorkshopTracking(
   const raw: TrackingResponse | WorkshopTracking | null = await response
     .json()
     .catch(() => null);
-console.log("Workshop tracking response:", raw);
   if (!response.ok) {
     throw new Error(
       `Workshop tracking failed: ${response.status} ${response.statusText}${

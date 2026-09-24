@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Wallet, FileCheck2 } from 'lucide-react';
 import { CartData, deleteCart, getCartData } from '@/services/cart.service';
@@ -18,13 +18,16 @@ export default function CheckoutFlow({ initialData,  }: CheckoutFlowProps) {
   // Step 2 = Billing / Checkout
   // Step 3 = Order Complete
   const [step, setStep] = useState(1);
-  const hasHydratedStep = useRef(false);
   const [cartData, setCartData] = useState<CartData[]>(initialData ?? []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const guestItems = useGuestCartStore(state => state.items);
   const removeGuestItem = useGuestCartStore(state => state.removeItem);
   const isGuest = cartData[0]?.userId === 'guest';
+
+  useEffect(() => {
+    setCartData(initialData ?? []);
+  }, [initialData]);
 
   const changeStep = (nextStep: number) => {
     setStep(nextStep);

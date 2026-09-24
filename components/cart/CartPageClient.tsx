@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useGuestCartStore } from '@/store/guestCartStore';
 import { guestCartToCartData } from '@/utils/guestCart';
 import { useRouter } from 'next/navigation';
+import { useGuestCartHydrated } from '@/hooks/useGuestCartHydrated';
 
 export default function CartPageClient() {
   const userId = useAuthStore(state => state.user?.userId);
@@ -16,10 +17,16 @@ export default function CartPageClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const guestCartHydrated = useGuestCartHydrated();
   const isGuest = !userId;
 
   const loadCart = useCallback(async () => {
     if (!userId) {
+      if (!guestCartHydrated) {
+        setLoading(true);
+        return;
+      }
+
       setCartData(guestCartToCartData(guestItems));
       setError(null);
       setLoading(false);
@@ -38,7 +45,7 @@ export default function CartPageClient() {
     } finally {
       setLoading(false);
     }
-  }, [userId, guestItems]);
+  }, [userId, guestItems, guestCartHydrated]);
 
   useEffect(() => {
     void loadCart();

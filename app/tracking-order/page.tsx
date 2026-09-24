@@ -47,7 +47,6 @@ export default async function TerracottaTrackingPage({ searchParams }: TrackingP
 
   let trackingData;
   try {
-    console.log("Fetching tracking data for ID:", trackingRef);
     trackingData = await getWorkshopTracking(trackingRef);
   } catch (error) {
     return (
@@ -279,7 +278,7 @@ export default async function TerracottaTrackingPage({ searchParams }: TrackingP
             <a
               href={trackingData.collection.mapUrl}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-sm font-normal text-slate-700 hover:text-indigo-700 transition-colors pt-1"
             >
               View Studio Location on Map →

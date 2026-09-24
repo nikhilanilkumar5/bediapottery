@@ -101,7 +101,6 @@ export const forgotPassword = async (
       }
     );
 
-    console.log("Forgot password response:", response.data, data);  
     return response.data;
   } catch (error: any) {
     throw {
@@ -132,10 +131,10 @@ export const resetPassword = async (
     
     return response.data;
   } catch (error: any) {
-    console.log("Reset password response:", error?.response?.data);
     throw {
       message:
-        error?.response?.data?.errors[0].msg ||
+        error?.response?.data?.errors?.[0]?.msg ||
+        error?.response?.data?.message ||
         "Failed to reset password",
     };
   }

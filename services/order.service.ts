@@ -161,8 +161,6 @@ export async function getOrderById(
     .json()
     .catch(() => null);
 
-  console.log("Order API response:", raw);
-
   if (!res.ok) {
     throw new Error(
       `Order validation failed: ${res.status} ${res.statusText}${
@@ -172,8 +170,6 @@ export async function getOrderById(
       }`
     );
   }
-
-  console.log("Order details:", raw?.data);
 
   return raw?.data;
 }

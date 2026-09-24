@@ -181,13 +181,13 @@ const Header: React.FC = () => {
 
         {/* Fixed Footer Icons */}
         <div className="flex items-center gap-6 pt-4 border-t border-gray-100 shrink-0">
-          <a href="https://instagram.com" target="_blank" rel="noreferrer" className="text-primary hover:opacity-80 transition-opacity">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:opacity-80 transition-opacity">
             <Instagram className="w-6 h-6" />
           </a>
-          <a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-primary hover:opacity-80 transition-opacity">
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:opacity-80 transition-opacity">
             <Facebook className="w-6 h-6" />
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-primary hover:opacity-80 transition-opacity">
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:opacity-80 transition-opacity">
             <Linkedin className="w-6 h-6" />
           </a>
         </div>

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { CartData, deleteCart } from "@/services/cart.service";
-import { useEffect } from "react";
+import { getCartTotals, formatPercent } from "@/utils/cartTotals";
 
 export default function MobileCart({
   data,
@@ -20,7 +20,7 @@ export default function MobileCart({
 }) {
   const router = useRouter();
   const cartItems = data?.[0]?.items || [];
-  const cartTotal = data?.[0]?.totalAmount ?? 0;
+  const { subtotal: cartTotal, taxPercent } = getCartTotals(data?.[0]);
   const currency = cartItems?.[0]?.currency || "AED";
   const formatDate = (dateString: string) => {
   if (!dateString) return "";
@@ -30,9 +30,6 @@ export default function MobileCart({
     year: "numeric"
   });
 };
-useEffect(() => {
-  console.log("MobileCart cartItems:", cartItems);
-}, [cartItems]);
 
   if (cartItems.length === 0) {
     return (
@@ -166,7 +163,7 @@ useEffect(() => {
         <div className="flex justify-between items-center text-lg">
           <span className="font-semibold text-black">TOTAL</span>
           <span className="font-bold text-black">
-            {currency} {cartTotal.toFixed(2)}<span className="text-xs"> ( + 5% VAT )</span>
+            {currency} {cartTotal.toFixed(2)}<span className="text-xs"> ( + {formatPercent(taxPercent)}% VAT )</span>
           </span>
         </div>
 

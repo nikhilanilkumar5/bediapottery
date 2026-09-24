@@ -18,7 +18,7 @@ export const COUNTRY_PHONE_CODES = [
   { value: '+966', label: 'Saudi Arabia (+966)', minDigits: 7, maxDigits: 9 },
   { value: '+965', label: 'Kuwait (+965)', minDigits: 7, maxDigits: 8 },
   { value: '+974', label: 'Qatar (+974)', minDigits: 7, maxDigits: 8 },
-  { value: '+965', label: 'Bahrain (+973)', minDigits: 7, maxDigits: 8 },
+  { value: '+973', label: 'Bahrain (+973)', minDigits: 7, maxDigits: 8 },
   { value: '+44', label: 'United Kingdom (+44)', minDigits: 7, maxDigits: 12 },
   { value: '+1', label: 'United States (+1)', minDigits: 7, maxDigits: 10 },
   { value: '+91', label: 'India (+91)', minDigits: 7, maxDigits: 12 },
