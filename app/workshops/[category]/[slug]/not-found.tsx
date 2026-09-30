@@ -1,11 +1,8 @@
 import Link from 'next/link'
-import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
 
 export default function NotFound() {
   return (
     <main className="min-h-screen bg-white">
-      <Header />
       <div className="page-wrapper md:pt-16 pt-8 pb-16">
         <div className="text-center">
           <h1 className="text-4xl font-semibold text-primary mb-4">

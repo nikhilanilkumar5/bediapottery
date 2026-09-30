@@ -235,7 +235,8 @@ const FamilyProductDetailClient: React.FC<ProductDetailClientProps> = ({
     if (!success) {
       return
     }
-    router.push('/checkout')
+     localStorage.setItem('checkoutCartStep', '1');
+    router.push('/checkout');
   }
 
   const handlecheck = async (destination: 'cart' | 'checkout') => {

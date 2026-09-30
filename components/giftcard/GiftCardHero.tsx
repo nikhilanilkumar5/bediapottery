@@ -319,6 +319,7 @@ export default function GiftCardHero({ product }: GiftCardHeroProps) {
                 onIncrease={() => setQuantity((prev) => prev + 1)}
                 onDecrease={() => setQuantity((prev) => Math.max(1, prev - 1))}
                 limit={1}
+                isGiftCard={true}
                 unitPrice={selectedMaterial?.price}
                 currency={selectedMaterial?.currency ?? "AED"}
                 onCart={handleCheck}

@@ -7,6 +7,7 @@
   /* --font-sunrise: 'Sunrise Himalaya', sans-serif; */
   --font-euclid: 'Euclid Circular A', sans-serif;
   --header-h: 57px;
+  --header-hb: 57px;
 }
 @layer base {
   html {

@@ -141,7 +141,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
 
           {/* TEXT */}
           <div className="absolute bottom-[80px] lg:bottom-[120px] w-full flex justify-center text-center z-30 px-4">
-            <div className="max-w-xl">
+            <div className="max-w-2xl">
               <Title className="!text-white mb-2 lg:mb-4 font-normal text-2xl lg:!text-3xl">
                 {slide?.title}
               </Title>

@@ -110,7 +110,7 @@ export default function RootLayout({
       >
         <ScrollToTop />
         <Header />
-        {children}
+        <div className="pt-[var(--header-hb)]">{children}</div>
         <Footer />
       </body>
     </html>

@@ -317,7 +317,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
                   href="/"
                   className="inline-block bg-[#0D463D] text-white md:px-40 px-16 py-3.5 text-sm font-medium hover:bg-[#0a3730] transition-colors rounded-sm shadow-sm"
                 >
-                  Shop Now
+                  Book Your Experience
                 </Link>
               </div>
             </div>

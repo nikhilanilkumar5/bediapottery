@@ -23,6 +23,7 @@ interface QuantitySelectorProps {
   buttonlabel?: string;
   className?: string;
   child?: boolean;
+  isGiftCard?: boolean;
   content?: string;
 }
 
@@ -42,6 +43,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   className = "",
   buttonlabel = "Add to Cart",
   child = false,
+  isGiftCard = false,
 }) => {
   const effectiveChildCount = child ? childCount : 0;
   const totalPersons = quantity + effectiveChildCount;
@@ -53,7 +55,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
 
   return (
     <div className={`space-y-4 ${className}`}>
-      {limit > 1 ? (
+      {limit > 1 || !isGiftCard ? (
         <div>
           <Content className=" leading-relaxed !text-black  font-semibold">
             Select Participants & Reserve Your Spot
@@ -335,7 +337,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
             <div className="flex items-center justify-between bg-[#0f4a3c] text-white w-full py-3 pl-4 pr-3 md:py-[9px] md:pl-7">
               {/* Price */}
               <Content className="font-medium !text-white whitespace-nowrap">
-                {totalPrice} {currency}<span className="text-xs">( + 5% VAT )</span>
+                {totalPrice} {currency} <span className="text-xs">( + 5% VAT )</span>
               </Content>
 
               {/* Add to Cart */}

@@ -53,7 +53,8 @@ export default function CartPageClient() {
 
   const onCheckout = () => {
     localStorage.setItem('checkoutCartStep', '1');
-    router.push('/checkout');
+     localStorage.setItem('checkoutCartStep', '1');
+    router.push('/checkout');;
   };
 
   const bannerImage =

@@ -63,7 +63,7 @@ export default async function Home() {
   const heroSlides = await getHeroSlides()
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen relative">
       <HeroSection slides={heroSlides} />
       <FeatureScroller />
        <div className="lg:py-16 py-8 space-y-9 page-wrapper">

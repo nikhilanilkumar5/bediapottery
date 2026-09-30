@@ -57,7 +57,8 @@ const ClientLogosSlider = () => {
         </div>
         <div className="text-center lg:mb-[50px] mb-8 flex flex-col items-center">
           <Subtitle className="mb-[30px]"> Our Trusted Partners</Subtitle>
-          <Title className="mb-2.5 font-normal">Companies We Work With</Title>
+          <Title className="mb-2.5 font-normal">Brands, Companies & Schools We’ve Worked With 
+</Title>
         </div>
          <div className="bg-white p-6 sm:p-10">
         <Swiper
