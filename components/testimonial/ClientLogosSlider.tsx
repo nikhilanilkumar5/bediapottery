@@ -32,7 +32,19 @@ const clientLogos = [
   { name: "continental", src: "/images/clients/continental.png" },
 
   // --- Remaining Brand Assets ---
-  { name: "bytedance", src: "/images/clients/bytedance.png" },
+  // { name: "bytedance", src: "/images/clients/bytedance.png" },
+  //   { name: "1", src: "/images/clients/1.png" },
+  // { name: "2", src: "/images/clients/2.png" },
+  // { name: "3", src: "/images/clients/3.png" },
+  // { name: "4", src: "/images/clients/4.png" },
+  // { name: "5", src: "/images/clients/5.png" },
+  // { name: "6", src: "/images/clients/6.png" },
+  // { name: "7", src: "/images/clients/7.png" },
+  // { name: "8", src: "/images/clients/8.png" },
+  // { name: "9", src: "/images/clients/9.png" },
+  // { name: "10", src: "/images/clients/10.png" },
+  // { name: "11", src: "/images/clients/11.png" },
+  // { name: "12", src: "/images/clients/12.png" },
   { name: "inc", src: "/images/clients/inc.png" },
   { name: "boston", src: "/images/clients/boston.png" },
   { name: "forsite", src: "/images/clients/forsite.jpeg" },
@@ -44,6 +56,7 @@ const clientLogos = [
   { name: "wealth", src: "/images/clients/wealth.webp" },
   { name: "original", src: "/images/clients/original.png" },
   { name: "Purehealth", src: "/images/clients/Purehealth.png" },
+
 ];
 
 const ClientLogosSlider = () => {
