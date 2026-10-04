@@ -70,7 +70,8 @@ export function TrackingTimeline({ steps , status}: TrackingTimelineProps) {
         {steps.map((step, idx) => {
           const normalizedStepStatus = step.status.trim().toLowerCase().replace(/[-\s]+/g, '_');
           const isTerminalCollectedStep = normalizedStatus === 'collected' && normalizedStepStatus === 'collected';
-          const isCompleted = step.state === 'completed' || isTerminalCollectedStep;
+          const isCreatedStep = normalizedStepStatus === 'created';
+          const isCompleted = step.state === 'completed' || isTerminalCollectedStep || isCreatedStep;
           const isCurrent = !isCompleted && (step.state === 'current' || step.state === 'in_progress');
           const isDelayed = status=== 'delay';
           // Completed steps display Check icon; active/upcoming steps show their specific status icon

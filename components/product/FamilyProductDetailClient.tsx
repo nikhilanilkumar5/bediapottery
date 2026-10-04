@@ -248,6 +248,7 @@ const FamilyProductDetailClient: React.FC<ProductDetailClientProps> = ({
 
     const bookingPayload = {
       bookingType: "pottery" as const,
+      workshopType: "family" as const,
       workshopId: product._id,
       optionId: selectedMaterialId,
       bookingDate: formattedDate,

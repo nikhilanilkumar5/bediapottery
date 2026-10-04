@@ -146,11 +146,15 @@ export function guestCartToCartData(
 
     bookingType: item.bookingData.bookingType,
 
+    workshopType: item.bookingData.workshopType,
+
     optionId: item.bookingData.optionId,
 
     optionTitle: item.display.optionTitle,
 
     people: item.bookingData.people,
+    adult: item.bookingData.adult,
+    child: item.bookingData.child,
 
     price: item.display.price,
 

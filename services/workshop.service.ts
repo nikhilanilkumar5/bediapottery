@@ -96,7 +96,6 @@ export async function getWorkshopData(slug: string): Promise<WorkshopItem> {
   });
 
   const raw = await res.json().catch(() => null);
-
   if (!res.ok) {
     throw new Error(
       `Workshop data failed: ${res.status} ${res.statusText}${

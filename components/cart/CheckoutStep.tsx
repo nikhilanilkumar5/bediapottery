@@ -327,9 +327,14 @@ export default function CheckoutStep({
         const existing = workshopMap.get(key);
 
         const workshopItem = {
-          optionId: item.optionId,
-          people: item.people,
-        };
+  optionId: item.optionId,
+  people: item.people,
+  ...(item.workshopType && { workshopType: item.workshopType }),
+  ...(item.adult != null && { adult: item.adult }),
+  ...(item.child != null && { child: item.child }),
+  ...(item.handBuild != null && { handBuild: item.handBuild }),
+  ...(item.wheelPottery != null && { wheelPottery: item.wheelPottery }),
+};
 
         if (existing) {
           existing.items.push(workshopItem);
@@ -385,7 +390,7 @@ export default function CheckoutStep({
     try {
       const payload = buildCheckoutPayload();
 
-      localStorage.setItem("checkoutCartStep", "1");
+      // localStorage.setItem("checkoutCartStep", "1");
 
       const raw = await bookingService.bookNow(payload);
 

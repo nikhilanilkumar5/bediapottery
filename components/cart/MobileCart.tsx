@@ -5,6 +5,14 @@ import Image from "next/image";
 import { CartData, deleteCart } from "@/services/cart.service";
 import { getCartTotals, formatPercent } from "@/utils/cartTotals";
 
+function isBirthdayPackage(title: string, optionTitle: string) {
+  return `${title} ${optionTitle}`
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase()
+    .includes("birthday package (14+ years)");
+}
+
 export default function MobileCart({
   data,
   refreshCart,
@@ -109,49 +117,65 @@ export default function MobileCart({
     {item.startTime} - {item.endTime}
   </label>
 </h3>
-                <div className="flex justify-between items-center text-gray-500">
-                  {item.workshopId.title !== "Adult's Birthday Party" ? (
-                    /* IF NOT "Adult's Birthday Party" -> Show standard price breakdown */
-                    <>
-                      <p>
-                        x {item.people}{" "}
-                        <span className="ml-1">
-                          {item.currency} {item.price.toFixed(2)}
-                        </span>
-                      </p>
-                      <p className="font-medium text-black">
-                        {item.currency} {item.subtotal.toFixed(2)}
-                      </p>
-                    </>
-                  ) : (
-                    /* ELSE ("Adult's Birthday Party") -> Show custom technique breakdown or logic */
-                    <>
-                      <div className="">
-                        {(item.wheelPottery ?? 0) > 0 && (
-                          <p className="mb-2">
-                            x {item.wheelPottery} Wheel Pottery
-                            <span className="ml-1">
-                              {item.currency}{" "}
-                              {Number(item.price ?? 0).toFixed(2)}
-                            </span>
-                          </p>
-                        )}
-                         {(item.handBuild ?? 0) > 0 && (
-                        <p>
-                          x {item.handBuild}
-                          {" Hand Building"}
-                          <span className="ml-1">
-                            {item.currency} {item.price.toFixed(2)}
-                          </span>
-                        </p>
-                        )}
-                      </div>
-                      <p className="font-medium text-black">
-                        {item.currency} {item.subtotal.toFixed(2)}
-                      </p>
-                    </>
-                  )}
-                </div>
+               <div className="flex justify-between items-end text-gray-500">
+  {item.workshopType === "family" ? (
+    // IF: family
+    <>
+      <p>
+        {/* x {item.people}{" "}
+        <span className="ml-1">
+          {item.currency} {item.price.toFixed(2)}
+        </span> */}
+      </p>
+
+      <p className="font-medium text-black">
+        {item.currency} {item.subtotal.toFixed(2)}
+      </p>
+    </>
+  ) : !isBirthdayPackage(item.workshopId.title, item.optionTitle) ? (
+    // ELSE IF: NOT birthday package
+    <>
+      {/* Your normal workshop display */}
+      <p>
+        x {item.people}{" "}
+        <span className="ml-1">
+          {item.currency} {item.price.toFixed(2)}
+        </span>
+      </p>
+
+      <p className="font-medium text-black">
+        {item.currency} {item.subtotal.toFixed(2)}
+      </p>
+    </>
+  ) : (
+    // ELSE: birthday package
+    <>
+      <div>
+        {(item.wheelPottery ?? 0) > 0 && (
+          <p className="mb-2">
+            x {item.wheelPottery} Wheel Pottery
+            <span className="ml-1">
+              {item.currency} {Number(item.price ?? 0).toFixed(2)}
+            </span>
+          </p>
+        )}
+
+        {(item.handBuild ?? 0) > 0 && (
+          <p>
+            x {item.handBuild} Hand Building
+            <span className="ml-1">
+              {item.currency} {Number(item.price ?? 0).toFixed(2)}
+            </span>
+          </p>
+        )}
+      </div>
+
+      <p className="font-medium text-black">
+        {item.currency} {item.subtotal.toFixed(2)}
+      </p>
+    </>
+  )}
+</div>
               </div>
             </div>
           </div>

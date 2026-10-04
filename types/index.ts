@@ -154,6 +154,7 @@ export interface BookingData {
     personalMessage: string;
   };
   bookingType: string;
+  workshopType?: string;
   slotId?: string;
   startTime?: string;
   endTime?: string;
@@ -202,9 +203,11 @@ export interface CheckoutWorkshopPayload {
 }
 export interface CheckoutWorkshopItem {
   optionId: string;
-  people: number;
+ people: number;
   adult?: number;
   child?: number;
+  handBuild?: number;
+  wheelPottery?: number;
 }
 
 export interface CheckoutWorkshopPayload {
@@ -218,6 +221,8 @@ export interface CheckoutWorkshopItemPayload {
   people: number;
   adult?: number;
   child?: number;
+  handBuild?: number;
+  wheelPottery?: number;
 }
 
 export interface CheckoutCustomerPayload {

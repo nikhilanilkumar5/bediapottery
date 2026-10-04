@@ -15,6 +15,7 @@ export interface CartWorkshop {
 }
 
 export interface CartItem {
+  workshopType?: string;
   workshopId: CartWorkshop;
   bookingDate: string;
   bookingType: string;
@@ -24,6 +25,8 @@ export interface CartItem {
   optionId: string;
   optionTitle: string;
   people: number;
+  adult?: number;
+  child?: number;
   price: number;
   subtotal: number;
   currency: string;
