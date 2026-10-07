@@ -12,6 +12,13 @@ interface CartStepProps {
   loading?: boolean;
   error?: string | null;
 }
+function isBirthdayPackage(title: string, optionTitle: string) {
+  return `${title} ${optionTitle}`
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase()
+    .includes("birthday package (14+ years)");
+}
 
 export default function CartStep({ onNext, data, onDeleteItem, loading = false, error }: CartStepProps) {
   const [isEditing, setIsEditing] = useState(false);
@@ -117,36 +124,41 @@ export default function CartStep({ onNext, data, onDeleteItem, loading = false, 
      <h3 className="font-normal text-[15px] text-black mb-2 leading-tight">
                   {formatDate(item.bookingDate)}<label className="ml-2 text-gray-600 text-[13px] ">{item.startTime} - {item.endTime}</label>
                 </h3>
-                    {item.workshopId.title !== "Adult's Birthday Party" ? (
-                      /* IF NOT "Adult's Birthday Party" -> Show standard price breakdown */
-                      <p className="text-sm text-gray-500">
-                        x {item.people}{" "}
-                        <span className="ml-1">
-                          {item.currency} {item.price.toFixed(2)}
-                        </span>
-                      </p>
-                    ) : (
-                      /* ELSE ("Adult's Birthday Party") -> Show custom technique breakdown */
-                      <div className="text-sm text-gray-500 space-y-1">
-                        {(item.wheelPottery ?? 0) > 0 && (
-                          <p>
-                            x {item.wheelPottery} Wheel Pottery
-                            <span className="ml-1">
-                              {item.currency}{" "}
-                              {Number(item.price ?? 0).toFixed(2)}
-                            </span>
-                          </p>
-                        )}
-                        {(item.handBuild ?? 0) > 0 && (
-                          <p>
-                            x {item.handBuild} HandBuilding
-                            <span className="ml-1">
-                              {item.currency} {item.price.toFixed(2)}
-                            </span>
-                          </p>
-                        )}
-                      </div>
-                    )}
+       {isBirthdayPackage(item.workshopId.title, item.optionTitle) ? (
+  /* 1. Adult Birthday Package -> Custom technique breakdown */
+  <div className="space-y-1 text-sm text-gray-500">
+    {(item.wheelPottery ?? 0) > 0 && (
+      <p>
+        x {item.wheelPottery} Wheel Pottery
+        <span className="ml-1">
+          {item.currency} {Number(item.price ?? 0).toFixed(2)}
+        </span>
+      </p>
+    )}
+    {(item.handBuild ?? 0) > 0 && (
+      <p>
+        x {item.handBuild} HandBuilding
+        <span className="ml-1">
+          {item.currency} {item.price.toFixed(2)}
+        </span>
+      </p>
+    )}
+  </div>
+) : item.workshopType === "family" ? (
+  /* 2. ELSE IF "family" -> Show subtotal */
+  <></>
+  // <p className="font-medium text-black">
+  //   {item.currency} {item.subtotal.toFixed(2)}
+  // </p>
+) : (
+  /* 3. ELSE -> Standard price breakdown */
+  <p className="text-sm text-gray-500">
+    x {item.people}{" "}
+    <span className="ml-1">
+      {item.currency} {item.price.toFixed(2)}
+    </span>
+  </p>
+)}
                   </div>
 
                   <div className="text-right mt-4 sm:mt-0">

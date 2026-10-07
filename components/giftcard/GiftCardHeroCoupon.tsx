@@ -1,14 +1,18 @@
 "use client";
 
 import { useMemo, useRef, useState, ChangeEvent, useEffect } from "react";
-import { format, isToday } from "date-fns";
+import { format } from "date-fns";
 import { useFilteredTimeSlots } from "@/hooks/useFilteredTimeSlots";
-import { Play } from "lucide-react";
 import { useRouter } from "next/navigation";
 import DateSelector from "../product/DateSelector";
 import TimeSlotSelector from "../product/TimeSlotSelector";
+import ProductMedia from "../product/ProductMedia";
 import { BookingService } from "@/services/booking.service";
-import { getAvailabilityData } from "@/services/avaliablity.service";
+import {
+  getAvailabilityData,
+  getPotteryCapacity,
+  PotteryCapacityResult,
+} from "@/services/avaliablity.service";
 import { Availability } from "@/types";
 import { useAuthStore } from "@/store/authStore";
 import { confirmGiftRedeem } from "@/services/gift.service";
@@ -24,6 +28,12 @@ interface PresetBookingPayload {
     _id: string;
     title: string;
     slug: string;
+    bannerImage?: string;
+    images?: Array<{
+      _id: string;
+      image: string;
+      title: string;
+    }>;
     defaultSlots: Array<{
       _id: string;
       label: string;
@@ -63,6 +73,57 @@ interface ValidationError {
   message: string;
 }
 
+const STATIC_CLAY_OPTIONS = [
+  {
+    clayTypeId: "698ed9075bed39f35db8991a",
+    title: "Air-Dry Clay",
+    price: 249,
+    currency: "AED",
+    priceDescription: "14 yrs - 19 yrs",
+    description:
+      "• Soft and easy to shape, perfect for beginners.<br>• Air-dries naturally without a kiln or oven.<br>• <b>Take your pot home with you right after the workshop.</b><br>• Ideal for decorative pieces only.<br>• Not suitable for food or drinks.<br>• Allow approximately 2–3 days to dry at room temperature. (Keep it inside the box.)<br>• Once fully dry, you can paint your piece at home with acrylic paints.",
+    inclusions: [],
+    image: "",
+    clayTypethumbnailImage:
+      "http://api.bediapottery.ae/uploads/1787577412038-Air fin.png",
+    clayTypeVideo:
+      "http://api.bediapottery.ae/uploads/1787562430872-AIR DRY CLAY_WEBSITE.mp4",
+    _id: "6abd29210a660551f0bedd0b",
+  },
+  {
+    clayTypeId: "698ed9075bed39f35db8991c",
+    title: "Terracotta Clay",
+    price: 259,
+    currency: "AED",
+    priceDescription: "20 yrs & above",
+    description:
+      "• Naturally earthy red in color.<br>• Ideal for creating functional items such as cups, bowls, and plates.<br>• The pieces created during the workshop will undergo two rounds of firing.<br>• After firing, the pieces will be glaze-coated, making them ceramic and food-safe.<br>• Your finished items will be ready for collection in approximately 3 weeks.<br>• We will notify you once your items are ready for collection.<br><br><b>Note: Painting is not available for terracotta items.</b>",
+    inclusions: [],
+    image: "",
+    clayTypethumbnailImage:
+      "http://api.bediapottery.ae/uploads/1787577412570-Tera fin.png",
+    clayTypeVideo:
+      "http://api.bediapottery.ae/uploads/1787562435317-TERACOTTA CLAY_WEBSITE.mp4",
+    _id: "6abd29210a660551f0bedd0c",
+  },
+  {
+    clayTypeId: "698ed9075bed39f35db8991b",
+    title: "Ceramic Clay",
+    price: 299,
+    currency: "AED",
+    priceDescription: "",
+    description:
+      "• Natural white in color.<br>• Ideal for creating functional items such as cups, bowls, and plates.<br>• A painting session is included.<br>• A painting invitation will be sent within 2–3 weeks after creation.<br>• After painting, your piece will be glaze-fired by our team, making it ceramic and food-safe.<br>• Your finished item will be ready for collection approximately 1–2 weeks after painting.<br>• We will notify you once your item is ready for collection.",
+    inclusions: [],
+    image: "",
+    clayTypethumbnailImage:
+      "http://api.bediapottery.ae/uploads/1787577413110-cera fin.png",
+    clayTypeVideo:
+      "https://api.bediapottery.ae/uploads/1788086398103-CERAMIC_CLAY_WEBSITE.mp4",
+    _id: "6abd29210a660551f0bedd0d",
+  },
+] as const;
+
 export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
@@ -71,7 +132,6 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
   const [availabilityError, setAvailabilityError] = useState("");
   const [couponCode, setCouponCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   // Form Management States
   const [formData, setFormData] = useState<FormState>({
     firstName: "",
@@ -84,23 +144,46 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
   const [formError, setFormError] = useState("");
   const [isRedeemReached, setIsRedeemReached] = useState(false);
   const redeemSectionRef = useRef<HTMLDivElement>(null);
-
+   const [capacityInfo, setCapacityInfo] =
+      useState<PotteryCapacityResult | null>(null);
+const [capacityLoading, setCapacityLoading] = useState(false);
+  const [capacityError, setCapacityError] = useState<string>("");
   const router = useRouter();
+
+  const options = STATIC_CLAY_OPTIONS;
 
   const bookingItem = bookingData?.items?.[0] || {
     optionId: "",
-    optionTitle: "N/A",
+    optionTitle: options[0]?.title || "N/A",
     price: 0,
     people: 1,
     adult: 0,
     child: 0,
   };
+
+  const staticWorkshopMedia = useMemo(() => {
+    const images = STATIC_CLAY_OPTIONS.map((option) => ({
+      _id: option._id,
+      image: option.clayTypethumbnailImage,
+      title: option.title,
+    }));
+
+    return {
+      bannerImage: STATIC_CLAY_OPTIONS[0]?.clayTypethumbnailImage || "/images/product/1.png",
+      images,
+    };
+  }, []);
+
   const workshop = bookingData?.workshop || {
     _id: "",
-    title: "",
+    title: "Gift Card Workshop",
+    bannerImage: staticWorkshopMedia.bannerImage,
+    images: staticWorkshopMedia.images,
     defaultSlots: [],
   };
   const occasion = bookingData?.occasion || "General";
+  const selectedMaterialOption =
+    options.find((option) => option.title === bookingItem.optionTitle) || options[0];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -146,6 +229,42 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
     setSlotError("");
     setAvailabilityError("");
   };
+
+  useEffect(() => {
+    const fetchCapacity = async () => {
+      if (!selectedDate || !selectedSlotId) {
+        setCapacityInfo(null);
+        setCapacityError("");
+        return;
+      }
+
+      const slot = workshop.defaultSlots.find((s) => s._id === selectedSlotId);
+      if (!slot) return;
+
+      setCapacityLoading(true);
+      setCapacityError("");
+
+      try {
+        const res = await getPotteryCapacity({
+          workshopId: workshop._id,
+          bookingDate: formattedDate,
+          startTime: slot.startTime,
+          endTime: slot.endTime,
+          bookingType: "events",
+        });
+
+        setCapacityInfo(res.result ?? null);
+      } catch (err: any) {
+        console.error("Capacity fetch error", err);
+        setCapacityError(err?.message || "Unable to fetch capacity");
+        setCapacityInfo(null);
+      } finally {
+        setCapacityLoading(false);
+      }
+    };
+
+    fetchCapacity();
+  }, [formattedDate, selectedDate, selectedSlotId, workshop._id, workshop.defaultSlots]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -267,52 +386,41 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
   return (
     <section className="bg-secondary-dark min-h-screen md:py-12 py-8 font-sans text-[#0D463D]">
       <div className="page-wrapper px-[17px] grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-        {/* Left Column: Media Gallery */}
-         <div className="lg:hidden block p-3 pt-8">
-            <Title className="2xl:mb-7 mb-5 font-normal">{workshop?.title}</Title>
+        <div className="flex flex-col gap-4 h-full">
+          <div className="lg:hidden block p-3 pt-8">
+            <Title className="2xl:mb-7 mb-5 font-normal">Your Pottery Gift Awaits!</Title>
             <p className="text-[#0D463D]/80 leading-relaxed text-[17px]">
-              Review your gift customization configurations and finalize your setup below by choosing a valid schedule availability.
+             A special clay experience, gifted just for you. <br/><br/>
+             Before you begin, watch the video below to see the journey of your clay. Then, redeem your voucher and get ready to create something special!
             </p>
           </div>
-        <div className="space-y-4 h-auto lg:sticky lg:top-6">
-          <div className="relative w-full aspect-video bg-gray-200 overflow-hidden rounded shadow-sm">
-            <img
-              src="/images/product/gift-card-1.png"
-              alt="Gift boxes"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <button className="w-16 h-16 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/50 hover:bg-white/50 transition duration-300">
-                <Play className="text-white fill-white ml-1" size={24} />
-              </button>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-3 gap-3">
-            {[
-              { _id: "1", image: "/images/product/gift-card-2.jpg", title: "Gift thumbnail 1" },
-              { _id: "2", image: "/images/product/gift-card-3.jpg", title: "Gift thumbnail 2" },
-              { _id: "3", image: "/images/product/gift-card-4.jpg", title: "Gift thumbnail 3" },
-            ].map((img) => (
-              <div key={img._id} className="aspect-video bg-gray-200 overflow-hidden rounded">
-                <img
-                  src={img.image}
-                  alt={img.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
+          <ProductMedia
+            imageUrl={"images/gift/banner.png"}
+            alt={workshop?.title || "Gift card workshop"}
+            images={workshop?.images || staticWorkshopMedia.images}
+            videos={
+              options
+                .filter(
+                  (option) =>
+                    option.clayTypeVideo && option.clayTypethumbnailImage,
+                )
+                .map((option) => ({
+                  id: option._id,
+                  thumbnailUrl: option.clayTypethumbnailImage || "",
+                  videoUrl: option.clayTypeVideo || "",
+                }))
+            }
+          />
         </div>
 
         {/* Right Column: Content & Integrated Controls */}
         <div className="flex flex-col space-y-6">
            <div className="lg:block hidden">
-            <h1 className="text-5xl font-serif mb-4 text-[#0D463D]">
-              {workshop.title}
-            </h1>
+          <Title className="2xl:mb-7 mb-5 font-normal">Your Pottery Gift Awaits!</Title>
             <p className="text-[#0D463D]/80 leading-relaxed text-[17px]">
-              Review your gift customization configurations and finalize your setup below by choosing a valid schedule availability.
+             A special clay experience, gifted just for you. <br/><br/>
+             Before you begin, watch the video below to see the journey of your clay. Then, redeem your voucher and get ready to create something special!
             </p>
           </div>
 
@@ -332,7 +440,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
                 Selected Material Option
               </label>
               <div className="w-full bg-[#0D463D] text-white py-2 px-3 rounded text-sm font-medium text-center truncate">
-                {bookingItem.optionTitle}
+                {selectedMaterialOption?.title || bookingItem.optionTitle}
               </div>
             </div>
           </div>
@@ -427,19 +535,45 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
           </div>
 
           {/* Time Slots Box */}
-          {availableSlots?.length > 0 && (
-            <div className="bg-white p-4 border border-gray-100 rounded shadow-sm">
-              <TimeSlotSelector
-                slots={availableSlots.map((slot) => ({
-                  ...slot,
-                  capacity: Boolean(slot.capacity),
-                }))}
-                selectedSlotId={selectedSlotId}
-                onSlotSelect={handleSlotSelect}
-              />
-              {slotError && <p className="mt-2.5 text-sm text-red-600 font-medium">{slotError}</p>}
-            </div>
-          )}
+           {availableSlots?.length > 0 && (
+              <div className="p-[18px] bg-white">
+                <TimeSlotSelector
+                  slots={availableSlots.map((slot) => ({
+                    ...slot,
+                    capacity: Boolean(slot.capacity),
+                  }))}
+                  selectedSlotId={selectedSlotId}
+                  onSlotSelect={handleSlotSelect}
+                />
+                {slotError && (
+                  <p className="mt-3 text-sm text-red-600">{slotError}</p>
+                )}
+
+                {capacityLoading && (
+                  <p className="mt-3 text-sm text-gray-600">
+                    Checking capacity...
+                  </p>
+                )}
+                {capacityError && (
+                  <p className="mt-3 text-sm text-red-600">{capacityError}</p>
+                )}
+                {capacityInfo &&
+                  (capacityInfo.remainingCapacity === 0 ? (
+                    <p className="mt-3 text-sm text-red-600">
+                      Sorry, this time slot is fully booked. Please select
+                      another time slot or date.
+                    </p>
+                  ) : (
+                    <div className="mt-3 text-sm text-green-700">
+                      <p>
+                        <strong>Available slots:</strong>{" "}
+                        {capacityInfo.remainingCapacity}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+            )}
+
 
           {/* Coupon Redemption Field */}
           <div ref={redeemSectionRef} className="bg-white p-4 border border-gray-100 rounded shadow-sm space-y-4 scroll-mt-6">
@@ -450,7 +584,7 @@ export default function GiftCardHero({ bookingData }: GiftCardHeroProps) {
                   type="text"
                   value={couponCode}
                   onChange={(e) => setCouponCode(e.target.value)}
-                  placeholder="Enter dynamic secure coupon code string"
+                  placeholder="Enter your voucher code"
                   className="flex-grow p-3 border-none focus:ring-0 text-sm bg-white outline-none"
                 />
               </div>
