@@ -250,7 +250,7 @@ const [capacityLoading, setCapacityLoading] = useState(false);
           bookingDate: formattedDate,
           startTime: slot.startTime,
           endTime: slot.endTime,
-          bookingType: "events",
+          bookingType: "pottery",
         });
 
         setCapacityInfo(res.result ?? null);
@@ -396,7 +396,7 @@ const [capacityLoading, setCapacityLoading] = useState(false);
           </div>
 
           <ProductMedia
-            imageUrl={"images/gift/banner.png"}
+            imageUrl="/images/gift/banner.png"
             alt={workshop?.title || "Gift card workshop"}
             images={workshop?.images || staticWorkshopMedia.images}
             videos={
@@ -613,6 +613,7 @@ const [capacityLoading, setCapacityLoading] = useState(false);
         isVisible={!isRedeemReached}
         onScrollToQuantity={scrollToRedeem}
         actionLabel="Redeem Gift"
+        isPriceVisible={false}
       />
     </section>
   );

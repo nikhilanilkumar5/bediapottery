@@ -7,6 +7,7 @@ interface MobileQuantityBarProps {
   currency?: string
   totalPrice: number
   isVisible: boolean
+  isPriceVisible?: boolean
   onScrollToQuantity: () => void
   actionLabel?: string
 }
@@ -14,6 +15,7 @@ interface MobileQuantityBarProps {
 const MobileQuantityBar: React.FC<MobileQuantityBarProps> = ({
   materialTitle,
   currency = 'AED',
+  isPriceVisible = true,
   totalPrice,
   isVisible,
   onScrollToQuantity,
@@ -30,9 +32,11 @@ const MobileQuantityBar: React.FC<MobileQuantityBarProps> = ({
         <span className="text-[11px] text-gray-500 uppercase tracking-wider block font-medium">
           {materialTitle}
         </span>
-        <span className="text-lg font-bold text-black">
-          {currency} {totalPrice}
-        </span>
+        {isPriceVisible && (
+          <span className="text-lg font-bold text-black">
+            {currency} {totalPrice}
+          </span>
+        )}
       </div>
       <button
         type="button"
