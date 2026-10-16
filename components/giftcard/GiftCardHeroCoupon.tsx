@@ -160,6 +160,7 @@ const [capacityLoading, setCapacityLoading] = useState(false);
     adult: 0,
     child: 0,
   };
+  const materialDisplayTitle = bookingItem.optionTitle.split(" - ")[0].trim();
 
   const staticWorkshopMedia = useMemo(() => {
     const images = STATIC_CLAY_OPTIONS.map((option) => ({
@@ -440,7 +441,7 @@ const [capacityLoading, setCapacityLoading] = useState(false);
                 Selected Material Option
               </label>
               <div className="w-full bg-[#0D463D] text-white py-2 px-3 rounded text-sm font-medium text-center truncate">
-                {selectedMaterialOption?.title || bookingItem.optionTitle}
+                {materialDisplayTitle}
               </div>
             </div>
           </div>
