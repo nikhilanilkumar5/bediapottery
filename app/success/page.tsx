@@ -147,7 +147,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
                           )}
                           {(item.bookingId.items[0]?.handBuild ?? 0) > 0 && (
                             <p>
-                              {item.bookingId.items[0]?.handBuild} x HandBuilding
+                              {item.bookingId.items[0]?.handBuild} x Handbuilding
                               <span className="ml-1 text-black">
                                 {item.bookingId.currency}{" "}
                                 {item.bookingId.items[0]?.price.toFixed(2)}
@@ -216,7 +216,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
                           {(item.bookingId.items[0]?.handBuild ?? 0) > 0 && (
                             <p>
                           {item.bookingId.items[0]?.handBuild}{" "}    x 
-                              HandBuilding
+                              Handbuilding
                               <span className="ml-1 text-black">
                                 {item.bookingId.currency}{" "}
                                 {item.bookingId.items[0]?.price.toFixed(2)}
