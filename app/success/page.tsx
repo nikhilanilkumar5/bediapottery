@@ -1,4 +1,7 @@
-import { getOrderById } from "@/services/order.service";
+import {
+  getOrderById,
+  type OrderDetails,
+} from "@/services/order.service";
 import { ClearCartOnSuccess } from "./ClearCartOnSuccess";
 import { FileCheck2, ShoppingBag, Wallet } from "lucide-react";
 import Image from "next/image";
@@ -14,6 +17,7 @@ interface SuccessPageProps {
     orderId?: string;
   }>;
 }
+
 
 export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   const { orderId } = await searchParams;
@@ -71,10 +75,12 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
       <div className="max-w-7xl mx-auto px-4 pb-24 relative min-h-[600px]">
         {orderdata && (
           <>
-            <ClearCartOnSuccess />
+             <ClearCartOnSuccess />
             {/* Header / Status */}
             <div className="flex justify-between items-end mb-8 border-b border-gray-200 pb-7">
-              <span className="text-black font-medium">Your Order</span>
+              <span className="text-black font-medium">
+                Your Order
+              </span>
               <span className="inline-flex items-center gap-2 text-[#0D463D] font-medium">
                 <svg
                   width="25"
@@ -129,7 +135,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
                         <div className="text-sm text-gray-500 space-y-1">
                           {(item.bookingId.items[0]?.wheelPottery ?? 0) > 0 && (
                             <p>
-                              x {item.bookingId.items[0]?.wheelPottery} Wheel
+                              {item.bookingId.items[0]?.wheelPottery} x Wheel
                               Pottery
                               <span className="ml-1 text-black">
                                 {item.bookingId.currency}{" "}
@@ -141,8 +147,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
                           )}
                           {(item.bookingId.items[0]?.handBuild ?? 0) > 0 && (
                             <p>
-                              x {item.bookingId.items[0]?.handBuild}{" "}
-                              HandBuilding
+                              {item.bookingId.items[0]?.handBuild} x HandBuilding
                               <span className="ml-1 text-black">
                                 {item.bookingId.currency}{" "}
                                 {item.bookingId.items[0]?.price.toFixed(2)}
@@ -150,7 +155,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
                             </p>
                           )}
                           <p>
-                            {item.bookingId.items[0]?.people} x
+                            {item.bookingId.items[0]?.people} x 
                             <span className="ml-1 text-black">
                               {item.bookingId.currency}{" "}
                               {item.bookingId.items[0]?.price.toFixed(2)}
@@ -174,7 +179,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
                 <div className="border-b border-gray-200 pb-6" key={i}>
                   <div className="flex gap-4">
                     {/* Thumbnail */}
-                    <div className="w-24 h-24 sm:w-28 sm:h-28 bg-gray-200 rounded-sm shrink-0 overflow-hidden">
+                    <div className="w-20 h-20 sm:w-28 sm:h-28 bg-gray-200 rounded-sm shrink-0 overflow-hidden">
                       <Image
                         src={
                           item.bookingId.workshopId.images?.[0]?.image ||
@@ -194,11 +199,11 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
                         {item.bookingId.workshopId.title}-
                         {item.bookingId.items[0]?.optionTitle}
                       </h3>
-                      <div className="flex justify-between items-center text-gray-500">
+                      <div className="flex justify-between xl:items-center items-end text-gray-500 flex-col ">
                         <>
                           {(item.bookingId.items[0]?.wheelPottery ?? 0) > 0 && (
                             <p>
-                              x {item.bookingId.items[0]?.wheelPottery} Wheel
+                          {item.bookingId.items[0]?.wheelPottery}    x  Wheel
                               Pottery
                               <span className="ml-1 text-black">
                                 {item.bookingId.currency}{" "}
@@ -210,7 +215,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
                           )}
                           {(item.bookingId.items[0]?.handBuild ?? 0) > 0 && (
                             <p>
-                              x {item.bookingId.items[0]?.handBuild}{" "}
+                          {item.bookingId.items[0]?.handBuild}{" "}    x 
                               HandBuilding
                               <span className="ml-1 text-black">
                                 {item.bookingId.currency}{" "}
@@ -219,17 +224,17 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
                             </p>
                           )}
                           <p>
-                            {item.bookingId.items[0]?.people} x
+                            {item.bookingId.items[0]?.people} x {" "}
                             <span className=" text-black">
                               {item.bookingId.currency}{" "}
                               {item.bookingId.items[0]?.price.toFixed(2)}
                             </span>
                           </p>
                         </>
-                        <p className=" text-black">
+                        {/* <p className=" text-black">
                           {item.bookingId.currency}{" "}
                           {item.bookingId.items[0]?.subtotal.toFixed(2)}
-                        </p>
+                        </p> */}
                       </div>
                     </div>
                   </div>
